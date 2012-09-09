@@ -507,16 +507,16 @@
   </defs>
   <sodipodi:namedview
      id="base"
-     pagecolor="#ffffff"
+     pagecolor="#000000"
      bordercolor="#666666"
      borderopacity="1.0"
-     inkscape:pageopacity="0.0"
+     inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.70710678"
      inkscape:cx="1.7547324"
      inkscape:cy="922.72896"
      inkscape:document-units="px"
-     inkscape:current-layer="layer4"
+     inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1680"
      inkscape:window-height="1026"
@@ -723,13 +723,13 @@
        transform="translate(664.53193,0)"
        width="744.09448"
        height="1052.3622"
-       inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/car-exterior.png"
+       inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/car-interior.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <g
        id="g3624"
        transform="matrix(1.6978158,0,0,1.6977553,-672.21466,-897.19543)"
-       inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/car-exterior.png"
+       inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/car-interior.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90">
       <path
@@ -938,7 +938,7 @@
     <g
        id="g3841"
        transform="matrix(3.9574468,0,0,3.9573057,-1541.292,-1860.3282)"
-       inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/car-exterior.png"
+       inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/car-interior.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90">
       <g
@@ -3728,7 +3728,7 @@
      inkscape:groupmode="layer"
      id="layer5"
      inkscape:label="Interior"
-     style="display:none">
+     style="display:inline">
     <g
        id="g6262"
        inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/car-exterior.png"
