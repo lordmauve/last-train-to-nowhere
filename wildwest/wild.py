@@ -23,7 +23,7 @@ IMG_TABLE = os.path.join(ASSETS_BASE, 'table.png')
 IMG_CRATE = os.path.join(ASSETS_BASE, 'crate.png')
 IMG_CARRIAGE = os.path.join(ASSETS_BASE, 'car-interior.png')
 
-FLOOR_Y = 400
+FLOOR_Y = 275
 
 
 class Bullet(Object):
@@ -42,10 +42,10 @@ class Player(ImageObject):
         ImageObject.__init__(self, pos, img_path)
         self.direction = geometry.Vector(1, 0)
         self.walk_speed = 0
-        self.jump_speed = 0
+        self.jump_speed = 10
         self.jumping = False
         self.on_floor = False
-        self.fall_through = 0  # frames of fall_through
+        # self.fall_through = 0  # frames of fall_through
 
     def controls(self):
         if button.is_pressed(A_BUTTON):
@@ -58,16 +58,18 @@ class Player(ImageObject):
 
     def jump(self):
         print 'jumping'
-        if not self.on_floor:
-            return
-        if not self.jumping:
-            self.jumping = True
-            if button.is_held(DOWN):
-                self.jump_speed = 7
-                self.fall_through = 4
-            else:
-                self.jump_speed = -11
-            print 'jump_speed:', self.jump_speed
+        self.jumping = True
+        self.jump_speed = -11
+        # if not self.on_floor:
+        #     return
+        # if not self.jumping:
+        #     self.jumping = True
+        #     if button.is_held(DOWN):
+        #         self.jump_speed = 7
+        #         # self.fall_through = 4
+        #     else:
+        #         self.jump_speed = -11
+        #     print 'jump_speed:', self.jump_speed
 
     def control_walk(self):
         self.walk_speed = 0
@@ -94,14 +96,19 @@ class Player(ImageObject):
     def update(self):
         # if self.jump_speed < 7:
         #     self.jump_speed += 1
-        if self.jump_speed < 0:
+        # if self.jump_speed < 10 and\
+        if (self.jumping or self.rect.y < FLOOR_Y - self.rect.height):
+            self.jump_speed += 1
             self.rect.y += self.jump_speed
+            if self.rect.y > FLOOR_Y - self.rect.height:
+                self.rect.y = FLOOR_Y - self.rect.height
+            print 'jump_speed: %d, rect.y: %d' % (self.jump_speed, self.rect.y)
 
         self.do_walk()
         self.on_floor = False
         self.collide_with_floors()
-        if self.fall_through > 0:
-            self.fall_through -= 1
+        # if self.fall_through > 0:
+        #     self.fall_through -= 1
 
     def collide_with_floors(self):
         # print list(self.platforms)
@@ -115,11 +122,12 @@ class Player(ImageObject):
             #         if self.rect.bottom < platform.rect.top + (self.jump_speed*2):
             #             self.rect.bottom = platform.rect.top
             #             self.hit_floor()
-        if self.rect.right >= FLOOR_Y:
+        if self.rect.y >= FLOOR_Y - self.rect.height:
             self.hit_floor()
 
     def hit_floor(self):
-        self.jump_speed = 3
+        # print 'hit the floor'
+        self.jump_speed = 10
         self.on_floor = True
         self.jumping = False
 
@@ -169,7 +177,7 @@ def main():
 
     Carriage((10, 70))
     hero = Hero((90, 167))
-    Lawman((600, 165))
+    # Lawman((600, 165))
     Table((300, 222))
     Crate((500, 197))
 
