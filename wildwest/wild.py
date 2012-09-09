@@ -38,6 +38,10 @@ class ImageObject(Object):
 
 
 class Player(ImageObject):
+    MAX_WALK = 5  # limit on walk speed
+    ACCEL = 1  # acceleration when walking
+    FRICTION = 0.85  # deceleration
+
     def __init__(self, pos, img_path):
         ImageObject.__init__(self, pos, img_path)
         self.direction = geometry.Vector(1, 0)
@@ -57,11 +61,10 @@ class Player(ImageObject):
         # self.choose_images()
 
     def jump(self):
-        print 'jumping'
+        if not self.on_floor:
+             return
         self.jumping = True
-        self.jump_speed = -11
-        # if not self.on_floor:
-        #     return
+        self.jump_speed = -12
         # if not self.jumping:
         #     self.jumping = True
         #     if button.is_held(DOWN):
@@ -72,12 +75,15 @@ class Player(ImageObject):
         #     print 'jump_speed:', self.jump_speed
 
     def control_walk(self):
-        self.walk_speed = 0
         if button.is_held(LEFT):
-            self.walk_speed -= 3
-        if button.is_held(RIGHT):
-            self.walk_speed += 3
-
+            self.walk_speed = max(-self.MAX_WALK, self.walk_speed - self.ACCEL)
+        elif button.is_held(RIGHT):
+            self.walk_speed = min(self.MAX_WALK, self.walk_speed + self.ACCEL)
+        else:
+            self.walk_speed *= self.FRICTION
+            if abs(self.walk_speed) < 0.01:
+                self.walk_speed = 0
+    
     # def aim_shot(self):
     #     self.shot_vector = self.direction.copy()
     #     x = int(button.is_held(RIGHT) - button.is_held(LEFT))
@@ -90,7 +96,7 @@ class Player(ImageObject):
 
     def do_walk(self):
         if self.walk_speed:
-            self.rect.x += self.walk_speed
+            self.rect.x = int(self.rect.x + self.walk_speed)
             self.direction.x = self.walk_speed / abs(self.walk_speed)
 
     def update(self):
@@ -102,7 +108,7 @@ class Player(ImageObject):
             self.rect.y += self.jump_speed
             if self.rect.y > FLOOR_Y - self.rect.height:
                 self.rect.y = FLOOR_Y - self.rect.height
-            print 'jump_speed: %d, rect.y: %d' % (self.jump_speed, self.rect.y)
+            #print 'jump_speed: %d, rect.y: %d' % (self.jump_speed, self.rect.y)
 
         self.do_walk()
         self.on_floor = False
