@@ -2,7 +2,7 @@ import math
 import pyglet
 from pyglet import gl
 
-from geom import Rect
+from geom import Rect, v
 
 
 pyglet.resource.path += [
@@ -20,7 +20,7 @@ class Camera(object):
         self.far = 10000.0
         self.screen_w = screen_w
         self.screen_h = screen_h
-        self.offset = offset
+        self.offset = v(offset)
 
     def get_plane_rect(self, depth):
         """Get the rectangle of a plane perpendicular to the view direction,
@@ -104,6 +104,41 @@ class StaticImage(AnimatedNode):
     def __init__(self, pos, img, z=0):
         im = pyglet.resource.image(img)
         super(StaticImage, self).__init__(pos, im, z)
+
+
+class Wheels(Node):
+    z = -1
+
+    def __init__(self, pos):
+        from pyglet.image import Animation, AnimationFrame
+        im1 = pyglet.resource.image('wheels.png')
+        im2 = pyglet.resource.image('wheels2.png')
+        im3 = pyglet.resource.image('wheels3.png')
+        anim = Animation([
+            AnimationFrame(im1, 0.1),
+            AnimationFrame(im2, 0.1),
+            AnimationFrame(im3, 0.1),
+        ])
+        self.sprite1 = pyglet.sprite.Sprite(anim)
+        self.sprite2 = pyglet.sprite.Sprite(anim)
+        self.sprite2.color = (64, 64, 64)
+        self.pos = pos
+
+    def get_position(self):
+        return self.sprite1.position
+
+    def set_position(self, pos):
+        self.sprite1.position = pos
+        self.sprite2.position = pos
+
+    pos = property(get_position, set_position)
+
+    def draw(self, camera):
+        gl.glPushMatrix()
+        gl.glTranslatef(0, 0, -70)
+        self.sprite2.draw()
+        gl.glPopMatrix()
+        self.sprite1.draw()
 
 
 class GroundPlane(Node):
@@ -228,6 +263,7 @@ if __name__ == '__main__':
     s.add(StaticImage((300, 115), 'table.png'))
     s.add(StaticImage((500, 115), 'crate.png'))
     s.add(RailTrack(pyglet.resource.texture('track.png')))
+    s.add(Wheels((400, 0)))
     ground = GroundPlane(
         (218, 176, 127, 255),
         (194, 183, 164, 255),
@@ -246,6 +282,7 @@ if __name__ == '__main__':
         s.draw(camera)
 
     def update(dt):
+        camera.offset += v(10, 0) * dt
         s.update(dt)
 
     pyglet.clock.schedule_interval(update, 1/30.0)
