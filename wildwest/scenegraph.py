@@ -76,7 +76,6 @@ class Camera(object):
         gl.glTranslatef(-x, -y, -self.focus)
 
 
-
 class Node(object):
     """Base class for scenegraph objects."""
     z = 0
@@ -381,6 +380,11 @@ class Scenegraph(object):
         self.objects.sort(key=lambda x: x.z)
         for o in self.objects:
             o.draw(camera)
+
+    def on_key_press(self, symbol, modifier):
+        for o in self.objects:
+            if hasattr(o, 'on_key_press'):
+                o.on_key_press(symbol, modifier)
 
 
 if __name__ == '__main__':
