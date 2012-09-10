@@ -8,9 +8,10 @@ sys.path.insert(0, '..')
 import pyglet
 from pyglet.window import key
 from scenegraph import StaticImage, Scenegraph, Fill, RailTrack
-from scenegraph import SkyBox, GroundPlane, Wheels
+from scenegraph import SkyBox, GroundPlane, Wheels, Locomotive
 from scenegraph import Camera
-from vector import Vector
+from geom import v
+
 
 # Image File Paths
 ASSETS_BASE = 'assets/sprites'
@@ -22,42 +23,39 @@ IMG_TABLE = 'table.png'
 IMG_CRATE = 'crate.png'
 IMG_CARRIAGE = 'car-interior.png'
 
+
 # Key Bindings
 KEY_RIGHT = key.RIGHT
 KEY_LEFT = key.LEFT
 KEY_JUMP = key.Z
 KEY_SHOOT = key.X
 
-FLOOR_Y = 275
+
+
+FLOOR_Y = 115
+GRAVITY = 1000
 
 
 class Bullet(StaticImage):
     pass
 
 
-class Player(StaticImage):
+class Player(object):
     MAX_WALK = 200  # limit on walk speed
     ACCEL = 1600  # acceleration when walking
     FRICTION = 1  # deceleration
 
-    def __init__(self, pos, img_path):
-        StaticImage.__init__(self, pos, img_path)
-        self.direction = Vector((1, 0))
-        self.t = 0
-        self.walk_speed = 0
-        self.xaccel = 0
-        self.jump_speed = 10
-        self.jumping = False
-        self.on_floor = False
-        # self.fall_through = 0  # frames of fall_through
+    w = 42  # bounding box width
+    h = 84  # bounding box height
 
-    def on_key_press(self, symbol, modifiers):
-        if symbol == KEY_JUMP:
-            self.jump()
-        if symbol == KEY_SHOOT:
-            self.shoot()
-        if symbol in (KEY_LEFT, KEY_RIGHT):
-            self.walk(symbol)
+    def __init__(self, pos, node):
+        self.pos = pos
+        self.node = node
+        self.direction = v(1, 0)
+        self.v = v(0, 0)
+        self.xaccel = 0
+        self.on_floor = True
+        # self.fall_through = 0  # frames of fall_through
         # self.aim_shot()
         # self.choose_images()
 
@@ -65,7 +63,8 @@ class Player(StaticImage):
         if not self.on_floor:
             return
         self.jumping = True
-        self.jump_speed = -12
+        self.v += v(0, 600)  # Apply jumping impulse
+        self.on_floor = False
         # if not self.jumping:
         #     self.jumping = True
         #     if button.is_held(DOWN):
@@ -75,11 +74,14 @@ class Player(StaticImage):
         #         self.jump_speed = -11
         #     print 'jump_speed:', self.jump_speed
 
-    def walk(self, symbol):
-        if symbol == key.LEFT:
-            self.xaccel = -self.ACCEL
-        elif symbol == key.RIGHT:
-            self.xaccel = self.ACCEL
+    def left(self):
+        self.xaccel = -self.ACCEL
+
+    def right(self):
+        self.xaccel = self.ACCEL
+
+    def shoot(self):
+        """Not yet implemented!"""
 
     # def aim_shot(self):
     #     self.shot_vector = self.direction.copy()
@@ -96,36 +98,38 @@ class Player(StaticImage):
     #         self.rect.x = int(self.rect.x + self.walk_speed)
     #         self.direction.x = self.walk_speed / abs(self.walk_speed)
 
-    def draw(self, camera):
-        dt = self.scenegraph.t - self.t
-        self.t = self.scenegraph.t
 
-        # update horizontally
-        u = self.walk_speed
-        self.walk_speed += self.xaccel * dt
-        if abs(self.walk_speed) > self.MAX_WALK:
-            self.walk_speed = self.MAX_WALK * self.walk_speed / abs(self.walk_speed)
-        self.sprite.x += 0.5 * (u + self.walk_speed) * dt
+    def update(self, dt):
+        # work out our new velocity
+        u = self.v
+        vx = u.x + self.xaccel * dt
+        vx = max(-self.MAX_WALK, min(self.MAX_WALK, vx))
+        vy = u.y - GRAVITY * dt
+        self.v = v(vx, vy)
 
-        super(Player, self).draw(camera)
+        # work out our new position
+        # Constant acceleration formulae
+        self.pos += 0.5 * (u + self.v) * dt
 
+        # So far so mechanical. Now we have to take into account collisions and friction etc.
+        
         # update acceleration
-        if abs(self.walk_speed) < 0.01:
-            self.walk_speed = 0
+        if abs(self.v.x) < 0.01:
+            self.v = v(0, self.v.y)
             self.xaccel = 0
         else:
-            self.xaccel = -self.FRICTION * self.walk_speed
+            self.xaccel = -self.FRICTION * self.v.x
 
-        # update vertically
-        # # if self.jump_speed < 7:
-        # #     self.jump_speed += 1
-        # # if self.jump_speed < 10 and\
-        # if (self.jumping or self.sprite.y < FLOOR_Y - self.sprite.height):
-        #     self.jump_speed += 1
-        #     self.sprite.y += self.jump_speed
-        #     if self.sprite.y > FLOOR_Y - self.sprite.height:
-        #         self.sprite.y = FLOOR_Y - self.sprite.height
-        #     #print 'jump_speed: %d, rect.y: %d' % (self.jump_speed, self.rect.y)
+        # Collision with floor
+        x, y = self.pos
+        if y <= FLOOR_Y:
+            y = FLOOR_Y
+            self.on_floor = True
+        else:
+            self.on_floor = False
+
+        self.pos = v(x, y)
+        self.node.pos = self.pos
 
         # #self.do_walk()
         # self.on_floor = False
@@ -181,21 +185,17 @@ class Carriage(StaticImage):
         self.allow_fall_through = False
 
 
-def main():
-    WIDTH = 800
-    HEIGHT = 600
-    w = pyglet.window.Window(width=800, height=600)
+def make_scene():
     s = Scenegraph()
-
-    s.add(Fill((1.0, 1.0, 1.0, 1.0)))
     s.add(Carriage((0, 53)))
-    s.add(Hero((90, 115)))
-    s.add(Lawman((600, 115)))
-    s.add(Table((300, 115)))
-    s.add(Crate((500, 115)))
+#    s.add(Hero((90, 115)))
+#    s.add(Lawman((600, 115)))
+#    s.add(Table((300, 115)))
+#    s.add(Crate((500, 115)))
     s.add(RailTrack(pyglet.resource.texture('track.png')))
     s.add(Wheels((91, 0)))
     s.add(Wheels((992 - 236, 0)))
+    s.add(Locomotive((1070, 0)))
 
     ground = GroundPlane(
         (218, 176, 127, 255),
@@ -207,21 +207,63 @@ def main():
         (129, 218, 255, 255),
         (49, 92, 142, 255)
     ))
+    return s
 
-    camera = Camera((200.0, 200.0), WIDTH, HEIGHT)
 
-    @w.event
-    def on_draw():
-        s.draw(camera)
+class World(object):
+    """Collection of all the objects and geometry in the world."""
+    def __init__(self, scenegraph):
+        self.actors = []
+        self.static = []
 
-    @w.event
-    def on_key_press(symbol, modifiers):
-        s.on_key_press(symbol, modifiers)
 
-    def update(dt):
-        s.update(dt)
+FPS = 30
 
-    pyglet.clock.schedule_interval(update, 1 / 30.0)
+
+class Game(object):
+    def __init__(self):
+        WIDTH = 800
+        HEIGHT = 600
+        self.window = pyglet.window.Window(width=WIDTH, height=HEIGHT)
+        self.scene = make_scene()
+        self.camera = Camera((200.0, 200.0), WIDTH, HEIGHT)
+        self.keys = key.KeyStateHandler() 
+        self.window.push_handlers(self.keys)
+        self.window.push_handlers(
+            on_draw=self.draw
+        )
+        self.spawn_player()
+        pyglet.clock.schedule_interval(self.update, 1.0 / FPS)
+
+    def spawn_player(self):
+        # all this should be done elsewhere
+        start = v(90, 115)
+        node = StaticImage(start, 'pc-standing.png')
+        self.scene.add(node)
+        self.hero = Player(start, node)
+
+    def draw(self):
+        self.scene.draw(self.camera)
+
+    def process_input(self):
+        if self.keys[KEY_LEFT]:
+            self.hero.left()
+        elif self.keys[KEY_RIGHT]:
+            self.hero.right()
+
+        if self.keys[KEY_JUMP]:
+            self.hero.jump()
+        elif self.keys[KEY_SHOOT]:
+            self.hero.shoot()
+
+    def update(self, dt):
+        self.process_input()
+        self.hero.update(dt)
+        self.scene.update(dt)
+
+
+def main():
+    g = Game()
     pyglet.app.run()
 
 

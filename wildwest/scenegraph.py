@@ -6,6 +6,8 @@ from geom import Rect, v
 
 
 pyglet.resource.path += [
+    './assets/sprites',
+    './assets/textures',
     '../assets/sprites',
     '../assets/textures',
 ]
@@ -86,7 +88,7 @@ class Node(object):
 
 
 class CompoundNode(Node):
-    def __init__(self, children=(), pos=(0, 0)):
+    def __init__(self, pos=(0, 0), children=()):
         self.pos = v(pos)
         self.children = []
         for c in children:
@@ -259,7 +261,7 @@ class Locomotive(CompoundNode):
         self.add_child(StaticImage((0, 0), 'locomotive.png'))
         self.add_child(Wheels((60, 0)))
 
-        wheels = CompoundNode([
+        wheels = CompoundNode(children=[
             LocomotiveWheel((303 + 82, 82)),
             LocomotiveWheel((303 + 180 + 82, 82))
         ])
