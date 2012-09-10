@@ -80,18 +80,57 @@ class Camera(object):
 class Node(object):
     """Base class for scenegraph objects."""
     z = 0
+    scenegraph = None
+
+    def set_scenegraph(self, scenegraph):
+        self.scenegraph = scenegraph
+
+
+class CompoundNode(Node):
+    def __init__(self, children=(), pos=(0, 0)):
+        self.pos = v(pos)
+        self.children = []
+        for c in children:
+            self.add_child(c)
+        self.build()
+
+    def set_scenegraph(self, scenegraph):
+        self.scenegraph = scenegraph
+        for c in self.children:
+            c.set_scenegraph(scenegraph)
+
+    def build(self):
+        """Subclasses can override this to populate the node."""
+
+    def add_child(self, c):
+        assert isinstance(c, Node)
+        c.set_scenegraph(self.scenegraph)
+        self.children.append(c)
+
+    def remove_child(self, c):
+        c.set_scenegraph(None)
+        self.children.remove(c)
+
+    def draw(self, camera):
+        self.children.sort(key=lambda x: x.z)
+        gl.glPushMatrix()
+        gl.glTranslatef(self.pos.x, self.pos.y, 0)
+        for c in self.children:
+            c.draw(camera)
+        gl.glPopMatrix()
 
 
 class AnimatedNode(Node):
     def __init__(self, pos, animation, z=0):
         self.z = z
         self.sprite = pyglet.sprite.Sprite(animation)
-        self.pos = pos
+        self.pos = v(pos)
 
     def get_position(self):
-        return self.sprite.position
+        return self._pos
 
     def set_position(self, pos):
+        self._pos = pos
         self.sprite.position = pos
 
     pos = property(get_position, set_position)
@@ -140,6 +179,97 @@ class Wheels(Node):
         self.sprite2.draw()
         gl.glPopMatrix()
         self.sprite1.draw()
+
+
+class LocomotiveWheel(AnimatedNode):
+    z = 1
+    def __init__(self, pos):
+        wheel = pyglet.resource.image('locomotive-wheel.png')
+        wheel.anchor_x = wheel.width // 2
+        wheel.anchor_y = wheel.height // 2
+        super(LocomotiveWheel, self).__init__(pos, wheel, 1)
+
+    def draw(self, camera):
+        angle = (self.scenegraph.t * 360) % 25
+        self.sprite.rotation = angle
+        super(LocomotiveWheel, self).draw(camera)
+
+
+class Depth(Node):
+    def __init__(self, node, dz):
+        self.node = node
+        self.dz = dz
+
+    @property
+    def z(self):
+        return self.node.z + self.dz
+
+    def draw(self, camera):
+        gl.glPushMatrix()
+        gl.glTranslatef(0, 0, self.dz)
+        self.node.draw(camera)
+        gl.glPopMatrix()
+
+
+class WheelBar(StaticImage):
+    RADIUS = 50
+    CONNECTED_LENGTH = 180  # distance between the wheels
+
+    def __init__(self, pos):
+        super(WheelBar, self).__init__(pos, 'wheel-bar.png', 2)
+        im = self.sprite.image
+        im.anchor_x = 12
+        im.anchor_y = 12
+        self.sprite2 = pyglet.sprite.Sprite(im)
+        
+        pb = pyglet.resource.image('piston-bar.png')
+        pb.anchor_x = 17
+        pb.anchor_y = 17
+        self.pistonbar = pyglet.sprite.Sprite(pb)
+
+        p = pyglet.resource.image('piston.png')
+        p.anchor_y = 21
+        self.piston = pyglet.sprite.Sprite(p)
+        self.piston.position = self._pos + v(2.5 * self.CONNECTED_LENGTH, 0)
+
+    def draw(self, camera):
+        a = self.scenegraph.t * math.pi * 7
+        off = v(
+            self.RADIUS * math.sin(a),
+            self.RADIUS * math.cos(a),
+        )
+        self.sprite.position = v(self._pos) + off
+
+        a2 = math.asin(off.y / self.CONNECTED_LENGTH)
+        self.sprite2.rotation = math.degrees(a2)
+        self.sprite2.position = v(self.sprite.position) + v(self.CONNECTED_LENGTH, 0)
+        super(WheelBar, self).draw(camera)
+        self.sprite2.draw()
+        self.pistonbar.position = v(
+            off.x + self.CONNECTED_LENGTH + self.CONNECTED_LENGTH * math.cos(a2),
+            0
+        ) + self._pos
+        self.pistonbar.draw()
+        self.piston.draw()
+
+
+class Locomotive(CompoundNode):
+    z = 1
+
+    def build(self):
+        self.add_child(StaticImage((0, 0), 'locomotive.png'))
+        self.add_child(Wheels((60, 0)))
+
+        wheels = CompoundNode([
+            LocomotiveWheel((303 + 82, 82)),
+            LocomotiveWheel((303 + 180 + 82, 82))
+        ])
+
+        # Link the same object into the scenegraph twice! Ooo-err...
+        self.add_child(wheels)
+        self.add_child(Depth(wheels, -70))
+
+        self.add_child(WheelBar((303 + 82, 82)))
 
 
 class GroundPlane(Node):
@@ -239,10 +369,11 @@ class Scenegraph(object):
         self.t += dt
 
     def add(self, obj):
-        obj.scenegraph = self
+        obj.set_scenegraph(self)
         self.objects.append(obj)
 
     def remove(self, obj):
+        obj.set_scenegraph(None)
         self.objects.remove(obj)
 
     def draw(self, camera):
@@ -257,15 +388,15 @@ if __name__ == '__main__':
     HEIGHT = 600
     w = pyglet.window.Window(width=800, height=600)
     s = Scenegraph()
-    s.add(Fill((1.0, 1.0, 1.0, 1.0)))
-    s.add(StaticImage((0, 53), 'car-interior.png'))
-    s.add(StaticImage((90, 115), 'pc-standing.png'))
-    s.add(StaticImage((600, 115), 'lawman-standing.png'))
-    s.add(StaticImage((300, 115), 'table.png'))
-    s.add(StaticImage((500, 115), 'crate.png'))
+#    s.add(Fill((1.0, 1.0, 1.0, 1.0)))
+#    s.add(Wheels((91, 0)))
+#    s.add(Wheels((992 - 236, 0)))
+#    s.add(StaticImage((0, 53), 'car-interior.png'))
+#    s.add(StaticImage((90, 115), 'pc-standing.png'))
+#    s.add(StaticImage((600, 115), 'lawman-standing.png'))
+#    s.add(StaticImage((300, 115), 'table.png'))
+#    s.add(StaticImage((500, 115), 'crate.png'))
     s.add(RailTrack(pyglet.resource.texture('track.png')))
-    s.add(Wheels((91, 0)))
-    s.add(Wheels((992 - 236, 0)))
     ground = GroundPlane(
         (218, 176, 127, 255),
         (194, 183, 164, 255),
@@ -277,6 +408,7 @@ if __name__ == '__main__':
         (49, 92, 142, 255)
     ))
 
+    s.add(Locomotive(pos=(0, 0)))
     camera = Camera((200.0, 200.0), WIDTH, HEIGHT)
 
     @w.event
@@ -287,5 +419,5 @@ if __name__ == '__main__':
         camera.offset += v(100, 0) * dt
         s.update(dt)
 
-    pyglet.clock.schedule_interval(update, 1/30.0)
+    pyglet.clock.schedule_interval(update, 1/60.0)
     pyglet.app.run()
