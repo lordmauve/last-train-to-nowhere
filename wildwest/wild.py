@@ -7,12 +7,13 @@ sys.path.insert(0, '..')
 import retrogamelib
 from retrogamelib.gameobject import Object
 from retrogamelib import display
-from retrogamelib import clock
 from retrogamelib import button
 from retrogamelib.constants import *
 from retrogamelib.camera import Camera
 from retrogamelib import util
 from retrogamelib import geometry
+
+from pygame.time import Clock
 
 ASSETS_BASE = 'assets/sprites'
 IMG_PC_STANDING = os.path.join(ASSETS_BASE, 'pc-standing.png')
@@ -38,14 +39,15 @@ class ImageObject(Object):
 
 
 class Player(ImageObject):
-    MAX_WALK = 5  # limit on walk speed
-    ACCEL = 1  # acceleration when walking
-    FRICTION = 0.85  # deceleration
+    MAX_WALK = 200  # limit on walk speed
+    ACCEL = 1600  # acceleration when walking
+    FRICTION = 4  # deceleration
 
     def __init__(self, pos, img_path):
         ImageObject.__init__(self, pos, img_path)
         self.direction = geometry.Vector(1, 0)
         self.walk_speed = 0
+        self.xaccel = 0
         self.jump_speed = 10
         self.jumping = False
         self.on_floor = False
@@ -62,7 +64,7 @@ class Player(ImageObject):
 
     def jump(self):
         if not self.on_floor:
-             return
+            return
         self.jumping = True
         self.jump_speed = -12
         # if not self.jumping:
@@ -76,14 +78,16 @@ class Player(ImageObject):
 
     def control_walk(self):
         if button.is_held(LEFT):
-            self.walk_speed = max(-self.MAX_WALK, self.walk_speed - self.ACCEL)
+            self.xaccel = -self.ACCEL
         elif button.is_held(RIGHT):
-            self.walk_speed = min(self.MAX_WALK, self.walk_speed + self.ACCEL)
+            self.xaccel = self.ACCEL
         else:
-            self.walk_speed *= self.FRICTION
             if abs(self.walk_speed) < 0.01:
                 self.walk_speed = 0
-    
+                self.xaccel = 0
+            else:
+                self.xaccel = -self.FRICTION * self.walk_speed
+
     # def aim_shot(self):
     #     self.shot_vector = self.direction.copy()
     #     x = int(button.is_held(RIGHT) - button.is_held(LEFT))
@@ -99,7 +103,12 @@ class Player(ImageObject):
             self.rect.x = int(self.rect.x + self.walk_speed)
             self.direction.x = self.walk_speed / abs(self.walk_speed)
 
-    def update(self):
+    def update(self, dt):
+        u = self.walk_speed
+        self.walk_speed += self.xaccel * dt
+        if abs(self.walk_speed) > self.MAX_WALK:
+            self.walk_speed = self.MAX_WALK * self.walk_speed / abs(self.walk_speed)
+        self.rect.x += 0.5 * (u + self.walk_speed) * dt
         # if self.jump_speed < 7:
         #     self.jump_speed += 1
         # if self.jump_speed < 10 and\
@@ -110,7 +119,7 @@ class Player(ImageObject):
                 self.rect.y = FLOOR_Y - self.rect.height
             #print 'jump_speed: %d, rect.y: %d' % (self.jump_speed, self.rect.y)
 
-        self.do_walk()
+        #self.do_walk()
         self.on_floor = False
         self.collide_with_floors()
         # if self.fall_through > 0:
@@ -190,12 +199,17 @@ def main():
     camera = Camera()
     camera.follow(hero)
 
+    clock = Clock()
+
     while True:
-        clock.tick()
+        dt = clock.tick(60)
+        dt *= 0.001
         button.handle_input()
-        for o in objects:
-            o.update()
         hero.controls()
+        hero.update(dt)
+        for o in objects:
+            if o is not hero:
+                o.update()
         camera.update()
 
         surface = display.surface
