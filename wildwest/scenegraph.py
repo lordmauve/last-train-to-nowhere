@@ -32,27 +32,31 @@ class Camera(object):
         self.screen_h = screen_h
         self.offset = offset
 
+    def get_plane_rect(self, depth):
+        """Get the rectangle of a plane perpendicular to the view direction,
+        a distance depth from the camera."""
+        scale = depth / self.focus
+        x, y = self.offset
+
+        # The extra 1/1.01 is to cover the distance from the centre of the
+        # outside pixels to the edge of the frustum
+        sw = self.screen_w + 1.001
+        sh = self.screen_h + 1.001
+
+        return Rect(
+            x + scale * -0.5 * sw,
+            x + scale * 0.5 * sw,
+            y + scale * -0.5 * sh,
+            y + scale * 0.5 * sh
+        )
+
     def far_plane(self):
         """Get the rectangle of the back plane"""
-        scale = self.far / self.focus
-        x, y = self.offset
-        return Rect(
-            x + scale * -0.5 * self.screen_w,
-            x + scale * 0.5 * self.screen_w,
-            y + scale * -0.5 * self.screen_h,
-            y + scale * 0.5 * self.screen_h,
-        )
+        return self.get_plane_rect(self.far)
 
     def near_plane(self):
         """Get the rectangle of the near plane"""
-        scale = self.near / self.focus
-        x, y = self.offset
-        return Rect(
-            x + scale * -0.5 * self.screen_w,
-            x + scale * 0.5 * self.screen_w,
-            y + scale * -0.5 * self.screen_h,
-            y + scale * 0.5 * self.screen_h,
-        )
+        return self.get_plane_rect(self.near)
     
     def viewport(self):
         """Get the rectangle of the near plane"""
@@ -134,10 +138,29 @@ class GroundPlane(Node):
         pyglet.graphics.draw(4, gl.GL_QUADS, coords, col)
 
 
+class SkyBox(Node):
+    z = -901
+
+    def __init__(self, horizon_colour, zenith_colour):
+        self.horizon_colour = list(horizon_colour)
+        self.zenith_colour = list(zenith_colour)
+
+    def draw(self, camera):
+        far = camera.far_plane()
+        z = -camera.far + 400
+        coords = ('v3f', [
+            far.l, 0, z,
+            far.r, 0, z,
+            far.r, far.t, z,
+            far.l, far.t, z,
+        ])
+        col = ('c4B', self.horizon_colour * 2 + self.zenith_colour * 2)
+        pyglet.graphics.draw(4, gl.GL_QUADS, coords, col)
+
+
 class RailTrack(Node):
     z = -1
     def __init__(self, tex, y=0):
-        self.dist = 0
         self.y = y
         self.group = pyglet.sprite.SpriteGroup(
             tex,
@@ -146,7 +169,7 @@ class RailTrack(Node):
         )
 
     def draw(self, camera):
-        self.dist += 11.7
+        dist = 779 * self.scenegraph.t
         vp = camera.viewport()
 
         l = vp.l - 128
@@ -158,7 +181,7 @@ class RailTrack(Node):
             r, self.y, -96,
             l, self.y, -96,
         ])
-        d = self.dist / 128.0
+        d = dist / 128.0
         tc = ('t2f', [
             1, d,
             1, d + scale,
@@ -184,6 +207,10 @@ class Fill(Node):
 class Scenegraph(object):
     def __init__(self):
         self.objects = []
+        self.t = 0
+
+    def update(self, dt):
+        self.t += dt
 
     def add(self, obj):
         obj.scenegraph = self
@@ -217,10 +244,19 @@ if __name__ == '__main__':
     )
     s.add(ground)
 
+    s.add(SkyBox(
+        (129, 218, 255, 255),
+        (49, 92, 142, 255)
+    ))
+
     camera = Camera((200.0, 200.0), WIDTH, HEIGHT)
 
     @w.event
     def on_draw():
         s.draw(camera)
 
+    def update(dt):
+        s.update(dt)
+
+    pyglet.clock.schedule_interval(update, 1/30.0)
     pyglet.app.run()

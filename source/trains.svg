@@ -516,7 +516,7 @@
      inkscape:cx="1.7547324"
      inkscape:cy="922.72896"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer6"
      showgrid="false"
      inkscape:window-width="1680"
      inkscape:window-height="1026"
@@ -568,8 +568,7 @@
      inkscape:groupmode="layer"
      id="layer6"
      inkscape:label="Background"
-     style="display:none"
-     sodipodi:insensitive="true">
+     style="display:inline">
     <rect
        style="color:#000000;fill:url(#linearGradient6251);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.838;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        id="rect6235"
@@ -3728,7 +3727,8 @@
      inkscape:groupmode="layer"
      id="layer5"
      inkscape:label="Interior"
-     style="display:inline">
+     style="display:inline"
+     sodipodi:insensitive="true">
     <g
        id="g6262"
        inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/car-exterior.png"
@@ -4049,7 +4049,7 @@
      id="layer4"
      inkscape:label="Contents"
      sodipodi:insensitive="true"
-     style="display:none">
+     style="display:inline">
     <g
        transform="translate(1.1072964e-6,-4.226627e-6)"
        style="display:inline"
