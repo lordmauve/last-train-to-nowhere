@@ -260,6 +260,8 @@ class Game(object):
     def update(self, dt):
         self.process_input()
         self.hero.update(dt)
+
+        self.camera.offset = self.hero.pos + v(0, 120)
         self.scene.update(dt)
 
 
