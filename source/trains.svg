@@ -503,6 +503,17 @@
        y1="146.36218"
        x2="-304"
        y2="156.36218" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath6931-7">
+      <rect
+         y="171.61218"
+         x="-1207.75"
+         height="143.5"
+         width="162.25"
+         id="rect6933-9"
+         style="color:#000000;fill:#333333;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+    </clipPath>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -511,9 +522,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8284271"
-     inkscape:cx="-323.1221"
-     inkscape:cy="277.27825"
+     inkscape:zoom="1"
+     inkscape:cx="-2344.7699"
+     inkscape:cy="843.15346"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -567,7 +578,8 @@
      inkscape:groupmode="layer"
      id="layer6"
      inkscape:label="Background"
-     style="display:inline">
+     style="display:none"
+     sodipodi:insensitive="true">
     <rect
        style="color:#000000;fill:url(#linearGradient6251);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.838;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        id="rect6235"
@@ -713,17 +725,6 @@
      inkscape:groupmode="layer"
      id="layer1"
      style="display:inline">
-    <use
-       x="0"
-       y="0"
-       xlink:href="#g3624"
-       id="use3963"
-       transform="translate(664.53193,-218)"
-       width="744.09448"
-       height="1052.3622"
-       inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/car-interior.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
     <g
        id="g3624"
        transform="matrix(1.6978158,0,0,1.6977553,-672.21466,-679.19543)"
@@ -941,6 +942,89 @@
        inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/car-interior.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90">
+      <use
+         style="display:inline"
+         x="0"
+         y="0"
+         xlink:href="#g13253"
+         id="use13266"
+         transform="matrix(-1,0,0,1,741.95178,-7.4181146e-7)"
+         width="744.09448"
+         height="1052.3622"
+         inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/car-exterior.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <g
+         transform="matrix(0.25268817,0,0,0.25269718,389.46626,470.0997)"
+         style="display:inline"
+         id="g13253"
+         inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/car-exterior.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90">
+        <path
+           inkscape:connector-curvature="0"
+           id="path13233"
+           d="m -568,372.36218 48,-17"
+           style="fill:none;stroke:#000000;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+        <path
+           style="fill:none;stroke:#000000;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m -568,362.36218 48,-17"
+           id="path13235"
+           inkscape:connector-curvature="0" />
+        <path
+           style="color:#000000;fill:#550000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+           d="m -567,331.36218 153,0 0,11.02944 -63.29708,16.97056 -89.70292,0 z"
+           id="rect13227"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="cccccc" />
+        <rect
+           y="322.34372"
+           x="-567"
+           height="17"
+           width="153"
+           id="rect13201"
+           style="color:#000000;fill:#800000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+        <rect
+           y="346.36218"
+           x="-594"
+           height="34"
+           width="27"
+           id="rect13229"
+           style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+        <rect
+           transform="scale(1,-1)"
+           style="color:#000000;fill:#333333;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.99999982;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+           id="rect13231"
+           width="27"
+           height="14"
+           x="-594"
+           y="-345.36218" />
+        <g
+           transform="matrix(1,0,0,0.97152992,0,11.068611)"
+           id="g13247">
+          <path
+             inkscape:connector-curvature="0"
+             id="path13241"
+             d="m -595.00531,329.72607 c -4.22482,-1.21626 -7.24254,-10.03406 -9.35495,-10.64218 -2.1124,-0.60813 -3.3195,4.25687 -3.3195,4.25687 l 0,39.22403 c 0,0 1.50887,5.77719 3.3195,6.3853 1.81063,0.60813 3.01773,-5.77718 3.92305,-7.29749 0.90531,-1.5203 6.03543,-4.56093 6.03543,-4.56093 z"
+             style="fill:#1a1a1a;stroke:#000000;stroke-width:1.01454639px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+          <path
+             style="fill:#1a1a1a;stroke:#000000;stroke-width:1.01454639px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             d="m -595.00531,348.81796 c -4.22482,-1.21626 -7.24254,-10.03406 -9.35495,-10.64218 -2.1124,-0.60813 -3.3195,4.25687 -3.3195,4.25687 l 0,39.22403 c -0.5,3.75 1.87465,7.63453 3.3195,6.3853 5.36222,-4.6362 3.35767,-7.79131 9.95848,-11.85842 z"
+             id="path13239"
+             inkscape:connector-curvature="0"
+             sodipodi:nodetypes="csccscc" />
+          <path
+             style="opacity:0.25;fill:none;stroke:#ffffff;stroke-width:1.01454639px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             d="m -604.4375,340.54968 c 1.3125,1.875 4.5625,6.625 5.25,7.125 0.6875,0.5 2,1.6875 2,1.6875"
+             id="path13243"
+             inkscape:connector-curvature="0" />
+          <path
+             inkscape:connector-curvature="0"
+             id="path13245"
+             d="m -604.4375,321.98718 c 1.3125,1.875 4.5625,6.625 5.25,7.125 0.6875,0.5 2,1.6875 2,1.6875"
+             style="opacity:0.25;fill:none;stroke:#ffffff;stroke-width:1.01454639px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+        </g>
+      </g>
       <g
          id="g3718">
         <g
@@ -988,9 +1072,9 @@
       <path
          style="color:#000000;fill:#800000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.99999988;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
          d="m -519.59375,173.15625 0,169.1875 901.3125,0 0,-169.1875 -901.3125,0 z m 58.375,20.78125 41.5625,0 0,49.375 -41.5625,0 0,-49.375 z m 61.9375,0 41.53125,0 0,49.375 -41.53125,0 0,-49.375 z m 61.90625,0 41.53125,0 0,49.375 -41.53125,0 0,-49.375 z m 61.90625,0 41.5625,0 0,49.375 -41.5625,0 0,-49.375 z m 371.5,0 41.5625,0 0,49.375 -41.5625,0 0,-49.375 z m 61.9375,0 41.53125,0 0,49.375 -41.53125,0 0,-49.375 z m 61.90625,0 41.53125,0 0,49.375 -41.53125,0 0,-49.375 z m 61.90625,0 41.5625,0 0,49.375 -41.5625,0 0,-49.375 z m -464.375,0.0312 41.5625,0 0,49.34375 -41.5625,0 0,-49.34375 z m 61.9375,0 41.53125,0 0,49.34375 -41.53125,0 0,-49.34375 z m 61.90625,0 41.5625,0 0,49.34375 -41.5625,0 0,-49.34375 z m 61.90625,0 41.5625,0 0,49.34375 -41.5625,0 0,-49.34375 z"
-         transform="matrix(0.25268817,0,0,0.25269718,389.46626,470.09969)"
          id="rect3377"
-         inkscape:connector-curvature="0" />
+         inkscape:connector-curvature="0"
+         transform="matrix(0.25268817,0,0,0.25269718,389.46626,470.09969)" />
       <g
          style="opacity:0.5;fill:#008080"
          transform="matrix(1,0,0,1.0613267,140.42224,-31.835415)"
@@ -2395,20 +2479,35 @@
     </g>
     <g
        id="g6962"
-       inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/freightcar-exterior.png"
+       inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/freightcar-interior.png"
        inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90">
-      <use
-         x="0"
-         y="0"
-         xlink:href="#g3624"
-         id="use6285"
-         transform="translate(-384.81453,-218)"
-         width="744.09448"
-         height="1052.3622"
-         inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/car-exterior.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+       inkscape:export-ydpi="90"
+       transform="translate(-248,-2)">
+      <g
+         id="g13458"
+         transform="translate(-27.106691,0)">
+        <use
+           height="1"
+           width="1"
+           id="use13433"
+           xlink:href="#g13253"
+           y="0"
+           x="0"
+           style="display:inline"
+           transform="matrix(3.9574468,0,0,3.9573057,-2559.292,-1860.3282)" />
+        <use
+           style="display:inline"
+           x="0"
+           y="0"
+           xlink:href="#g13253"
+           id="use13435"
+           transform="matrix(-3.9574468,0,0,3.9573057,376.9427,-1860.3282)"
+           width="744.09448"
+           height="1052.3622"
+           inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/car-exterior.png"
+           inkscape:export-xdpi="90"
+           inkscape:export-ydpi="90" />
+      </g>
       <g
          id="g6287"
          transform="matrix(3.9574468,0,0,3.9573057,-2590.6385,-1860.3282)"
@@ -2908,17 +3007,6 @@
            x="420.20132"
            y="503.88754" />
       </g>
-      <use
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
-         inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/car-exterior.png"
-         height="1052.3622"
-         width="744.09448"
-         transform="translate(-1049.8511,-218)"
-         id="use6639"
-         xlink:href="#g3624"
-         y="0"
-         x="0" />
       <g
          id="g6691-6"
          style="display:inline"
@@ -3041,20 +3129,35 @@
     <g
        inkscape:export-ydpi="90"
        inkscape:export-xdpi="90"
-       inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/mailcar-exterior.png"
+       inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/mailcar-interior.png"
        id="g7057"
-       transform="translate(-1046,0)">
-      <use
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
-         inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/car-exterior.png"
-         height="1052.3622"
-         width="744.09448"
-         transform="translate(-384.81453,-218)"
-         id="use7059"
-         xlink:href="#g3624"
-         y="0"
-         x="0" />
+       transform="translate(-1404,0)">
+      <g
+         style="display:inline"
+         id="g13458-0"
+         transform="translate(-27.106815,-2)">
+        <use
+           height="1"
+           width="1"
+           id="use13433-0"
+           xlink:href="#g13253"
+           y="0"
+           x="0"
+           style="display:inline"
+           transform="matrix(3.9574468,0,0,3.9573057,-2559.292,-1860.3282)" />
+        <use
+           style="display:inline"
+           x="0"
+           y="0"
+           xlink:href="#g13253"
+           id="use13435-5"
+           transform="matrix(-3.9574468,0,0,3.9573057,376.9427,-1860.3282)"
+           width="744.09448"
+           height="1052.3622"
+           inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/car-exterior.png"
+           inkscape:export-xdpi="90"
+           inkscape:export-ydpi="90" />
+      </g>
       <g
          id="g7063"
          transform="matrix(3.9574468,0,0,3.9573057,-2590.6385,-1860.3282)">
@@ -3657,17 +3760,6 @@
            x="270.57007"
            y="532.59869" />
       </g>
-      <use
-         x="0"
-         y="0"
-         xlink:href="#g3624"
-         id="use7213"
-         transform="translate(-1049.8511,-218)"
-         width="744.09448"
-         height="1052.3622"
-         inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/car-exterior.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
       <rect
          y="177.20337"
          x="-1569.5905"
@@ -3723,14 +3815,6 @@
     <g
        id="g7796"
        transform="translate(-1.9999847,0)" />
-    <use
-       x="0"
-       y="0"
-       xlink:href="#g3624"
-       id="use12941"
-       transform="translate(0,-218)"
-       width="744.09448"
-       height="1052.3622" />
     <g
        inkscape:export-ydpi="90"
        inkscape:export-xdpi="90"
@@ -4162,7 +4246,7 @@
      sodipodi:insensitive="true">
     <g
        id="g6262"
-       inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/car-exterior.png"
+       inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/car-interior.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90">
       <path
@@ -4309,7 +4393,7 @@
     </g>
     <g
        id="g6496"
-       transform="translate(-1049.3465,0)"
+       transform="translate(-1297.3465,0)"
        inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/freightcar-exterior.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90">
@@ -4329,96 +4413,97 @@
          inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/car-exterior.png"
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90" />
-    </g>
-    <g
-       id="g6691"
-       transform="translate(5,0)"
-       clip-path="url(#clipPath6931)">
       <g
-         style="fill:#311b0a;fill-opacity:1"
-         transform="translate(22.627417,2.1213203)"
-         id="g6588">
-        <rect
-           style="color:#000000;fill:#311b0a;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-           id="rect6572"
-           width="21.920311"
-           height="145.664"
-           x="-1231.78"
-           y="168.4787"
-           rx="2"
-           ry="2" />
-        <rect
-           style="color:#000000;fill:#311b0a;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-           id="rect6576"
-           width="21.920311"
-           height="145.664"
-           x="-1207.8563"
-           y="168.4787"
-           rx="2"
-           ry="2" />
-        <rect
-           style="color:#000000;fill:#311b0a;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-           id="rect6578"
-           width="21.920311"
-           height="145.664"
-           x="-1183.9326"
-           y="168.4787"
-           rx="2"
-           ry="2" />
-        <rect
-           style="color:#000000;fill:#311b0a;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-           id="rect6580"
-           width="21.920311"
-           height="145.664"
-           x="-1160.0089"
-           y="168.4787"
-           rx="2"
-           ry="2" />
-        <rect
-           style="color:#000000;fill:#311b0a;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-           id="rect6582"
-           width="21.920311"
-           height="145.664"
-           x="-1136.0852"
-           y="168.4787"
-           rx="2"
-           ry="2" />
-        <rect
-           style="color:#000000;fill:#311b0a;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-           id="rect6584"
-           width="21.920311"
-           height="145.664"
-           x="-1112.1615"
-           y="168.4787"
-           rx="2"
-           ry="2" />
-        <rect
-           style="color:#000000;fill:#311b0a;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-           id="rect6586"
-           width="21.920311"
-           height="145.664"
-           x="-1088.2378"
-           y="168.4787"
-           rx="2"
-           ry="2" />
+         style="display:inline"
+         id="g6691"
+         transform="translate(1054.3465,0)"
+         clip-path="url(#clipPath6931-7)">
+        <g
+           style="fill:#311b0a;fill-opacity:1"
+           transform="translate(22.627417,2.1213203)"
+           id="g6588">
+          <rect
+             style="color:#000000;fill:#311b0a;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+             id="rect6572"
+             width="21.920311"
+             height="145.664"
+             x="-1231.78"
+             y="168.4787"
+             rx="2"
+             ry="2" />
+          <rect
+             style="color:#000000;fill:#311b0a;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+             id="rect6576"
+             width="21.920311"
+             height="145.664"
+             x="-1207.8563"
+             y="168.4787"
+             rx="2"
+             ry="2" />
+          <rect
+             style="color:#000000;fill:#311b0a;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+             id="rect6578"
+             width="21.920311"
+             height="145.664"
+             x="-1183.9326"
+             y="168.4787"
+             rx="2"
+             ry="2" />
+          <rect
+             style="color:#000000;fill:#311b0a;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+             id="rect6580"
+             width="21.920311"
+             height="145.664"
+             x="-1160.0089"
+             y="168.4787"
+             rx="2"
+             ry="2" />
+          <rect
+             style="color:#000000;fill:#311b0a;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+             id="rect6582"
+             width="21.920311"
+             height="145.664"
+             x="-1136.0852"
+             y="168.4787"
+             rx="2"
+             ry="2" />
+          <rect
+             style="color:#000000;fill:#311b0a;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+             id="rect6584"
+             width="21.920311"
+             height="145.664"
+             x="-1112.1615"
+             y="168.4787"
+             rx="2"
+             ry="2" />
+          <rect
+             style="color:#000000;fill:#311b0a;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+             id="rect6586"
+             width="21.920311"
+             height="145.664"
+             x="-1088.2378"
+             y="168.4787"
+             rx="2"
+             ry="2" />
+        </g>
+        <g
+           transform="matrix(1,0,0,-1,0,483.34707)"
+           id="g6683" />
+        <g
+           id="g6679" />
       </g>
-      <g
-         transform="matrix(1,0,0,-1,0,483.34707)"
-         id="g6683" />
-      <g
-         id="g6679" />
+      <path
+         style="opacity:0.5;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         d="m -153.4035,171.625 0,143.5 3,0 0,-140.875 159.25,0 0,-2.625 -162.25,0 z"
+         id="rect6927"
+         inkscape:connector-curvature="0" />
     </g>
-    <path
-       style="opacity:0.5;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       d="m -1202.75,171.625 0,143.5 3,0 0,-140.875 159.25,0 0,-2.625 -162.25,0 z"
-       id="rect6927"
-       inkscape:connector-curvature="0" />
     <rect
        style="color:#000000;fill:#442300;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        id="rect6502"
        width="884.64026"
        height="18.834732"
-       x="-1560.7416"
+       x="-1808.7416"
        y="314.34842"
        inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/car-exterior.png"
        inkscape:export-xdpi="90"
@@ -4427,7 +4512,8 @@
        id="g7987"
        inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/mailcar-exterior.png"
        inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90">
+       inkscape:export-ydpi="90"
+       transform="translate(-358,0)">
       <path
          style="color:#000000;fill:#2b1600;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
          d="m -2289.5625,47.59375 0,103.9375 -317.5,0 0,181.96875 885.5625,0 0,-181.96875 -317.5,0 0,-103.9375 -250.5625,0 z m 10.875,35.09375 41.5313,0 0,49.34375 -41.5313,0 0,-49.34375 z m 186.8437,0 41.5313,0 0,49.34375 -41.5313,0 0,-49.34375 z m -430.9062,100.40625 41.5625,0 0,38.75 -41.5625,0 0,-38.75 z m 667.5,0 41.5625,0 0,38.75 -41.5625,0 0,-38.75 z"
@@ -4480,7 +4566,7 @@
      id="layer4"
      inkscape:label="Contents"
      sodipodi:insensitive="true"
-     style="display:inline">
+     style="display:none">
     <g
        transform="translate(1.1072964e-6,-4.226627e-6)"
        style="display:inline"

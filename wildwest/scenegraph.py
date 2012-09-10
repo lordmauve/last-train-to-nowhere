@@ -16,7 +16,7 @@ class Camera(object):
     """A camera object."""
     def __init__(self, offset, screen_w, screen_h):
         self.near = 1.0
-        self.focus = 400.0  # the plane our 2D scene is mainly on
+        self.focus = 800.0  # the plane our 2D scene is mainly on
         self.far = 10000.0
         self.screen_w = screen_w
         self.screen_h = screen_h
@@ -114,10 +114,11 @@ class Wheels(Node):
         im1 = pyglet.resource.image('wheels.png')
         im2 = pyglet.resource.image('wheels2.png')
         im3 = pyglet.resource.image('wheels3.png')
+        t = 0.05
         anim = Animation([
-            AnimationFrame(im1, 0.1),
-            AnimationFrame(im2, 0.1),
-            AnimationFrame(im3, 0.1),
+            AnimationFrame(im1, t),
+            AnimationFrame(im2, t),
+            AnimationFrame(im3, t),
         ])
         self.sprite1 = pyglet.sprite.Sprite(anim)
         self.sprite2 = pyglet.sprite.Sprite(anim)
@@ -172,7 +173,7 @@ class SkyBox(Node):
 
     def draw(self, camera):
         far = camera.far_plane()
-        z = -camera.far + 400
+        z = -camera.far + camera.focus
         coords = ('v3f', [
             far.l, 0, z,
             far.r, 0, z,
@@ -257,13 +258,14 @@ if __name__ == '__main__':
     w = pyglet.window.Window(width=800, height=600)
     s = Scenegraph()
     s.add(Fill((1.0, 1.0, 1.0, 1.0)))
-    s.add(StaticImage((10, 0), 'car-interior.png'))
+    s.add(StaticImage((0, 53), 'car-interior.png'))
     s.add(StaticImage((90, 115), 'pc-standing.png'))
     s.add(StaticImage((600, 115), 'lawman-standing.png'))
     s.add(StaticImage((300, 115), 'table.png'))
     s.add(StaticImage((500, 115), 'crate.png'))
     s.add(RailTrack(pyglet.resource.texture('track.png')))
-    s.add(Wheels((400, 0)))
+    s.add(Wheels((91, 0)))
+    s.add(Wheels((992 - 236, 0)))
     ground = GroundPlane(
         (218, 176, 127, 255),
         (194, 183, 164, 255),
@@ -282,7 +284,7 @@ if __name__ == '__main__':
         s.draw(camera)
 
     def update(dt):
-        camera.offset += v(10, 0) * dt
+        camera.offset += v(100, 0) * dt
         s.update(dt)
 
     pyglet.clock.schedule_interval(update, 1/30.0)
