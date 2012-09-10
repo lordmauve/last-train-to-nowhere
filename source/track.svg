@@ -20,7 +20,16 @@
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
-     id="defs4666" />
+     id="defs4666">
+    <filter
+       id="filter12935"
+       inkscape:label="Motion Blur">
+      <feGaussianBlur
+         stdDeviation="0.01 4"
+         id="feGaussianBlur12937"
+         in="SourceGraphic" />
+    </filter>
+  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -28,9 +37,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="67.535315"
-     inkscape:cy="56.015332"
+     inkscape:zoom="2"
+     inkscape:cx="56.984618"
+     inkscape:cy="28.42188"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -56,142 +65,163 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(0,-924.36218)">
-    <path
-       style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;opacity:0.5"
-       d="M 4 4 L 4 36 L 28 36 L 28 64 L 36 64 L 36 36 L 108 36 L 108 64 L 116 64 L 116 36 L 124 36 L 124 4 L 4 4 z "
-       transform="translate(0,924.36218)"
-       id="rect5196" />
-    <path
-       style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;opacity:0.5"
-       d="M 4 68 L 4 100 L 28 100 L 28 128 L 36 128 L 36 100 L 108 100 L 108 128 L 116 128 L 116 100 L 124 100 L 124 68 L 4 68 z "
-       transform="translate(0,924.36218)"
-       id="rect5198" />
-    <rect
-       style="color:#000000;fill:#432612;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       id="rect4672"
-       width="120"
-       height="32"
-       x="0"
-       y="924.36218" />
-    <rect
-       y="988.36218"
-       x="0"
-       height="32"
-       width="120"
-       id="rect5182"
-       style="color:#000000;fill:#432612;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
-    <rect
-       style="opacity:0.5;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       id="rect5188"
-       width="8"
-       height="32"
-       x="25"
-       y="988.36218" />
     <g
-       id="g5224">
+       id="g12911"
+       style="filter:url(#filter12935)">
+      <path
+         inkscape:connector-curvature="0"
+         id="rect5196"
+         d="m 120,1048.3622 0,-32 -24,0 0,-28.00001 -8,0 0,28.00001 -72,0 0,-28.00001 -8,0 0,28.00001 -8,0 0,32 120,0 z"
+         style="opacity:0.5;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+      <path
+         inkscape:connector-curvature="0"
+         id="rect5198"
+         d="m 120,984.36219 0,-32 -24,0 0,-28 -8,0 0,28 -72,0 0,-28 -8,0 0,28 -8,0 0,32 120,0 z"
+         style="opacity:0.5;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+      <rect
+         transform="scale(-1,-1)"
+         y="-1052.3622"
+         x="-124"
+         height="32"
+         width="120"
+         id="rect4672"
+         style="color:#000000;fill:#432612;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+      <rect
+         transform="scale(-1,-1)"
+         style="color:#000000;fill:#432612;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect5182"
+         width="120"
+         height="32"
+         x="-124"
+         y="-988.36218" />
+      <rect
+         transform="scale(-1,-1)"
+         y="-988.36218"
+         x="-99"
+         height="32"
+         width="8"
+         id="rect5188"
+         style="opacity:0.5;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
       <g
-         transform="translate(0.25,-0.625)"
-         id="g5214">
-        <rect
-           style="color:#000000;fill:#797979;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-           id="rect5210"
-           width="7.25"
-           height="3.125"
-           x="12"
-           y="1010.9872"
-           rx="0.99999994"
-           ry="1" />
-        <rect
-           ry="1"
-           rx="0.99999994"
-           y="1010.9872"
-           x="20.25"
-           height="3.125"
-           width="7.25"
-           id="rect5212"
-           style="color:#000000;fill:#474747;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+         transform="matrix(-1,0,0,-1,124,1976.7244)"
+         id="g5224">
+        <g
+           id="g5214"
+           transform="translate(0.25,-0.625)">
+          <rect
+             ry="1"
+             rx="0.99999994"
+             y="1010.9872"
+             x="12"
+             height="3.125"
+             width="7.25"
+             id="rect5210"
+             style="color:#000000;fill:#797979;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+          <rect
+             style="color:#000000;fill:#474747;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+             id="rect5212"
+             width="7.25"
+             height="3.125"
+             x="20.25"
+             y="1010.9872"
+             rx="0.99999994"
+             ry="1" />
+        </g>
+        <g
+           transform="translate(0.25,-16.75)"
+           id="g5218">
+          <rect
+             style="color:#000000;fill:#797979;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+             id="rect5220"
+             width="7.25"
+             height="3.125"
+             x="12"
+             y="1010.9872"
+             rx="0.99999994"
+             ry="1" />
+          <rect
+             ry="1"
+             rx="0.99999994"
+             y="1010.9872"
+             x="20.25"
+             height="3.125"
+             width="7.25"
+             id="rect5222"
+             style="color:#000000;fill:#474747;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+        </g>
       </g>
-      <g
-         id="g5218"
-         transform="translate(0.25,-16.75)">
-        <rect
-           ry="1"
-           rx="0.99999994"
-           y="1010.9872"
-           x="12"
-           height="3.125"
-           width="7.25"
-           id="rect5220"
-           style="color:#000000;fill:#797979;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
-        <rect
-           style="color:#000000;fill:#474747;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-           id="rect5222"
-           width="7.25"
-           height="3.125"
-           x="20.25"
-           y="1010.9872"
-           rx="0.99999994"
-           ry="1" />
-      </g>
+      <rect
+         transform="scale(-1,-1)"
+         style="opacity:0.5;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect5192"
+         width="8"
+         height="32"
+         x="-99"
+         y="-1052.3622" />
+      <use
+         height="128"
+         width="128"
+         transform="translate(0,63.5)"
+         id="use5232"
+         xlink:href="#g5224"
+         y="0"
+         x="0" />
+      <rect
+         transform="scale(-1,-1)"
+         y="-1052.3622"
+         x="-109"
+         height="128"
+         width="10"
+         id="rect5184"
+         style="color:#000000;fill:#999999;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+      <rect
+         transform="scale(-1,-1)"
+         style="opacity:0.5;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect5190"
+         width="8"
+         height="32"
+         x="-19"
+         y="-988.36218" />
+      <use
+         height="128"
+         width="128"
+         transform="translate(-80,0)"
+         id="use5250"
+         xlink:href="#g5224"
+         y="0"
+         x="0" />
+      <rect
+         transform="scale(-1,-1)"
+         y="-1052.3622"
+         x="-19"
+         height="32"
+         width="8"
+         id="rect5194"
+         style="opacity:0.5;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+      <use
+         x="0"
+         y="0"
+         xlink:href="#g5224"
+         id="use5252"
+         transform="translate(-80,63.5)"
+         width="128"
+         height="128" />
+      <rect
+         transform="scale(-1,-1)"
+         style="color:#000000;fill:#999999;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect5186"
+         width="10"
+         height="128"
+         x="-29"
+         y="-1052.3622" />
     </g>
-    <rect
-       y="924.36218"
-       x="25"
-       height="32"
-       width="8"
-       id="rect5192"
-       style="opacity:0.5;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
     <use
        x="0"
        y="0"
-       xlink:href="#g5224"
-       id="use5232"
-       transform="translate(0,-63.5)"
+       xlink:href="#g12911"
+       id="use12933"
+       transform="translate(0,-128)"
        width="128"
        height="128" />
-    <rect
-       style="color:#000000;fill:#999999;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       id="rect5184"
-       width="10"
-       height="128"
-       x="15"
-       y="924.36218" />
-    <rect
-       y="988.36218"
-       x="105"
-       height="32"
-       width="8"
-       id="rect5190"
-       style="opacity:0.5;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
-    <use
-       x="0"
-       y="0"
-       xlink:href="#g5224"
-       id="use5250"
-       transform="translate(80,0)"
-       width="128"
-       height="128" />
-    <rect
-       style="opacity:0.5;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       id="rect5194"
-       width="8"
-       height="32"
-       x="105"
-       y="924.36218" />
-    <use
-       height="128"
-       width="128"
-       transform="translate(80,-63.5)"
-       id="use5252"
-       xlink:href="#g5224"
-       y="0"
-       x="0" />
-    <rect
-       y="924.36218"
-       x="95"
-       height="128"
-       width="10"
-       id="rect5186"
-       style="color:#000000;fill:#999999;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
   </g>
 </svg>
