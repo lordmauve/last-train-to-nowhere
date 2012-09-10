@@ -33,7 +33,7 @@ KEY_SHOOT = key.X
 
 
 FLOOR_Y = 115
-GRAVITY = 1000
+GRAVITY = 1200
 
 
 class Bullet(StaticImage):
@@ -42,7 +42,7 @@ class Bullet(StaticImage):
 
 class Player(object):
     MAX_WALK = 200  # limit on walk speed
-    ACCEL = 1600  # acceleration when walking
+    ACCEL = 2000  # acceleration when walking
     FRICTION = 1  # deceleration
 
     w = 42  # bounding box width
@@ -63,7 +63,7 @@ class Player(object):
         if not self.on_floor:
             return
         self.jumping = True
-        self.v += v(0, 600)  # Apply jumping impulse
+        self.v += v(0, 400)  # Apply jumping impulse
         self.on_floor = False
         # if not self.jumping:
         #     self.jumping = True
@@ -125,6 +125,7 @@ class Player(object):
         if y <= FLOOR_Y:
             y = FLOOR_Y
             self.on_floor = True
+            self.v = v(self.v.x, 0)
         else:
             self.on_floor = False
 
