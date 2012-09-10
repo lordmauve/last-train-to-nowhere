@@ -1,25 +1,15 @@
 import math
 import pyglet
 from pyglet import gl
-from collections import namedtuple
+
+from geom import Rect
+
 
 pyglet.resource.path += [
     '../assets/sprites',
     '../assets/textures',
 ]
 pyglet.resource.reindex()
-
-
-class Rect(namedtuple('BaseRect', 'l r b t')):
-    """2D rectangle class."""    
-
-    @property
-    def w(self):
-        return self.r - self.l
-
-    @property
-    def h(self):
-        return self.t - self.b
 
 
 class Camera(object):
