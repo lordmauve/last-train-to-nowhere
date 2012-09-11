@@ -316,7 +316,7 @@ class SkyBox(Node):
 
 
 class RectNode(Node):
-    def __init__(self, rect, colour, z=0.1):
+    def __init__(self, rect, colour, z=0):
         self.rect = rect
         self.colour = colour
         self.z = z
@@ -336,11 +336,12 @@ class RectNode(Node):
 
 
 class DebugGeometryNode(CompoundNode):
-    def __init__(self, physics, colour=(1, 0, 1, 0.5), z=0.1):
+    z = 10
+    def __init__(self, physics, colour=(1, 0, 1, 0.5)):
         self.physics = physics
         children = []
         for r in physics.static_geometry:
-            children.append(RectNode(r, colour, z))
+            children.append(RectNode(r, colour))
         super(DebugGeometryNode, self).__init__(children=children)
 
     def draw(self, camera):
@@ -348,7 +349,7 @@ class DebugGeometryNode(CompoundNode):
         gl.glBlendFunc(gl.GL_SRC_ALPHA, gl.GL_ONE_MINUS_SRC_ALPHA)
         super(DebugGeometryNode, self).draw(camera)
         for d in self.physics.dynamic:
-            RectNode(d.get_rect(), (0, 1, 0, 0.5), self.z).draw(camera)
+            RectNode(d.get_rect(), (0, 1, 0, 0.5)).draw(camera)
 
 
 class RailTrack(Node):
