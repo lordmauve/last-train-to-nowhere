@@ -40,6 +40,87 @@ class Bullet(StaticImage):
     pass
 
 
+class Body(object):
+    def __init__(self, rect, mass, pos=v(0, 0)):
+        assert mass > 0
+        self.pos = pos
+        self.rect = rect
+        self.mass = mass
+        self.v = v(0, 0)
+        self.reset_forces()
+
+    def reset_forces(self):
+        self.f = v(0, -GRAVITY)
+
+    def apply_force(self, f):
+        self.f += f
+
+    def apply_impulse(self, impulse):
+        self.v += impulse
+
+    def update(self, dt):
+        if self.mass == 0:
+            return
+        u = self.v
+        self.v += self.f / self.mass
+        self.pos += 0.5 * (u + self.v) * dt
+
+
+class StaticBody(object):
+    def __init__(self, pos, rectangles):
+        self.pos = pos
+        self.rectangles = rectangles
+
+
+class Physics(object):
+    def __init__(self):
+        self.static_geometry = []
+        self.static_objects = []
+        self.dynamic = []
+
+    def add_body(self, b):
+        self.dynamic.append(b)
+
+    def add_static(self, s):
+        self.static_objects.append(s)
+        geom = []
+        for o in s.rectangles:
+            r = o.translate(s.pos)
+            self.static_geometry.append(r)
+            geom.append(r)
+        s._geom = geom
+
+    def remove_static(self, s):
+        self.static_objects.remove(s)
+        for r in s._geom:
+            self.static_geometry.remove(r)
+
+    def collide_static(self, d):
+        for s in self.static_geometry:
+            pass  # TODO: resolve collisions
+
+    def collide_dynamic(self, d, d2):
+        pass  # TODO: resolve collision
+
+    def _iterate(self, dt):
+        for d in self.dynamic:
+            d.update(dt)
+            self.collide_static(d)
+
+        for i, d in self.dynamic:
+            for d2 in self.dynamic[i + 1:]:
+                self.collide_dynamic(d, d2)
+
+    def update(self, dt):
+        for i in xrange(5):
+            self._iterate(dt / 5)
+
+        for d in self.dynamic:
+            d.reset_forces()
+
+
+
+
 class Player(object):
     MAX_WALK = 200  # limit on walk speed
     ACCEL = 2000  # acceleration when walking
@@ -63,7 +144,10 @@ class Player(object):
         if not self.on_floor:
             return
         self.jumping = True
+
+        # self.body.apply_impulse(v(0, 400))
         self.v += v(0, 400)  # Apply jumping impulse
+
         self.on_floor = False
         # if not self.jumping:
         #     self.jumping = True
@@ -112,7 +196,7 @@ class Player(object):
         self.pos += 0.5 * (u + self.v) * dt
 
         # So far so mechanical. Now we have to take into account collisions and friction etc.
-        
+
         # update acceleration
         if abs(self.v.x) < 0.01:
             self.v = v(0, self.v.y)
@@ -228,7 +312,7 @@ class Game(object):
         self.window = pyglet.window.Window(width=WIDTH, height=HEIGHT)
         self.scene = make_scene()
         self.camera = Camera((200.0, 200.0), WIDTH, HEIGHT)
-        self.keys = key.KeyStateHandler() 
+        self.keys = key.KeyStateHandler()
         self.window.push_handlers(self.keys)
         self.window.push_handlers(
             on_draw=self.draw
