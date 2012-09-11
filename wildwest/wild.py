@@ -175,7 +175,7 @@ class Crate(StaticImage):
 
     def __init__(self, pos):
         StaticImage.__init__(self, pos, IMG_CRATE)
-        self.body = Body(Rect.from_cwh(v(0, self.h / 2), self.w, self.h), 200, pos)
+        self.body = Body(Rect.from_cwh(v(0, self.h / 2), self.w, self.h), 1000, pos)
         physics.add_body(self.body)
 
     def update(self, dt):
