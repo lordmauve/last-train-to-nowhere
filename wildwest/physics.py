@@ -32,8 +32,7 @@ class Body(object):
         u = self.v
         self.v += self.f / self.mass
 
-        self.v = v(self.v.x * 0.2 ** dt, self.v.y)
-        self.v *= 0.9 ** dt  # linear damping
+        self.v = v(self.v.x * 0.05 ** dt, self.v.y)
 
         self.on_floor = False
 

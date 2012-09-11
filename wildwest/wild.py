@@ -49,7 +49,7 @@ physics.add_static(StaticBody([Rect.from_points((0, 0), (1077, 115))]))
 
 class Player(object):
     MAX_WALK = 200  # limit on walk speed
-    ACCEL = 2000  # acceleration when walking
+    ACCEL = 3000  # acceleration when walking
     FRICTION = 1  # deceleration
 
     w = 32  # bounding box width
@@ -60,7 +60,7 @@ class Player(object):
         self.node = node
         self.body = Body(Rect.from_cwh(v(0, self.h / 2), self.w, self.h), self.MASS, pos)
         physics.add_body(self.body)
-        self.direction = v(1, 0)
+        self.running = 0
         # self.fall_through = 0  # frames of fall_through
         # self.aim_shot()
         # self.choose_images()
@@ -79,10 +79,12 @@ class Player(object):
 
     def left(self):
         self.node.play('running')
+        self.running = -1
         self.body.apply_force(v(-self.ACCEL, 0))
 
     def right(self):
         self.node.play('running')
+        self.running = 1
         self.body.apply_force(v(self.ACCEL, 0))
 
     def shoot(self):
@@ -107,13 +109,16 @@ class Player(object):
     def update(self, dt):
         self.pos = self.node.pos = self.body.pos
         vx = self.body.v.x
-        if vx > 0:
+        if vx > 10:
             self.node.set_flip(False)
-        elif vx < 0:
+        elif vx < -10:
             self.node.set_flip(True)
 
-        if abs(vx) < 50 and abs(self.body.f.x) < 10:
+        if abs(vx) < 50 and not self.running:
+            self.body.v = v(0, self.body.v.y)
             self.node.play('standing')
+
+        self.running = 0
         return
 
 
