@@ -166,8 +166,7 @@ class Animation(AnimatedNode):
     def set_flip(self, flip):
         if flip == self.flip_x:
             return
-        self.flip_x = flip
-        self.play(self.playing)
+        self.play(self.playing, flip)
 
     def load(self, fname):
         from pyglet.image import Animation, AnimationFrame
