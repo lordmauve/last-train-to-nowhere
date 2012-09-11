@@ -76,31 +76,86 @@ class Physics(object):
                     y = 0
                     if mtd.y > 0:
                         d.on_floor = True
+                    # TODO: apply friction
                 if mtd.x:
                     x = 0
                 d.v = v(x, y)
 
-    def collide_dynamic(self, d, d2):
-        pass  # TODO: resolve collision
+    def collide_dynamic(self, a, b):
+        mtd = a.get_rect().intersects(b.get_rect())
+        if mtd:
+            return (a, mtd, b)
 
-    def _iterate(self):
+    def resolve_collision(self, c):
+        """Move the objects involved in a collision so as not to intersect."""
+        a, mtd, b = c
+        ma = a.mass
+        mb = b.mass
+        tm = ma + mb  # total mass
+        frac = mb / tm
+
+        # Move the objects so as not to intersect
+        a.pos += frac * mtd
+        b.pos -= (1 - frac) * mtd
+        
+    def collide_velocities(self, c):
+        """Work out the new velocities of objects in a collision."""
+        a, mtd, b = c
+        ua = a.v
+        ub = b.v
+        ma = a.mass
+        mb = b.mass
+        tm = ma + mb  # total mass
+
+        # Inelastic collision, see http://en.wikipedia.org/wiki/Inelastic_collision
+        com = (ma * ua + mb * ub) / tm
+
+        dv = ub - ua
+        cor = 0.2
+
+        dm = cor * mb * dv / tm
+        a.v = dm + com
+        b.v = -dm + com
+        return True
+
+    def do_collisions(self):
         for d in self.dynamic:
             self.collide_static(d)
 
+        collisions = []
         for i, d in enumerate(self.dynamic):
             for d2 in self.dynamic[i + 1:]:
-                self.collide_dynamic(d, d2)
+                c = self.collide_dynamic(d, d2)
+                if c:
+                    self.collide_velocities(c)
+                    collisions.append(c)
 
-    def solve_collisions(self):
         for i in xrange(5):
-            if self._iterate():
+            if not collisions:
                 break
+            colliding = set()
+            for c in collisions:
+                self.resolve_collision(c)
+                colliding.add(c[0])
+                colliding.add(c[2])
+
+            for d in colliding:
+                self.collide_static(d)
+
+            collisions = []
+            for d in colliding:
+                for d2 in self.dynamic:
+                    if d is not d2:
+                        c = self.collide_dynamic(d, d2)
+                        if c:
+                            collisions.append(c)
+
 
     def update(self, dt):
         for d in self.dynamic:
             d.update(dt)
 
-        self.solve_collisions()
+        self.do_collisions()
 
         for d in self.dynamic:
             d.reset_forces()

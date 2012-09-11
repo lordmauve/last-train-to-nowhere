@@ -175,8 +175,8 @@ class Crate(StaticImage):
 
     def __init__(self, pos):
         StaticImage.__init__(self, pos, IMG_CRATE)
-        self.body = StaticBody([Rect.from_cwh(v(0, self.h / 2), self.w, self.h)], pos)
-        physics.add_static(self.body)
+        self.body = Body(Rect.from_cwh(v(0, self.h / 2), self.w, self.h), 200, pos)
+        physics.add_body(self.body)
 
     def update(self, dt):
         self.pos = self.body.pos
@@ -204,7 +204,6 @@ def make_scene():
 #    s.add(Hero((90, 115)))
 #    s.add(Lawman((600, 115)))
 #    s.add(Table((300, 115)))
-    s.add(Crate((500, 115)))
     s.add(RailTrack(pyglet.resource.texture('track.png')))
     s.add(Wheels((91, 0)))
     s.add(Wheels((992 - 236, 0)))
@@ -246,6 +245,7 @@ class Game(object):
             on_draw=self.draw
         )
         self.spawn_player()
+        self.spawn_crate()
         pyglet.clock.schedule_interval(self.update, 1.0 / FPS)
 
     def spawn_player(self):
@@ -254,6 +254,10 @@ class Game(object):
         node = StaticImage(start, 'pc-standing.png')
         self.scene.add(node)
         self.hero = Player(start, node)
+        
+    def spawn_crate(self):
+        self.crate = Crate((500, 115))
+        self.scene.add(self.crate)
 
     def draw(self):
         self.scene.draw(self.camera)
@@ -273,6 +277,7 @@ class Game(object):
         self.process_input()
         physics.update(dt)
         self.hero.update(dt)
+        self.crate.update(dt)
 
         self.camera.offset = self.hero.pos + v(0, 120)
         self.scene.update(dt)
