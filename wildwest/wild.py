@@ -7,7 +7,7 @@ sys.path.insert(0, '..')
 
 import pyglet
 from pyglet.window import key
-from scenegraph import StaticImage, Scenegraph, Fill, RailTrack
+from scenegraph import StaticImage, Scenegraph, Fill, RailTrack, Animation
 from scenegraph import SkyBox, GroundPlane, Wheels, Locomotive
 from scenegraph import DebugGeometryNode
 from scenegraph import Camera
@@ -52,8 +52,8 @@ class Player(object):
     ACCEL = 2000  # acceleration when walking
     FRICTION = 1  # deceleration
 
-    w = 42  # bounding box width
-    h = 84  # bounding box height
+    w = 32  # bounding box width
+    h = 106  # bounding box height
     MASS = 100
 
     def __init__(self, pos, node):
@@ -78,9 +78,11 @@ class Player(object):
         #     print 'jump_speed:', self.jump_speed
 
     def left(self):
+        self.node.play('running')
         self.body.apply_force(v(-self.ACCEL, 0))
 
     def right(self):
+        self.node.play('running')
         self.body.apply_force(v(self.ACCEL, 0))
 
     def shoot(self):
@@ -104,65 +106,15 @@ class Player(object):
 
     def update(self, dt):
         self.pos = self.node.pos = self.body.pos
+        vx = self.body.v.x
+        if vx > 0:
+            self.node.set_flip(False)
+        elif vx < 0:
+            self.node.set_flip(True)
+
+        if abs(vx) < 50 and abs(self.body.f.x) < 10:
+            self.node.play('standing')
         return
-        # work out our new velocity
-        u = self.v
-        vx = u.x + self.xaccel * dt
-        vx = max(-self.MAX_WALK, min(self.MAX_WALK, vx))
-        vy = u.y - GRAVITY * dt
-        self.v = v(vx, vy)
-
-        # work out our new position
-        # Constant acceleration formulae
-        self.pos += 0.5 * (u + self.v) * dt
-
-        # So far so mechanical. Now we have to take into account collisions and friction etc.
-
-        # update acceleration
-        if abs(self.v.x) < 0.01:
-            self.v = v(0, self.v.y)
-            self.xaccel = 0
-        else:
-            self.xaccel = -self.FRICTION * self.v.x
-
-        # Collision with floor
-        x, y = self.pos
-        if y <= FLOOR_Y:
-            y = FLOOR_Y
-            self.on_floor = True
-            self.v = v(self.v.x, 0)
-        else:
-            self.on_floor = False
-
-        self.pos = v(x, y)
-        self.node.pos = self.pos
-
-        # #self.do_walk()
-        # self.on_floor = False
-        # self.collide_with_floors()
-        # # if self.fall_through > 0:
-        # #     self.fall_through -= 1
-
-    def collide_with_floors(self):
-        # print list(self.platforms)
-        # for platform in self.platforms:
-            # if self.fall_through and\
-            #         platform.allow_fall_through and\
-            #         self.jump_speed > 3:
-            #     continue
-            # if self.rect.colliderect(platform.rect):
-            #     if self.jump_speed >= 0:
-            #         if self.rect.bottom < platform.rect.top + (self.jump_speed*2):
-            #             self.rect.bottom = platform.rect.top
-            #             self.hit_floor()
-        if self.rect.y >= FLOOR_Y - self.rect.height:
-            self.hit_floor()
-
-    def hit_floor(self):
-        # print 'hit the floor'
-        self.jump_speed = 10
-        self.on_floor = True
-        self.jumping = False
 
 
 class Table(StaticImage):
@@ -170,17 +122,17 @@ class Table(StaticImage):
         StaticImage.__init__(self, pos, IMG_TABLE)
 
 
-class Crate(StaticImage):
+class Crate(object):
     w = 74
     h = 77
 
     def __init__(self, pos):
-        StaticImage.__init__(self, pos, IMG_CRATE)
+        self.node = Animation('crate.json', pos)
         self.body = Body(Rect.from_cwh(v(0, self.h / 2), self.w, self.h), 1000, pos)
         physics.add_body(self.body)
 
     def update(self, dt):
-        self.pos = self.body.pos
+        self.node.pos = self.body.pos
 
 
 class Hero(Player):
@@ -221,7 +173,6 @@ def make_scene():
         (49, 92, 142, 255)
     ))
 
-    s.add(DebugGeometryNode(physics))
     return s
 
 
@@ -254,13 +205,13 @@ class Game(object):
     def spawn_player(self):
         # all this should be done elsewhere
         start = v(90, 115)
-        node = StaticImage(start, 'pc-standing.png')
+        node = Animation('pc.json', start)
         self.scene.add(node)
         self.hero = Player(start, node)
         
     def spawn_crate(self):
         self.crate = Crate((500, 115))
-        self.scene.add(self.crate)
+        self.scene.add(self.crate.node)
 
     def draw(self):
         self.scene.draw(self.camera)
@@ -287,7 +238,14 @@ class Game(object):
 
 
 def main():
+    from optparse import OptionParser
+    parser = OptionParser()
+    parser.add_option('--debug', action='store_true', help='Debug collision geometries')
+    options, args = parser.parse_args()
+
     g = Game()
+    if options.debug:
+        g.scene.add(DebugGeometryNode(physics))
     pyglet.app.run()
 
 

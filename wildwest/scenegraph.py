@@ -1,3 +1,5 @@
+import os
+import json
 import math
 import pyglet
 from pyglet import gl
@@ -144,6 +146,73 @@ class StaticImage(AnimatedNode):
     def __init__(self, pos, img, z=0):
         im = pyglet.resource.image(img)
         super(StaticImage, self).__init__(pos, im, z)
+
+
+class Animation(AnimatedNode):
+    """Node that loads multiple animations from a JSON file.
+    
+    The current animation can be changed using .play()
+    """
+    def __init__(self, fname, pos, z=0):
+        self.animations = {}
+        self.flip_x = False
+        self.load(os.path.join('assets', 'animations', fname))
+        self.playing = self.default
+        super(Animation, self).__init__(pos, self.get_animation('default'))
+
+    def on_animation_end(self):
+        self.play('default')
+
+    def set_flip(self, flip):
+        if flip == self.flip_x:
+            return
+        self.flip_x = flip
+        self.play(self.playing)
+
+    def load(self, fname):
+        from pyglet.image import Animation, AnimationFrame
+
+        with open(fname) as f:
+            self.doc = json.load(f)
+
+        for name, a in self.doc.items():
+            if name == 'default':
+                if isinstance(a, unicode):
+                    self.default = a
+                    continue
+                else:
+                    self.default = 'default'
+            frames = []
+            for f in a['frames']:
+                im = pyglet.resource.image(f['file']) 
+                im.anchor_x, im.anchor_y = a.get('anchor', (0, 0))
+                frames.append(
+                    [im, a.get('frame_time', 0.1)]
+                )
+
+            if not a.get('loop', False):
+                frames[-1][1] = None
+
+            self.animations[name] = Animation([AnimationFrame(*f) for f in frames])
+
+    def get_animation(self, name):
+        if name == 'default':
+            return self.animations[self.default]
+        return self.animations[name]
+
+    def play(self, name, flip=None):
+        if name == 'default':
+            name = self.default
+
+        if name == self.playing and (flip is None or flip == self.flip_x):
+            return
+        if flip is not None:
+            self.flip_x = flip
+        anim = self.get_animation(name)
+        if self.flip_x:
+            anim = anim.get_transform(flip_x=True)
+        self.playing = name
+        self.sprite.image = anim
 
 
 class Wheels(Node):
