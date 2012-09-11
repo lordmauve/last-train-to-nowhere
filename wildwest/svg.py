@@ -14,22 +14,25 @@ def parse(filename):
 
 
 def images(tree):
+    rect = []
     for node in tree.findall('.//{http://www.w3.org/2000/svg}image'):
         x = node.attrib.get('x')
-        y = node.attrib.get('x')
+        y = node.attrib.get('y')
         width = node.attrib.get('width')
         height = node.attrib.get('height')
-        print x, y, height, width
+        rect += Rect.from_blwh(x, y, width, height)
+    return rect
 
 
 def rectangles(tree):
     rect = []
     for node in tree.findall('.//{http://www.w3.org/2000/svg}rect'):
         x = node.attrib.get('x')
-        y = node.attrib.get('x')
+        y = node.attrib.get('y')
         width = node.attrib.get('width')
         height = node.attrib.get('height')
         rect += Rect.from_blwh(x, y, width, height)
+        print x, y, width, height
     return rect
 
 
