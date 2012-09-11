@@ -315,6 +315,42 @@ class SkyBox(Node):
         pyglet.graphics.draw(4, gl.GL_QUADS, coords, col)
 
 
+class RectNode(Node):
+    def __init__(self, rect, colour, z=0.1):
+        self.rect = rect
+        self.colour = colour
+        self.z = z
+
+    def draw(self, camera):
+        gl.glColor4f(*self.colour)
+        r = self.rect
+        z = self.z
+        coords = ('v3f', [
+            r.l, r.b, z,
+            r.r, r.b, z,
+            r.r, r.t, z,
+            r.l, r.t, z,
+        ])
+        pyglet.graphics.draw(4, gl.GL_QUADS, coords)
+        gl.glColor4f(1, 1, 1, 1)
+
+
+class DebugGeometryNode(CompoundNode):
+    def __init__(self, physics, colour=(1, 0, 1, 0.5), z=0.1):
+        self.physics = physics
+        children = []
+        for r in physics.static_geometry:
+            children.append(RectNode(r, colour, z))
+        super(DebugGeometryNode, self).__init__(children=children)
+
+    def draw(self, camera):
+        gl.glEnable(gl.GL_BLEND)
+        gl.glBlendFunc(gl.GL_SRC_ALPHA, gl.GL_ONE_MINUS_SRC_ALPHA)
+        super(DebugGeometryNode, self).draw(camera)
+        for d in self.physics.dynamic:
+            RectNode(d.get_rect(), (0, 1, 0, 0.5), self.z).draw(camera)
+
+
 class RailTrack(Node):
     z = -1
     def __init__(self, tex, y=0):
