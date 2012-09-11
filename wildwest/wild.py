@@ -9,6 +9,7 @@ import pyglet
 from pyglet.window import key
 from scenegraph import StaticImage, Scenegraph, Fill, RailTrack
 from scenegraph import SkyBox, GroundPlane, Wheels, Locomotive
+from scenegraph import DebugGeometryNode
 from scenegraph import Camera
 from geom import v, Rect
 
@@ -219,6 +220,8 @@ def make_scene():
         (129, 218, 255, 255),
         (49, 92, 142, 255)
     ))
+
+    s.add(DebugGeometryNode(physics))
     return s
 
 
