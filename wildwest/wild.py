@@ -30,7 +30,8 @@ IMG_CARRIAGE = 'car-interior.png'
 # Key Bindings
 KEY_RIGHT = key.RIGHT
 KEY_LEFT = key.LEFT
-KEY_JUMP = key.Z
+KEY_DOWN = key.DOWN
+KEY_UP = key.UP
 KEY_SHOOT = key.X
 
 
@@ -61,6 +62,7 @@ class Player(object):
         self.body = Body(Rect.from_cwh(v(0, self.h / 2), self.w, self.h), self.MASS, pos)
         physics.add_body(self.body)
         self.running = 0
+        self.crouching = False
         # self.fall_through = 0  # frames of fall_through
         # self.aim_shot()
         # self.choose_images()
@@ -78,14 +80,27 @@ class Player(object):
         #     print 'jump_speed:', self.jump_speed
 
     def left(self):
+        if self.crouching:
+            self.node.set_flip(True)
+            return
         self.node.play('running')
         self.running = -1
         self.body.apply_force(v(-self.ACCEL, 0))
 
     def right(self):
+        if self.crouching:
+            self.node.set_flip(False)
+            return
         self.node.play('running')
         self.running = 1
         self.body.apply_force(v(self.ACCEL, 0))
+
+    def down(self):
+        self.crouch()
+
+    def crouch(self):
+        self.running = 0
+        self.crouching = True
 
     def shoot(self):
         """Not yet implemented!"""
@@ -114,10 +129,17 @@ class Player(object):
         elif vx < -10:
             self.node.set_flip(True)
 
-        if abs(vx) < 50 and not self.running:
-            self.body.v = v(0, self.body.v.y)
-            self.node.play('standing')
+        if self.crouching:
+            self.node.play('crouching')
+        else:
+            if self.node.playing == 'couching':
+                self.node.play('standing')
 
+            if abs(vx) < 50 and not self.running:
+                self.body.v = v(0, self.body.v.y)
+                self.node.play('standing')
+
+        self.crouching = False
         self.running = 0
         return
 
@@ -222,12 +244,15 @@ class Game(object):
         self.scene.draw(self.camera)
 
     def process_input(self):
+        if self.keys[KEY_DOWN]:
+            self.hero.down()
+        
         if self.keys[KEY_LEFT]:
             self.hero.left()
         elif self.keys[KEY_RIGHT]:
             self.hero.right()
 
-        if self.keys[KEY_JUMP]:
+        if self.keys[KEY_UP]:
             self.hero.jump()
         elif self.keys[KEY_SHOOT]:
             self.hero.shoot()
