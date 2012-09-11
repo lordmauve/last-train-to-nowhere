@@ -31,8 +31,12 @@ class Body(object):
             return
         u = self.v
         self.v += self.f / self.mass
-        if not self.v.is_zero:
-            self.on_floor = False
+
+        self.v = v(self.v.x * 0.2 ** dt, self.v.y)
+        self.v *= 0.9 ** dt  # linear damping
+
+        self.on_floor = False
+
         self.pos += 0.5 * (u + self.v) * dt
 
 
@@ -76,7 +80,6 @@ class Physics(object):
                     y = 0
                     if mtd.y > 0:
                         d.on_floor = True
-                    # TODO: apply friction
                 if mtd.x:
                     x = 0
                 d.v = v(x, y)
@@ -97,12 +100,16 @@ class Physics(object):
         # Move the objects so as not to intersect
         a.pos += frac * mtd
         b.pos -= (1 - frac) * mtd
+
+        if mtd.y > 0:
+            a.on_floor = True
         
     def collide_velocities(self, c):
         """Work out the new velocities of objects in a collision."""
         a, mtd, b = c
-        ua = a.v
-        ub = b.v
+        perp = mtd.perpendicular()
+        ua = mtd.project(a.v)
+        ub = mtd.project(b.v)
         ma = a.mass
         mb = b.mass
         tm = ma + mb  # total mass
@@ -114,8 +121,8 @@ class Physics(object):
         cor = 0.2
 
         dm = cor * mb * dv / tm
-        a.v = dm + com
-        b.v = -dm + com
+        a.v = perp.project(a.v) + dm + com
+        b.v = perp.project(b.v) - dm + com
         return True
 
     def do_collisions(self):
