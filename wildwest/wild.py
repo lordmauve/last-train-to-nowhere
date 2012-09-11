@@ -10,7 +10,9 @@ from pyglet.window import key
 from scenegraph import StaticImage, Scenegraph, Fill, RailTrack
 from scenegraph import SkyBox, GroundPlane, Wheels, Locomotive
 from scenegraph import Camera
-from geom import v
+from geom import v, Rect
+
+from physics import Body, StaticBody, Physics
 
 
 # Image File Paths
@@ -40,85 +42,8 @@ class Bullet(StaticImage):
     pass
 
 
-class Body(object):
-    def __init__(self, rect, mass, pos=v(0, 0)):
-        assert mass > 0
-        self.pos = pos
-        self.rect = rect
-        self.mass = mass
-        self.v = v(0, 0)
-        self.reset_forces()
-
-    def reset_forces(self):
-        self.f = v(0, -GRAVITY)
-
-    def apply_force(self, f):
-        self.f += f
-
-    def apply_impulse(self, impulse):
-        self.v += impulse
-
-    def update(self, dt):
-        if self.mass == 0:
-            return
-        u = self.v
-        self.v += self.f / self.mass
-        self.pos += 0.5 * (u + self.v) * dt
-
-
-class StaticBody(object):
-    def __init__(self, pos, rectangles):
-        self.pos = pos
-        self.rectangles = rectangles
-
-
-class Physics(object):
-    def __init__(self):
-        self.static_geometry = []
-        self.static_objects = []
-        self.dynamic = []
-
-    def add_body(self, b):
-        self.dynamic.append(b)
-
-    def add_static(self, s):
-        self.static_objects.append(s)
-        geom = []
-        for o in s.rectangles:
-            r = o.translate(s.pos)
-            self.static_geometry.append(r)
-            geom.append(r)
-        s._geom = geom
-
-    def remove_static(self, s):
-        self.static_objects.remove(s)
-        for r in s._geom:
-            self.static_geometry.remove(r)
-
-    def collide_static(self, d):
-        for s in self.static_geometry:
-            pass  # TODO: resolve collisions
-
-    def collide_dynamic(self, d, d2):
-        pass  # TODO: resolve collision
-
-    def _iterate(self, dt):
-        for d in self.dynamic:
-            d.update(dt)
-            self.collide_static(d)
-
-        for i, d in self.dynamic:
-            for d2 in self.dynamic[i + 1:]:
-                self.collide_dynamic(d, d2)
-
-    def update(self, dt):
-        for i in xrange(5):
-            self._iterate(dt / 5)
-
-        for d in self.dynamic:
-            d.reset_forces()
-
-
+physics = Physics()
+physics.add_static(StaticBody([Rect.from_points((0, 0), (1077, 115))]))
 
 
 class Player(object):
@@ -128,27 +53,20 @@ class Player(object):
 
     w = 42  # bounding box width
     h = 84  # bounding box height
+    MASS = 100
 
     def __init__(self, pos, node):
-        self.pos = pos
         self.node = node
+        self.body = Body(Rect.from_cwh(v(0, self.h / 2), self.w, self.h), self.MASS, pos)
+        physics.add_body(self.body)
         self.direction = v(1, 0)
-        self.v = v(0, 0)
-        self.xaccel = 0
-        self.on_floor = True
         # self.fall_through = 0  # frames of fall_through
         # self.aim_shot()
         # self.choose_images()
 
     def jump(self):
-        if not self.on_floor:
-            return
-        self.jumping = True
-
-        # self.body.apply_impulse(v(0, 400))
-        self.v += v(0, 400)  # Apply jumping impulse
-
-        self.on_floor = False
+        if self.body.on_floor:
+            self.body.apply_impulse(v(0, 450))
         # if not self.jumping:
         #     self.jumping = True
         #     if button.is_held(DOWN):
@@ -159,10 +77,10 @@ class Player(object):
         #     print 'jump_speed:', self.jump_speed
 
     def left(self):
-        self.xaccel = -self.ACCEL
+        self.body.apply_force(v(-self.ACCEL, 0))
 
     def right(self):
-        self.xaccel = self.ACCEL
+        self.body.apply_force(v(self.ACCEL, 0))
 
     def shoot(self):
         """Not yet implemented!"""
@@ -184,6 +102,8 @@ class Player(object):
 
 
     def update(self, dt):
+        self.pos = self.node.pos = self.body.pos
+        return
         # work out our new velocity
         u = self.v
         vx = u.x + self.xaccel * dt
@@ -250,8 +170,16 @@ class Table(StaticImage):
 
 
 class Crate(StaticImage):
+    w = 74
+    h = 77
+
     def __init__(self, pos):
         StaticImage.__init__(self, pos, IMG_CRATE)
+        self.body = StaticBody([Rect.from_cwh(v(0, self.h / 2), self.w, self.h)], pos)
+        physics.add_static(self.body)
+
+    def update(self, dt):
+        self.pos = self.body.pos
 
 
 class Hero(Player):
@@ -276,7 +204,7 @@ def make_scene():
 #    s.add(Hero((90, 115)))
 #    s.add(Lawman((600, 115)))
 #    s.add(Table((300, 115)))
-#    s.add(Crate((500, 115)))
+    s.add(Crate((500, 115)))
     s.add(RailTrack(pyglet.resource.texture('track.png')))
     s.add(Wheels((91, 0)))
     s.add(Wheels((992 - 236, 0)))
@@ -343,6 +271,7 @@ class Game(object):
 
     def update(self, dt):
         self.process_input()
+        physics.update(dt)
         self.hero.update(dt)
 
         self.camera.offset = self.hero.pos + v(0, 120)

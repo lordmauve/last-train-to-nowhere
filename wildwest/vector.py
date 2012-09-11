@@ -125,7 +125,7 @@ class Vector(tuple):
         """Flag indicating whether this is the zero vector.
 
         """
-        return self[0] == 0.0 and self[1] == 0.0
+        return self.length2 < 1e-9
 
     def __add__(self, other):
         """Add the vectors componentwise.
@@ -283,14 +283,18 @@ class Vector(tuple):
         v.length = 1.0
         return v
 
+    normalized = normalised
+
     def safe_normalised(self):
-        """Compute the vector scaled to unit length, or just return the vector
+        """Compute the vector scaled to unit length, or some unit vector
         if it was the zero vector.
 
         """
         if self.is_zero:
             return self
-        return self.normalised()
+        return Vector(0, 1)
+
+    safe_normalized = safe_normalised
 
     def perpendicular(self):
         """Compute the perpendicular.
