@@ -44,7 +44,7 @@ class Bullet(StaticImage):
 
 
 physics = Physics()
-physics.add_static(StaticBody([Rect.from_points((0, 0), (1077, 115))]))
+physics.add_static(StaticBody([Rect.from_points((0, 0), (1024, 115))]))
 
 
 class Player(object):
@@ -185,7 +185,7 @@ def make_scene():
     s.add(RailTrack(pyglet.resource.texture('track.png')))
     s.add(Wheels((91, 0)))
     s.add(Wheels((992 - 236, 0)))
-    s.add(Locomotive((1070, 0)))
+    s.add(Locomotive((1024, 0)))
 
     ground = GroundPlane(
         (218, 176, 127, 255),
