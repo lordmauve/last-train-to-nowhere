@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="car.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.15"
+     inkscape:cx="390.65217"
+     inkscape:cy="200"
+     inkscape:document-units="px"
+     inkscape:current-layer="svg2"
+     showgrid="false"
+     inkscape:window-width="1215"
+     inkscape:window-height="776"
+     inkscape:window-x="65"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid3289" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <image
+       sodipodi:absref="/home/arnav/code/pyweek15/assets/geometry/../sprites/car-interior.png"
+       xlink:href="../sprites/car-interior.png"
+       width="1024"
+       height="315"
+       id="image3044"
+       x="0"
+       y="737.36218" />
+    <image
+       sodipodi:absref="/home/arnav/code/pyweek15/assets/geometry/../sprites/pc-standing.png"
+       xlink:href="../sprites/pc-standing.png"
+       width="85"
+       height="109"
+       id="image3170"
+       x="81.5"
+       y="878.36218" />
+    <rect
+       style="fill:#0000ff;fill-rule:evenodd;stroke:#000000;stroke-width:0.97124016px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="rect3173"
+       width="1023.0287"
+       height="64.028763"
+       x="0.48562008"
+       y="987.84784" />
+    <rect
+       style="fill:#0000ff"
+       id="rect3265"
+       width="73.04348"
+       height="16.52174"
+       x="24.347826"
+       y="788.62305" />
+    <rect
+       style="fill:#0000ff"
+       id="rect3265-9"
+       width="73.04348"
+       height="16.52174"
+       x="933.47827"
+       y="787.84045" />
+    <rect
+       style="fill:#0000ff"
+       id="rect3285"
+       width="56.52174"
+       height="15.652174"
+       x="940.86957"
+       y="805.40564" />
+    <rect
+       style="fill:#0000ff"
+       id="rect3287"
+       width="7.826087"
+       height="52.173912"
+       x="941.73914"
+       y="821.05786" />
+    <rect
+       style="fill:#0000ff"
+       id="rect3295"
+       width="58.260868"
+       height="13.913043"
+       x="34.782608"
+       y="805.40564" />
+    <rect
+       style="fill:#0000ff"
+       id="rect3297"
+       width="9.565217"
+       height="53.913044"
+       x="83.478264"
+       y="819.31873" />
+    <rect
+       style="fill:#0000ff"
+       id="rect3305"
+       width="773.04352"
+       height="13.043478"
+       x="130.43478"
+       y="755.84045" />
+    <rect
+       style="fill:#0000ff"
+       id="rect3307"
+       width="40.869564"
+       height="32.173912"
+       x="902.6087"
+       y="755.84045" />
+    <rect
+       style="fill:#0000ff"
+       id="rect3307-1"
+       width="40.869564"
+       height="32.173912"
+       x="91.478264"
+       y="755.4057" />
+  </g>
+  <rect
+     style="fill:#0000ff"
+     id="rect3327"
+     width="38.260868"
+     height="19.130434"
+     x="200"
+     y="736.71002" />
+  <rect
+     style="fill:#0000ff"
+     id="rect3327-8"
+     width="38.260868"
+     height="19.130434"
+     x="343.04349"
+     y="737.23175" />
+  <rect
+     style="fill:#0000ff"
+     id="rect3327-4"
+     width="38.260868"
+     height="19.130434"
+     x="646.52173"
+     y="737.75348" />
+  <rect
+     style="fill:#0000ff"
+     id="rect3327-2"
+     width="38.260868"
+     height="19.130434"
+     x="801.73914"
+     y="737.84045" />
+</svg>
