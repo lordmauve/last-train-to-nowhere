@@ -1,7 +1,7 @@
 from geom import v
 
 
-GRAVITY = 40
+GRAVITY = 1000
 
 
 class Body(object):
@@ -30,7 +30,7 @@ class Body(object):
         if self.mass == 0:
             return
         u = self.v
-        self.v += self.f / self.mass
+        self.v += dt * self.f / self.mass
 
         self.v = v(self.v.x * 0.05 ** dt, self.v.y)
 
@@ -102,7 +102,7 @@ class Physics(object):
 
         if mtd.y > 0:
             a.on_floor = True
-        
+
     def collide_velocities(self, c):
         """Work out the new velocities of objects in a collision."""
         a, mtd, b = c
