@@ -76,7 +76,7 @@ class Player(object):
 
     def left(self):
         if self.crouching:
-            self.node.set_flip(True)
+            self.face_left()
             return
         self.running = -1
         self.body.apply_force(v(-self.ACCEL, 0))
@@ -85,7 +85,7 @@ class Player(object):
 
     def right(self):
         if self.crouching:
-            self.node.set_flip(False)
+            self.face_right()
             return
         self.running = 1
         self.body.apply_force(v(self.ACCEL, 0))
@@ -148,12 +148,11 @@ class Player(object):
             elif vy < -100:
                 self.node.play('standing')
         else:
-            if self.node.playing == 'couching':
-                self.node.play('standing')
-
             if abs(vx) < 50 and not self.running:
                 self.body.v = v(0, self.body.v.y)
                 self.node.play('standing')
+            else:
+                self.node.play('running')
 
         self.crouching = False
         self.running = 0
