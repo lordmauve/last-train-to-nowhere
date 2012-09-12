@@ -244,6 +244,11 @@ class World(object):
         self.scene.add(crate.node)
         self.objects.append(crate)
 
+    def spawn_lawman(self, pos):
+        node = Animation('lawman.json', pos)
+        lawman = Player(pos, node)
+        self.spawn(lawman)
+
     def update(self, dt):
         self.physics.update(dt)
 
@@ -275,6 +280,8 @@ class Game(object):
         pyglet.clock.schedule_interval(self.update, 1.0 / FPS)
         self.world.spawn_crate()
         self.world.spawn_crate(v(600, 115))
+
+        self.world.spawn_lawman(v(900, 115))
 
     def spawn_player(self):
         # all this should be done elsewhere
