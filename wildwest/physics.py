@@ -5,11 +5,12 @@ GRAVITY = 1000
 
 
 class Body(object):
-    def __init__(self, rect, mass, pos=v(0, 0)):
+    def __init__(self, rect, mass, pos=v(0, 0), controller=None):
         assert mass > 0
         self.pos = pos
         self.rect = rect
         self.mass = mass
+        self.controller = controller
         self.v = v(0, 0)
         self.on_floor = False
         self.reset_forces()
@@ -67,6 +68,20 @@ class Physics(object):
         self.static_objects.remove(s)
         for r in s._geom:
             self.static_geometry.remove(r)
+
+    def ray_query(self, segment):
+        intersections = []
+        for o in self.static_geometry:
+            d = segment.intersects(o)
+            if d:
+                intersections.append((d, StaticBody))
+
+        for o in self.dynamic:
+            d = segment.intersects(o.get_rect())
+            if d:
+                intersections.append((d, o.controller))
+        intersections.sort()
+        return intersections
 
     def collide_static(self, d):
         r = d.get_rect()

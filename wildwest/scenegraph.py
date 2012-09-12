@@ -160,7 +160,7 @@ class AnimatedNode(Node):
 
 
 class StaticImage(AnimatedNode):
-    def __init__(self, pos, img, z=0):
+    def __init__(self, pos, img, z=-1):
         im = pyglet.resource.image(img)
         super(StaticImage, self).__init__(pos, im, z)
 
@@ -170,7 +170,7 @@ class Animation(AnimatedNode):
     
     The current animation can be changed using .play()
     """
-    def __init__(self, fname, pos, z=0):
+    def __init__(self, fname, pos, z=1):
         self.animations = {}
         self.flip_x = False
         self.load(os.path.join('assets', 'animations', fname))
@@ -234,7 +234,7 @@ class Animation(AnimatedNode):
 
 
 class Wheels(Node):
-    z = -1
+    z = -1.9
 
     def __init__(self, pos):
         from pyglet.image import Animation, AnimationFrame
@@ -423,31 +423,32 @@ class RectNode(Node):
 
 
 class Bullet(Node):
-    z = 1
+    z = -0.1
     trail_width = 2
 
     batch = pyglet.graphics.Batch()
     MAX_AGE = 0.6
+    MAX_LENGTH = 500
 
-    def __init__(self, p1, p2):
-        self.p1 = p1
-        self.p2 = p2
+    def __init__(self, segment):
+        self.seg = segment
         self.t = None
         self.build()
     
     def build(self, age=0):
-        along = self.p2 - self.p1
-        across = along.perpendicular().safe_normalised() * 0.5 * self.trail_width
+        p1, p2 = self.seg.points
+        across = self.seg.axis * 0.5 * self.trail_width
 
+        length = self.seg.length / self.MAX_LENGTH
         frac = (age / self.MAX_AGE)
         frac2 = frac * frac
         c1 = (1, 1, 1, max(0, 0.1 - frac2))
-        c2 = (1, 1, 1, min(1, self.MAX_AGE - frac2))
+        c2 = (1, 1, 1, min(1, length * self.MAX_AGE  - frac2))
 
-        bl = self.p1 - across
-        br = self.p2 - across
-        tr = self.p2 + across
-        tl = self.p1 + across
+        bl = p1 - across
+        br = p2 - across
+        tr = p2 + across
+        tl = p1 + across
 
         self.vl = pyglet.graphics.vertex_list(4,
             ('v2f', list(chain(bl, br, tr, tl))),
@@ -457,9 +458,6 @@ class Bullet(Node):
     def update(self, age):
         self.vl.delete()
         self.build(age)
-
-    def __del__(self):
-        self.vl.delete()
 
     def draw(self, camera):
         if self.t is None:
@@ -494,7 +492,7 @@ class DebugGeometryNode(CompoundNode):
 
 
 class RailTrack(Node):
-    z = -1
+    z = -2
     def __init__(self, tex, y=0):
         self.y = y
         self.group = pyglet.sprite.SpriteGroup(
@@ -541,7 +539,7 @@ class Fill(Node):
 
 class Scenegraph(object):
     def __init__(self):
-        self.objects = []
+        self.objects = set()
         self.t = 0
 
     def update(self, dt):
@@ -549,7 +547,7 @@ class Scenegraph(object):
 
     def add(self, obj):
         obj.set_scenegraph(self)
-        self.objects.append(obj)
+        self.objects.add(obj)
 
     def remove(self, obj):
         obj.set_scenegraph(None)
@@ -557,8 +555,9 @@ class Scenegraph(object):
 
     def draw(self, camera):
         camera.setup_matrixes()
-        self.objects.sort(key=lambda x: x.z)
-        for o in self.objects:
+        obs = list(self.objects)
+        obs.sort(key=lambda x: x.z)
+        for o in obs:
             o.draw(camera)
 
     def on_key_press(self, symbol, modifier):

@@ -14,7 +14,7 @@ from scenegraph import StaticImage, Scenegraph, Fill, RailTrack, Animation
 from scenegraph import SkyBox, GroundPlane, Wheels, Locomotive, Bullet
 from scenegraph import DebugGeometryNode
 from scenegraph import Camera
-from geom import v, Rect
+from geom import v, Rect, Segment
 
 from physics import Body, StaticBody, Physics
 
@@ -58,6 +58,7 @@ class Player(object):
 
     def __init__(self, pos, node):
         self.node = node
+        node.z = 1
         self.body = Body(Rect.from_cwh(v(0, self.h / 2), self.w, self.h), self.MASS, pos)
         physics.add_body(self.body)
         self.running = 0
@@ -113,8 +114,18 @@ class Player(object):
 
         p1 = self.node.pos + off
         p2 = p1 + v(1000, random.uniform(-50, 50)) * self.direction
-        self.node.scenegraph.add(Bullet(p1, p2))
-        self.body.apply_impulse(v(-30, 0) * self.direction)
+        seg = Segment(p1, p2)
+        hit = physics.ray_query(seg)
+        if hit:
+            d = hit[0][0]
+            if d <= 0:
+                seg = None
+            else:
+                seg = seg.truncate(d)
+
+        if seg:
+            self.node.scenegraph.add(Bullet(seg))
+        self.body.apply_impulse(v(-10, 0) * self.direction)
         self.shooting = True
         pyglet.clock.schedule_once(self.shooting_finish, 0.5)
 
@@ -165,7 +176,7 @@ class Crate(object):
 
     def __init__(self, pos):
         self.node = Animation('crate.json', pos)
-        self.body = Body(Rect.from_cwh(v(0, self.h / 2), self.w, self.h), 1000, pos)
+        self.body = Body(Rect.from_cwh(v(0, self.h / 2), self.w, self.h), 1000, pos, controller=self)
         physics.add_body(self.body)
 
     def update(self, dt):
