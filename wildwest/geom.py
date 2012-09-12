@@ -166,3 +166,32 @@ class ConvexPolygon(BasePolygon):
             point = self.points[i]
             next_point = self.points[(i + 1) % len(self.points)]
             self.edges.append(next_point - point)
+
+
+
+class Segment(object):
+    def __init__(self, p1, p2):
+        self.points = p1, p2
+        self.edge = (p2 - p1).normalised()
+        self.axis = self.edge.perpendicular()
+        self.axis_dist = p1.dot(self.axis)
+        self.proj = self.project_to_axis(self.edge)
+
+    @property
+    def length(self):
+        return abs(self.proj.max - self.proj.min)
+
+    def truncate(self, dist):
+        p1 = self.points[0]
+        return Segment(p1, p1 + self.edge * dist) 
+
+    def project_to_axis(self, axis):
+        projected_points = [p.dot(axis) for p in self.points]
+        return Projection(min(projected_points), max(projected_points))
+  
+    def intersects(self, other):
+        proj = other.project_to_axis(self.axis)
+        if proj.max > self.axis_dist >= proj.min:
+            proj2 = other.project_to_axis(self.edge)
+            if proj2.intersection(self.proj):
+                return proj2.min - self.proj.min
