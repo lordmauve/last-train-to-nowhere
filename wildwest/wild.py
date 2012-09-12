@@ -66,9 +66,14 @@ class Player(object):
         # self.aim_shot()
         # self.choose_images()
 
+    @property
+    def jumping(self):
+        return not self.body.on_floor
+
     def jump(self):
-        if self.body.on_floor:
+        if not self.jumping:
             self.body.apply_impulse(v(0, 450))
+            self.node.play('jumping')
         # if not self.jumping:
         #     self.jumping = True
         #     if button.is_held(DOWN):
@@ -82,17 +87,19 @@ class Player(object):
         if self.crouching:
             self.node.set_flip(True)
             return
-        self.node.play('running')
         self.running = -1
         self.body.apply_force(v(-self.ACCEL, 0))
+        if not self.jumping:
+            self.node.play('running')
 
     def right(self):
         if self.crouching:
             self.node.set_flip(False)
             return
-        self.node.play('running')
         self.running = 1
         self.body.apply_force(v(self.ACCEL, 0))
+        if not self.jumping:
+            self.node.play('running')
 
     def down(self):
         self.crouch()
@@ -122,7 +129,7 @@ class Player(object):
 
     def update(self, dt):
         self.pos = self.node.pos = self.body.pos
-        vx = self.body.v.x
+        vx, vy = self.body.v
         if vx > 10:
             self.node.set_flip(False)
         elif vx < -10:
@@ -130,11 +137,16 @@ class Player(object):
 
         if self.crouching:
             self.node.play('crouching')
+        elif self.jumping:
+            if vy < -300:
+                self.node.play('falling')
+            elif vy < -100:
+                self.node.play('standing')
         else:
             if self.node.playing == 'couching':
                 self.node.play('standing')
 
-            if abs(vx) < 50 and not self.running and self.body.on_floor:
+            if abs(vx) < 50 and not self.running:
                 self.body.v = v(0, self.body.v.y)
                 self.node.play('standing')
 
