@@ -5,10 +5,13 @@ sys.path.insert(0, '..')
 # from retrogamelib.constants import *
 # from retrogamelib import geometry
 
+import random
+
 import pyglet
 from pyglet.window import key
+
 from scenegraph import StaticImage, Scenegraph, Fill, RailTrack, Animation
-from scenegraph import SkyBox, GroundPlane, Wheels, Locomotive
+from scenegraph import SkyBox, GroundPlane, Wheels, Locomotive, Bullet
 from scenegraph import DebugGeometryNode
 from scenegraph import Camera
 from geom import v, Rect
@@ -34,13 +37,10 @@ KEY_DOWN = key.DOWN
 KEY_UP = key.UP
 KEY_SHOOT = key.X
 
-
+RIGHT = 1
+LEFT = -1
 
 FLOOR_Y = 115
-
-
-class Bullet(StaticImage):
-    pass
 
 
 physics = Physics()
@@ -62,9 +62,8 @@ class Player(object):
         physics.add_body(self.body)
         self.running = 0
         self.crouching = False
-        # self.fall_through = 0  # frames of fall_through
-        # self.aim_shot()
-        # self.choose_images()
+        self.shooting = False
+        self.direction = RIGHT
 
     @property
     def jumping(self):
@@ -74,14 +73,6 @@ class Player(object):
         if not self.jumping:
             self.body.apply_impulse(v(0, 450))
             self.node.play('jumping')
-        # if not self.jumping:
-        #     self.jumping = True
-        #     if button.is_held(DOWN):
-        #         self.jump_speed = 7
-        #         # self.fall_through = 4
-        #     else:
-        #         self.jump_speed = -11
-        #     print 'jump_speed:', self.jump_speed
 
     def left(self):
         if self.crouching:
@@ -109,33 +100,47 @@ class Player(object):
         self.crouching = True
 
     def shoot(self):
-        """Not yet implemented!"""
+        if self.shooting:
+            return
+        if self.crouching:
+            self.node.play('crouching-shooting')
+            off = v(self.direction * 69, 49)
+        elif not self.jumping:
+            self.node.play('standing-shooting')
+            off = v(self.direction * 58, 78)
+        else:
+            return
 
-    # def aim_shot(self):
-    #     self.shot_vector = self.direction.copy()
-    #     x = int(button.is_held(RIGHT) - button.is_held(LEFT))
-    #     y = int(button.is_held(DOWN) - button.is_held(UP))
-    #     if not x and y > 0 and not self.jumping:
-    #         y = 0
-    #     if y:
-    #         self.shot_vector.x = x
-    #     self.shot_vector.y = y
+        p1 = self.node.pos + off
+        p2 = p1 + v(1000, random.uniform(-50, 50)) * self.direction
+        self.node.scenegraph.add(Bullet(p1, p2))
+        self.body.apply_impulse(v(-30, 0) * self.direction)
+        self.shooting = True
+        pyglet.clock.schedule_once(self.shooting_finish, 0.5)
 
-    # def do_walk(self):
-    #     if self.walk_speed:
-    #         self.rect.x = int(self.rect.x + self.walk_speed)
-    #         self.direction.x = self.walk_speed / abs(self.walk_speed)
+    def shooting_finish(self, dt):
+        self.shooting = False
 
+    def face_left(self):
+        self.node.set_flip(True)
+        self.direction = LEFT
+
+    def face_right(self):
+        self.node.set_flip(False)
+        self.direction = RIGHT
 
     def update(self, dt):
         self.pos = self.node.pos = self.body.pos
         vx, vy = self.body.v
-        if vx > 10:
-            self.node.set_flip(False)
-        elif vx < -10:
-            self.node.set_flip(True)
 
-        if self.crouching:
+        if self.running:
+            if vx > 10:
+                self.face_right()
+            elif vx < -10:
+                self.face_left()
+        if self.shooting:
+            pass
+        elif self.crouching:
             self.node.play('crouching')
         elif self.jumping:
             if vy < -300:

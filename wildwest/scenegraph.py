@@ -3,6 +3,7 @@ import json
 import math
 import pyglet
 from pyglet import gl
+from itertools import chain
 
 from geom import Rect, v
 
@@ -160,7 +161,7 @@ class Animation(AnimatedNode):
         self.playing = self.default
         super(Animation, self).__init__(pos, self.get_animation('default'))
 
-    def on_animation_end(self):
+    def on_animation_end(self, *args):
         self.play('default')
 
     def set_flip(self, flip):
@@ -186,11 +187,13 @@ class Animation(AnimatedNode):
                 im = pyglet.resource.image(f['file']) 
                 im.anchor_x, im.anchor_y = a.get('anchor', (0, 0))
                 frames.append(
-                    [im, a.get('frame_time', 0.1)]
+                    [im, a.get('frametime', 0.1)]
                 )
 
             if not a.get('loop', False):
-                frames[-1][1] = None
+                if len(frames) == 1:
+                    frames.append(frames[0])
+                frames[-1][1] = 0
 
             self.animations[name] = Animation([AnimationFrame(*f) for f in frames])
 
@@ -401,6 +404,60 @@ class RectNode(Node):
         ])
         pyglet.graphics.draw(4, gl.GL_QUADS, coords)
         gl.glColor4f(1, 1, 1, 1)
+
+
+class Bullet(Node):
+    z = 1
+    trail_width = 2
+
+    batch = pyglet.graphics.Batch()
+    MAX_AGE = 0.6
+
+    def __init__(self, p1, p2):
+        self.p1 = p1
+        self.p2 = p2
+        self.t = None
+        self.build()
+    
+    def build(self, age=0):
+        along = self.p2 - self.p1
+        across = along.perpendicular().safe_normalised() * 0.5 * self.trail_width
+
+        frac = (age / self.MAX_AGE)
+        frac2 = frac * frac
+        c1 = (1, 1, 1, max(0, 0.1 - frac2))
+        c2 = (1, 1, 1, min(1, self.MAX_AGE - frac2))
+
+        bl = self.p1 - across
+        br = self.p2 - across
+        tr = self.p2 + across
+        tl = self.p1 + across
+
+        self.vl = pyglet.graphics.vertex_list(4,
+            ('v2f', list(chain(bl, br, tr, tl))),
+            ('c4f', list(chain(c1, c2, c2, c1))),
+        )
+
+    def update(self, age):
+        self.vl.delete()
+        self.build(age)
+
+    def __del__(self):
+        self.vl.delete()
+
+    def draw(self, camera):
+        if self.t is None:
+            self.t = self.scenegraph.t
+        else:
+            age = self.scenegraph.t - self.t
+            if age > self.MAX_AGE:
+                self.scenegraph.remove(self)
+                return
+            else:
+                self.update(age)
+        gl.glEnable(gl.GL_BLEND)
+        gl.glBlendFunc(gl.GL_SRC_ALPHA, gl.GL_ONE_MINUS_SRC_ALPHA)
+        self.vl.draw(gl.GL_QUADS)
 
 
 class DebugGeometryNode(CompoundNode):
