@@ -279,9 +279,8 @@ class Game(object):
         self.spawn_player()
         pyglet.clock.schedule_interval(self.update, 1.0 / FPS)
         self.world.spawn_crate()
-        self.world.spawn_crate(v(600, 115))
 
-        self.world.spawn_lawman(v(900, 115))
+        self.world.spawn_lawman(v(600, 115))
 
     def spawn_player(self):
         # all this should be done elsewhere
