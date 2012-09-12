@@ -37,7 +37,6 @@ KEY_SHOOT = key.X
 
 
 FLOOR_Y = 115
-GRAVITY = 1200
 
 
 class Bullet(StaticImage):
@@ -50,7 +49,7 @@ physics.add_static(StaticBody([Rect.from_points((0, 0), (1077, 115))]))
 
 class Player(object):
     MAX_WALK = 200  # limit on walk speed
-    ACCEL = 3000  # acceleration when walking
+    ACCEL = 120000  # acceleration when walking
     FRICTION = 1  # deceleration
 
     w = 32  # bounding box width
@@ -135,18 +134,13 @@ class Player(object):
             if self.node.playing == 'couching':
                 self.node.play('standing')
 
-            if abs(vx) < 50 and not self.running:
+            if abs(vx) < 50 and not self.running and self.body.on_floor:
                 self.body.v = v(0, self.body.v.y)
                 self.node.play('standing')
 
         self.crouching = False
         self.running = 0
         return
-
-
-class Table(StaticImage):
-    def __init__(self, pos):
-        StaticImage.__init__(self, pos, IMG_TABLE)
 
 
 class Crate(object):
@@ -161,6 +155,10 @@ class Crate(object):
     def update(self, dt):
         self.node.pos = self.body.pos
 
+
+class Table(StaticImage):
+    def __init__(self, pos):
+        StaticImage.__init__(self, pos, IMG_TABLE)
 
 class Hero(Player):
     def __init__(self, pos):
@@ -206,19 +204,40 @@ def make_scene():
 class World(object):
     """Collection of all the objects and geometry in the world."""
     def __init__(self, scenegraph):
-        self.actors = []
-        self.static = []
+        self.objects = []
+        self.scene = scenegraph
+        self.physics = physics
 
+    def spawn(self, obj):
+        self.scene.add(obj.node)
+        self.objects.append(obj)
 
-FPS = 30
+    def spawn_crate(self, pos=v(400, 115)):
+        crate = Crate(pos)
+        self.scene.add(crate.node)
+        self.objects.append(crate)
+
+    def update(self, dt):
+        self.physics.update(dt)
+
+        for o in self.objects:
+            o.update(dt)
+
+FPS = 60
 
 
 class Game(object):
+    """Control the game.
+
+    Sets up the world, hands input to specific objects.
+    """
     def __init__(self):
         WIDTH = 800
         HEIGHT = 600
         self.window = pyglet.window.Window(width=WIDTH, height=HEIGHT)
         self.scene = make_scene()
+        self.world = World(self.scene)
+        self.objects = []
         self.camera = Camera((200.0, 200.0), WIDTH, HEIGHT)
         self.keys = key.KeyStateHandler()
         self.window.push_handlers(self.keys)
@@ -226,8 +245,9 @@ class Game(object):
             on_draw=self.draw
         )
         self.spawn_player()
-        self.spawn_crate()
         pyglet.clock.schedule_interval(self.update, 1.0 / FPS)
+        self.world.spawn_crate()
+        self.world.spawn_crate(v(600, 115))
 
     def spawn_player(self):
         # all this should be done elsewhere
@@ -235,10 +255,7 @@ class Game(object):
         node = Animation('pc.json', start)
         self.scene.add(node)
         self.hero = Player(start, node)
-        
-    def spawn_crate(self):
-        self.crate = Crate((500, 115))
-        self.scene.add(self.crate.node)
+        self.world.spawn(self.hero)
 
     def draw(self):
         self.scene.draw(self.camera)
@@ -246,7 +263,7 @@ class Game(object):
     def process_input(self):
         if self.keys[KEY_DOWN]:
             self.hero.down()
-        
+
         if self.keys[KEY_LEFT]:
             self.hero.left()
         elif self.keys[KEY_RIGHT]:
@@ -259,9 +276,7 @@ class Game(object):
 
     def update(self, dt):
         self.process_input()
-        physics.update(dt)
-        self.hero.update(dt)
-        self.crate.update(dt)
+        self.world.update(dt)
 
         self.camera.offset = self.hero.pos + v(0, 120)
         self.scene.update(dt)
