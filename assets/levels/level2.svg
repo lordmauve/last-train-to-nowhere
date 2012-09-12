@@ -12,12 +12,12 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="744.09448819"
    height="1052.3622047"
-   id="svg2"
+   id="svg3318"
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="level1.svg">
+   sodipodi:docname="level2.svg">
   <defs
-     id="defs4" />
+     id="defs3320" />
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.01"
-     inkscape:cx="504.03226"
-     inkscape:cy="326.45161"
+     inkscape:zoom="1.24"
+     inkscape:cx="480.69664"
+     inkscape:cy="232.42279"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -37,7 +37,7 @@
      inkscape:window-y="24"
      inkscape:window-maximized="1" />
   <metadata
-     id="metadata7">
+     id="metadata3323">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -55,50 +55,74 @@
     <image
        sodipodi:absref="/home/arnav/code/pyweek15/assets/levels/../sprites/car-interior.png"
        xlink:href="../sprites/car-interior.png"
-       y="737.36218"
-       x="0"
-       id="use4196"
+       width="1024"
        height="315"
-       width="1024" />
-    <image
-       sodipodi:absref="/home/arnav/code/pyweek15/assets/levels/../sprites/crate.png"
-       xlink:href="../sprites/crate.png"
-       width="74"
-       height="80"
-       id="image3249"
-       x="326.36633"
-       y="907.36218" />
-    <image
-       sodipodi:absref="/home/arnav/code/pyweek15/assets/levels/../sprites/crate.png"
-       xlink:href="../sprites/crate.png"
-       width="74"
-       height="80"
-       id="image3249-5"
-       x="560.02972"
-       y="907.36218" />
+       id="image3187"
+       x="0"
+       y="737.36218" />
     <image
        sodipodi:absref="/home/arnav/code/pyweek15/assets/levels/../sprites/crate.png"
        xlink:href="../sprites/crate.png"
        width="74"
        height="80"
        id="image3249-5-5"
-       x="599.73267"
-       y="834.16418" />
+       x="218.94058"
+       y="907.36218" />
+    <image
+       sodipodi:absref="/home/arnav/code/pyweek15/assets/levels/../sprites/crate.png"
+       xlink:href="../sprites/crate.png"
+       width="74"
+       height="80"
+       id="image3249-5-5-2"
+       x="385.39603"
+       y="907.36218" />
+    <image
+       sodipodi:absref="/home/arnav/code/pyweek15/assets/levels/../sprites/crate.png"
+       xlink:href="../sprites/crate.png"
+       width="74"
+       height="80"
+       id="image3249-5-5-3"
+       x="572.96039"
+       y="907.36218" />
+    <image
+       sodipodi:absref="/home/arnav/code/pyweek15/assets/levels/../sprites/crate.png"
+       xlink:href="../sprites/crate.png"
+       width="74"
+       height="80"
+       id="image3249-5-5-9"
+       x="768.20795"
+       y="907.36218" />
     <image
        sodipodi:absref="/home/arnav/code/pyweek15/assets/levels/../sprites/lawman-standing.png"
        xlink:href="../sprites/lawman-standing.png"
        width="90"
        height="112"
-       id="image3431-7"
-       x="397.61386"
+       id="image3431"
+       x="651.97028"
        y="875.36218" />
     <image
        sodipodi:absref="/home/arnav/code/pyweek15/assets/levels/../sprites/lawman-standing.png"
        xlink:href="../sprites/lawman-standing.png"
        width="90"
        height="112"
-       id="image3431-7-0"
-       x="772.30695"
+       id="image3431-0"
+       x="844.28711"
+       y="875.36218" />
+    <image
+       sodipodi:absref="/home/arnav/code/pyweek15/assets/levels/../sprites/lawman-standing.png"
+       xlink:href="../sprites/lawman-standing.png"
+       width="90"
+       height="112"
+       id="image3431-05"
+       x="459.25742"
+       y="875.36218" />
+    <image
+       sodipodi:absref="/home/arnav/code/pyweek15/assets/levels/../sprites/lawman-standing.png"
+       xlink:href="../sprites/lawman-standing.png"
+       width="90"
+       height="112"
+       id="image3431-7"
+       x="294.42575"
        y="875.36218" />
   </g>
 </svg>
