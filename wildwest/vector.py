@@ -291,8 +291,8 @@ class Vector(tuple):
 
         """
         if self.is_zero:
-            return self
-        return Vector(0, 1)
+            return Vector((0, 1))
+        return self.normalised() 
 
     safe_normalized = safe_normalised
 
