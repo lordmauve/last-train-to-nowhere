@@ -15,6 +15,8 @@ from .scenegraph import StaticImage, Scenegraph, Animation
 from .scenegraph import SkyBox, GroundPlane, Bullet
 from .scenegraph.railroad import Wheels, Locomotive, RailTrack
 
+from .ai import AI
+
 from geom import v, Rect, Segment
 
 from physics import Body, StaticBody, Physics
@@ -45,6 +47,8 @@ class Player(object):
     w = 32  # bounding box width
     h = 106  # bounding box height
     MASS = 100
+
+    MAX_HEALTH = 100
 
     def __init__(self, world, pos, node):
         self.world = world
@@ -139,17 +143,27 @@ class Player(object):
         pyglet.clock.schedule_once(self.shooting_finish, 0.5)
 
     def shooting_finish(self, dt):
+        """Called by a time to cancel the shooting animation."""
         self.shooting = False
 
     def face_left(self):
+        """Have the character face left."""
         self.node.set_flip(True)
         self.direction = LEFT
 
     def face_right(self):
+        """Have the character face right."""
         self.node.set_flip(False)
         self.direction = RIGHT
 
     def update(self, dt):
+        """Update the character.
+
+        Since the physics gives us a position we don't need to do much more to
+        calculate it here. However we do need to cue up the right animations
+        based on what has happened in the physics, plus any input.
+
+        """
         self.node.pos = self.body.pos
         vx, vy = self.body.v
 
@@ -176,80 +190,6 @@ class Player(object):
 
         self.crouching = False
         self.running = 0
-        return
-
-
-class AI(object):
-    MIN_DISTANCE = 700
-
-    def __init__(self, world):
-        self.world = world
-
-    def update(self, dt):
-        self.ai()
-
-    def ai(self):
-        hero = self.world.hero
-        lawmen = [obj for obj in self.world.objects\
-                    if isinstance(obj, Player) and\
-                    obj is not self.world.hero
-                ]
-
-        for lawman in lawmen:
-            # If hero is not in range, move towards him
-            if random.random() < 0.5:
-                self.defend(hero, lawman)
-            else:
-                self.attack(hero, lawman)
-
-    def defend(self, hero, lawman):
-        """A simple defensive strategy"""
-        # locate the hero: distance, vector
-        hero_pos = hero.pos
-        hero_hitlist = hero.hitlist
-        self_pos = lawman.pos
-        distance = self_pos.distance_to(hero_pos)
-
-        # Face the right direction
-        if (self_pos - hero_pos).x > 0:
-            # Hero is on the left
-            lawman.face_left()
-        else:
-            # Hero is on the right
-            lawman.face_right()
-
-        # Defence: if direct line of shooting
-        # 1. Crouch if hero is standing or jumping and preparing to shoot
-        if hero.jumping:
-            lawman.crouch()
-        # 2. Jump if hero is crouching
-        elif hero.crouching:
-            lawman.jump()
-
-    def attack(self, hero, lawman):
-        """A simple attack strategy"""
-        hero_pos = hero.pos
-        # hero_hitlist = hero.hitlist
-        self_pos = lawman.pos
-        # distance = self_pos.distance_to(hero_pos)
-        # Face the right direction
-        if (self_pos - hero_pos).x > 0:
-            # Hero is on the left
-            lawman.face_left()
-        else:
-            # Hero is on the right
-            lawman.face_right()
-
-        # Attack:
-        # 1. If hero is in direct range shoot
-        # hitlist = lawman.hitlist
-        lawman.shoot()
-
-    def move(self, hero, lawman):
-        # Motion:
-        # 1. If an object is blocking, go past it
-        # 2. Shoot and hide if hero is right in front
-        return
 
 
 class Crate(object):
@@ -311,10 +251,13 @@ class World(object):
 
         # setup the scene
         self.physics.add_static(StaticBody([Rect.from_points((0, 0), (1024, 115))]))
-        self.ai = AI(self)
         self.spawn_player()
         self.spawn_crate()
         self.spawn_lawman(v(600, 115))
+
+    def kill(self, obj):
+        self.scene.remove(obj.node)
+        self.objects.remove(obj)
 
     def spawn(self, obj):
         self.scene.add(obj.node)
@@ -336,6 +279,7 @@ class World(object):
     def spawn_lawman(self, pos):
         node = Animation('lawman.json', pos)
         lawman = Player(self, pos, node)
+        lawman.ai = AI(lawman)
         self.spawn(lawman)
 
     def process_input(self, keys):
@@ -356,5 +300,6 @@ class World(object):
         self.physics.update(dt)
 
         for o in self.objects:
+            if hasattr(o, 'ai'):
+                o.ai.update(dt)
             o.update(dt)
-        self.ai.update(dt)
