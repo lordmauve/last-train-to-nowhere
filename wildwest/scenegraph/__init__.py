@@ -173,14 +173,22 @@ class Animation(SpriteNode):
     """
     loaded = {}
 
-    def __init__(self, fname, pos, z=1):
+    def __init__(self, fname, pos, z=0):
         self.flip_x = False
         self.default, self.animations = self.load(os.path.join('assets', 'animations', fname))
         self.playing = self.default
-        super(Animation, self).__init__(pos, self.get_animation('default'))
+        super(Animation, self).__init__(pos, self.get_animation('default'), z=z)
+        self.sprite.set_handler('on_animation_end', self.on_animation_end)
+
+    def set_scenegraph(self, sg):
+        if sg is None:
+            self.sprite.pop_handlers()
+            self.sprite.remove_handler('on_animation_end', self.on_animation_end)
+        super(Animation, self).set_scenegraph(sg)
 
     def on_animation_end(self, *args):
-        self.play('default')
+        if self.sprite.image.frames[-1].duration is None:
+            self.play('default')
 
     def set_flip(self, flip):
         if flip == self.flip_x:
@@ -242,6 +250,11 @@ class Animation(SpriteNode):
             anim = anim.get_transform(flip_x=True)
         self.playing = name
         self.sprite.image = anim
+
+
+class AnimatedEffect(Animation):
+    def on_animation_end(self, *args):
+        self.scenegraph.remove(self)
 
 
 class Depth(Node):
