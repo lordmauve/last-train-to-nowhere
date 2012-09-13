@@ -1,3 +1,4 @@
+import re
 from xml.etree import ElementTree
 from geom import Rect
 
@@ -12,9 +13,14 @@ def images(tree):
     images = []
     doch = float(tree.getroot().get('height'))
     for node in tree.findall('.//{http://www.w3.org/2000/svg}image'):
-        file = node.get('xlink:href')
-        r = get_rect(node, doch)
-        images.append((file, r))
+        file = node.get('{http://www.w3.org/1999/xlink}href')
+        if not file:
+            continue
+        mo = re.search(r'/([^/]+).png$', file)
+        if mo:
+            name = mo.group(1)
+            r = get_rect(node, doch)
+            images.append((name, r))
     return images
 
 
@@ -49,6 +55,12 @@ def load_geometry(obj_type):
     source = 'assets/geometry/%s.svg' % obj_type
     tree = parse(source)
     return rectangles(tree)
+
+
+def load_level_data(name):
+    source = 'assets/levels/%s.svg' % name
+    tree = parse(source)
+    return images(tree)
 
 
 if __name__ == '__main__':

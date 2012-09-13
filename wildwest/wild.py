@@ -23,9 +23,6 @@ from geom import v, Rect, Segment
 from physics import Body, StaticBody, Physics
 
 
-IMG_CARRIAGE = 'car-interior.png'
-
-
 # Key Bindings
 KEY_RIGHT = key.RIGHT
 KEY_LEFT = key.LEFT
@@ -197,11 +194,14 @@ class Crate(object):
     w = 74
     h = 77
 
-    def __init__(self, world, pos):
+    def __init__(self, pos):
         self.node = Animation('crate.json', pos)
-        self.world = world
         self.body = Body(Rect.from_cwh(v(0, self.h / 2), self.w, self.h), 1000, pos, controller=self)
-        self.world.physics.add_body(self.body)
+
+    def spawn(self, world):
+        world.physics.add_body(self.body)
+        world.scene.add(self.node)
+        world.objects.append(self)
 
     def update(self, dt):
         self.node.pos = self.body.pos
@@ -240,9 +240,11 @@ class Carriage(object):
 
     pos = property(get_pos, set_pos)
 
-    def add(self, scenegraph):
-        scenegraph.add(self.interior)
-        scenegraph.add(self.exterior)
+    def spawn(self, world):
+        world.physics.add_static(self.body)
+        world.scene.add(self.interior)
+        world.scene.add(self.exterior)
+        world.carriages.append(self)
 
     def remove(self, scenegraph):
         scenegraph.remove(self.interior)
@@ -276,54 +278,44 @@ class LocomotiveObject(object):
         self.node = Locomotive(pos)
         self.body = StaticBody(load_geometry('locomotive'), pos)
 
-    def add(self, scenegraph):
-        scenegraph.add(self.node)
-
-
-def make_scene(scenegraph, world):
-    # setup the scene
-
-    s = scenegraph
-    carriage = Carriage(pos=(0, 0), name='freightcar')
-    world.physics.add_static(carriage.body)
-    carriage.add(s)
-    world.carriages.append(carriage)
-
-    carriage = Carriage(pos=(1024, 0), name='car')
-    world.physics.add_static(carriage.body)
-    carriage.add(s)
-    world.carriages.append(carriage)
-
-    locomotive = LocomotiveObject((2048, 0))
-    locomotive.add(s)
-    world.physics.add_static(locomotive.body)
-    s.add(RailTrack(pyglet.resource.texture('track.png')))
-
-    ground = GroundPlane(
-        (218, 176, 127, 255),
-        (194, 183, 164, 255),
-    )
-    s.add(ground)
-
-    s.add(SkyBox(
-        (129, 218, 255, 255),
-        (49, 92, 142, 255)
-    ))
-
-    world.spawn_player()
-    world.spawn_crate()
-    world.spawn_lawman(v(600, 115))
-    return s
+    def spawn(self, world):
+        world.scene.add(self.node)
+        world.physics.add_static(self.body)
 
 
 class World(object):
     """Collection of all the objects and geometry in the world."""
-    def __init__(self, scenegraph):
+    def __init__(self):
         self.objects = []
         self.carriages = []
 
-        self.scene = scenegraph
         self.physics = Physics()
+
+        self.scene = Scenegraph()
+        self.make_scene()
+        self.spawn_player()
+
+    def load_level(self, name):
+        from .loader import load_level
+        load_level(self, name)
+
+    def make_scene(self):
+        # setup the scene
+
+        s = self.scene
+        s.add(RailTrack(pyglet.resource.texture('track.png')))
+
+        ground = GroundPlane(
+            (218, 176, 127, 255),
+            (194, 183, 164, 255),
+        )
+        s.add(ground)
+
+        s.add(SkyBox(
+            (129, 218, 255, 255),
+            (49, 92, 142, 255)
+        ))
+        return s
 
     def kill(self, obj):
         self.scene.remove(obj.node)
@@ -333,11 +325,6 @@ class World(object):
         self.scene.add(obj.node)
         self.objects.append(obj)
 
-    def spawn_crate(self, pos=v(400, 115)):
-        crate = Crate(self, pos)
-        self.scene.add(crate.node)
-        self.objects.append(crate)
-
     def spawn_player(self):
         # all this should be done elsewhere
         start = v(90, 115)
@@ -345,12 +332,6 @@ class World(object):
         # self.scene.add(node)
         self.hero = Player(self, start, node)
         self.spawn(self.hero)
-
-    def spawn_lawman(self, pos):
-        node = Animation('lawman.json', pos)
-        lawman = Player(self, pos, node)
-        lawman.ai = AI(lawman)
-        self.spawn(lawman)
 
     def process_input(self, keys):
         if keys[KEY_DOWN]:
