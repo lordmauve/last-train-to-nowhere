@@ -11,7 +11,7 @@ import pyglet
 from pyglet.window import key
 
 
-from .scenegraph import Scenegraph, Animation
+from .scenegraph import Scenegraph, Animation, AnimatedEffect
 from .scenegraph import SkyBox, GroundPlane, Bullet
 from .scenegraph.railroad import Locomotive, RailTrack, CarriageInterior, CarriageExterior
 
@@ -94,7 +94,12 @@ class Player(object):
     def jumping(self):
         return not self.body.on_floor
 
-    def on_hit(self):
+    def on_hit(self, pos, vel):
+        flip = v(1, 0).dot(vel) > 0
+        blood = AnimatedEffect('bloodspray.json', pos, 1.1)
+        blood.set_flip(flip)
+        self.world.scene.add(blood)
+
         self.health -= random.uniform(10, 20)
         if self.health <= 0:
             self.die()
@@ -207,7 +212,7 @@ class Player(object):
             elif vx < -10:
                 self.face_left()
         if self.hit:
-            pass
+            return
         elif self.crouching:
             self.node.play('crouching')
         elif self.shooting:
@@ -376,13 +381,18 @@ class World(object):
         seg = Segment(p1, p2)
         hit = self.physics.ray_query(seg, mask=mask)
         for d, obj in hit:
+            vel = seg.edge
+
             if d <= 0:
+                pos = seg.points[0]
                 seg = None
             else:
                 seg = seg.truncate(d)
+                pos = seg.points[1]
 
             if hasattr(obj, 'hit'):
-                obj.on_hit()
+                obj.on_hit(pos, vel)
+
             break
 
         if seg:
