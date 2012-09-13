@@ -4,7 +4,7 @@ import pyglet
 from pyglet import gl
 
 from ..vector import v
-from . import Node, AnimatedNode, StaticImage, CompoundNode, Depth
+from . import Node, SpriteNode, StaticImage, CompoundNode, Depth
 
 
 class Wheels(Node):
@@ -43,7 +43,7 @@ class Wheels(Node):
         self.sprite1.draw()
 
 
-class LocomotiveWheel(AnimatedNode):
+class LocomotiveWheel(SpriteNode):
     z = 1
     def __init__(self, pos):
         wheel = pyglet.resource.image('locomotive-wheel.png')
@@ -153,3 +153,34 @@ class RailTrack(Node):
         self.group.unset_state()
 
 
+class CarriageInterior(CompoundNode):
+    z = -0.5
+    def __init__(self, pos, name):
+        children = [
+            StaticImage((0, 53), name + '-interior.png'),
+            Wheels((91, 0)),
+            Wheels((992 - 236, 0)),
+        ]
+        super(CarriageInterior, self).__init__(
+            pos=pos,
+            children=children,
+        )
+
+
+class CarriageExterior(CompoundNode):
+    z = 2
+    def __init__(self, pos, name, opacity=1):
+        self.img = StaticImage((0, 53), name + '-exterior.png')
+        super(CarriageExterior, self).__init__(
+            pos=pos,
+            children=[self.img],
+        )
+        self.set_opacity(opacity)
+
+    def set_opacity(self, opacity):
+        self.img.sprite.opacity = opacity * 255
+
+    def draw(self, camera):
+        if not self.img.sprite.opacity:
+            return
+        super(CarriageExterior, self).draw(camera)

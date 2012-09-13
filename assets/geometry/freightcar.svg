@@ -26,15 +26,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="535"
-     inkscape:cy="280"
+     inkscape:cx="730.8647"
+     inkscape:cy="120"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1215"
-     inkscape:window-height="776"
+     inkscape:window-width="1301"
+     inkscape:window-height="744"
      inkscape:window-x="65"
-     inkscape:window-y="24"
+     inkscape:window-y="468"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata3366">
@@ -44,7 +44,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -53,7 +53,7 @@
      inkscape:groupmode="layer"
      id="layer1">
     <image
-       sodipodi:absref="/home/arnav/code/pyweek15/assets/geometry/../sprites/freightcar-interior.png"
+       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/geometry/../sprites/freightcar-interior.png"
        xlink:href="../sprites/freightcar-interior.png"
        width="1024"
        height="317"
@@ -61,7 +61,7 @@
        x="0"
        y="735.36218" />
     <image
-       sodipodi:absref="/home/arnav/code/pyweek15/assets/geometry/../sprites/pc-standing.png"
+       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/geometry/../sprites/pc-standing.png"
        xlink:href="../sprites/pc-standing.png"
        width="85"
        height="109"
@@ -71,44 +71,16 @@
     <rect
        style="fill:#0000ff"
        id="rect3509"
-       width="67"
-       height="19"
-       x="21"
-       y="757.36218" />
-    <rect
-       style="fill:#0000ff"
-       id="rect3511"
-       width="53"
-       height="27"
-       x="89"
-       y="730.36218" />
-    <rect
-       style="fill:#0000ff"
-       id="rect3513"
-       width="117"
-       height="12"
-       x="211"
-       y="744.36218" />
-    <rect
-       style="fill:#0000ff"
-       id="rect3515"
-       width="115"
-       height="13"
-       x="692"
-       y="745.36218" />
-    <rect
-       style="fill:#0000ff"
-       id="rect3517"
-       width="47"
-       height="23"
-       x="885"
-       y="733.36218" />
+       width="54"
+       height="9.9523811"
+       x="34"
+       y="766.40979" />
     <rect
        style="fill:#0000ff"
        id="rect3519"
-       width="850"
+       width="957"
        height="9"
-       x="89"
+       x="34"
        y="757.36218" />
     <rect
        style="fill:#0000ff"
@@ -116,7 +88,7 @@
        width="8"
        height="86"
        x="80"
-       y="778.36218" />
+       y="776.36218" />
     <rect
        style="fill:#0000ff"
        id="rect3523"
@@ -127,10 +99,10 @@
     <rect
        style="fill:#0000ff"
        id="rect3525"
-       width="67"
-       height="21"
-       x="938"
-       y="755.36218" />
+       width="55"
+       height="11"
+       x="935"
+       y="765.36218" />
     <rect
        style="fill:#0000ff"
        id="rect3527"
