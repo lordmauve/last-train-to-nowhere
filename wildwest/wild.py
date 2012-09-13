@@ -10,6 +10,7 @@ import random
 import pyglet
 from pyglet.window import key
 
+
 from scenegraph import StaticImage, Scenegraph, Fill, RailTrack, Animation
 from scenegraph import SkyBox, GroundPlane, Wheels, Locomotive, Bullet
 from scenegraph import DebugGeometryNode
@@ -19,14 +20,6 @@ from geom import v, Rect, Segment
 from physics import Body, StaticBody, Physics
 
 
-# Image File Paths
-ASSETS_BASE = 'assets/sprites'
-IMG_PC_STANDING = 'pc-standing.png'
-IMG_PC_CROUCHING = 'pc-crouching.png'
-IMG_LAWMAN_STANDING = 'lawman-standing.png'
-IMG_LAWMAN_CROUCHING = 'lawman-crouching.png'
-IMG_TABLE = 'table.png'
-IMG_CRATE = 'crate.png'
 IMG_CARRIAGE = 'car-interior.png'
 
 
@@ -37,14 +30,11 @@ KEY_DOWN = key.DOWN
 KEY_UP = key.UP
 KEY_SHOOT = key.X
 
+
 RIGHT = 1
 LEFT = -1
 
 FLOOR_Y = 115
-
-
-physics = Physics()
-physics.add_static(StaticBody([Rect.from_points((0, 0), (1024, 115))]))
 
 
 class Player(object):
@@ -56,11 +46,12 @@ class Player(object):
     h = 106  # bounding box height
     MASS = 100
 
-    def __init__(self, pos, node):
+    def __init__(self, world, pos, node):
+        self.world = world
         self.node = node
         node.z = 1
         self.body = Body(Rect.from_cwh(v(0, self.h / 2), self.w, self.h), self.MASS, pos)
-        physics.add_body(self.body)
+        self.world.physics.add_body(self.body)
         self.running = 0
         self.crouching = False
         self.shooting = False
@@ -115,7 +106,7 @@ class Player(object):
         p1 = self.node.pos + off
         p2 = p1 + v(1000, random.uniform(-50, 50)) * self.direction
         seg = Segment(p1, p2)
-        hit = physics.ray_query(seg)
+        hit = self.world.physics.ray_query(seg)
         return hit
 
     def shoot(self):
@@ -133,7 +124,7 @@ class Player(object):
         p1 = self.node.pos + off
         p2 = p1 + v(1000, random.uniform(-50, 50)) * self.direction
         seg = Segment(p1, p2)
-        hit = physics.ray_query(seg)
+        hit = self.world.physics.ray_query(seg)
         if hit:
             d = hit[0][0]
             if d <= 0:
@@ -265,22 +256,14 @@ class Crate(object):
     w = 74
     h = 77
 
-    def __init__(self, pos):
+    def __init__(self, world, pos):
         self.node = Animation('crate.json', pos)
+        self.world = world
         self.body = Body(Rect.from_cwh(v(0, self.h / 2), self.w, self.h), 1000, pos, controller=self)
-        physics.add_body(self.body)
+        self.world.physics.add_body(self.body)
 
     def update(self, dt):
         self.node.pos = self.body.pos
-
-
-class Table(StaticImage):
-    def __init__(self, pos):
-        StaticImage.__init__(self, pos, IMG_TABLE)
-
-class Hero(Player):
-    def __init__(self, pos):
-        Player.__init__(self, pos, IMG_PC_STANDING)
 
 
 # class Lawman(StaticImage):
@@ -324,9 +307,11 @@ class World(object):
     def __init__(self, scenegraph):
         self.objects = []
         self.scene = scenegraph
-        self.physics = physics
-        self.ai = AI(self)
+        self.physics = Physics()
+
         # setup the scene
+        self.physics.add_static(StaticBody([Rect.from_points((0, 0), (1024, 115))]))
+        self.ai = AI(self)
         self.spawn_player()
         self.spawn_crate()
         self.spawn_lawman(v(600, 115))
@@ -336,7 +321,7 @@ class World(object):
         self.objects.append(obj)
 
     def spawn_crate(self, pos=v(400, 115)):
-        crate = Crate(pos)
+        crate = Crate(self, pos)
         self.scene.add(crate.node)
         self.objects.append(crate)
 
@@ -345,12 +330,12 @@ class World(object):
         start = v(90, 115)
         node = Animation('pc.json', start)
         # self.scene.add(node)
-        self.hero = Player(start, node)
+        self.hero = Player(self, start, node)
         self.spawn(self.hero)
 
     def spawn_lawman(self, pos):
         node = Animation('lawman.json', pos)
-        lawman = Player(pos, node)
+        lawman = Player(self, pos, node)
         self.spawn(lawman)
 
     def process_input(self, keys):
@@ -373,55 +358,3 @@ class World(object):
         for o in self.objects:
             o.update(dt)
         self.ai.update(dt)
-
-FPS = 60
-
-
-class Game(object):
-    """Control the game.
-
-    Sets up the world, hands input to specific objects.
-    """
-    def __init__(self):
-        WIDTH = 800
-        HEIGHT = 600
-        self.window = pyglet.window.Window(width=WIDTH, height=HEIGHT)
-        self.scene = make_scene()
-        self.world = World(self.scene)
-        self.objects = []
-        self.camera = Camera((200.0, 200.0), WIDTH, HEIGHT)
-        self.keys = key.KeyStateHandler()
-        self.window.push_handlers(self.keys)
-        self.window.push_handlers(
-            on_draw=self.draw
-        )
-        pyglet.clock.schedule_interval(self.update, 1.0 / FPS)
-
-    def draw(self):
-        self.scene.draw(self.camera)
-
-    def process_input(self):
-        self.world.process_input(self.keys)
-
-    def update(self, dt):
-        self.process_input()
-        self.world.update(dt)
-
-        self.camera.offset = self.world.hero.pos + v(0, 120)
-        self.scene.update(dt)
-
-
-def main():
-    from optparse import OptionParser
-    parser = OptionParser()
-    parser.add_option('--debug', action='store_true', help='Debug collision geometries')
-    options, args = parser.parse_args()
-
-    g = Game()
-    if options.debug:
-        g.scene.add(DebugGeometryNode(physics))
-    pyglet.app.run()
-
-
-if __name__ == '__main__':
-    main()

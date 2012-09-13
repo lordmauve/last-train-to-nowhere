@@ -1,3 +1,3 @@
-from wildwest.wild import main
+from wildwest.__main__ import main
 
 main()
