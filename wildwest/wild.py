@@ -38,6 +38,7 @@ FLOOR_Y = 115
 GROUP_ALL = MASK_ALL = 0xffff
 GROUP_PLAYER = 0x0001
 GROUP_ENEMY = 0x0002
+GROUP_SCENERY = 0x0004
 
 
 class Player(object):
@@ -62,13 +63,21 @@ class Player(object):
         self.running = 0
         self.crouching = False
         self.shooting = False
+        self.hit = False
         self.direction = RIGHT
+
+        self.health = self.MAX_HEALTH
 
     def spawn(self, world):
         self.world = world
         world.objects.append(self)
         world.scene.add(self.node)
         world.physics.add_body(self.body)
+
+    def kill(self, world):
+        world.objects.remove(self)
+        world.scene.remove(self.node)
+        world.physics.remove_body(self.body)
 
     @property
     def pos(self):
@@ -77,6 +86,19 @@ class Player(object):
     @property
     def jumping(self):
         return not self.body.on_floor
+
+    def on_hit(self):
+        self.health -= random.uniform(10, 20)
+        if self.health <= 0:
+            self.kill(self.world)
+        else:
+            self.node.play('hit')
+            self.hit = True
+            pyglet.clock.schedule_once(self.hit_finish, 0.3)
+
+    def hit_finish(self, dt):
+        """Called by a time to cancel the shooting animation."""
+        self.hit = False
 
     def jump(self):
         if not self.jumping:
@@ -173,7 +195,9 @@ class Player(object):
                 self.face_right()
             elif vx < -10:
                 self.face_left()
-        if self.crouching:
+        if self.hit:
+            pass
+        elif self.crouching:
             self.node.play('crouching')
         elif self.shooting:
             pass
@@ -219,7 +243,7 @@ class Crate(object):
 
     def __init__(self, pos):
         self.node = Animation('crate.json', pos)
-        self.body = Body(Rect.from_cwh(v(0, self.h / 2), self.w, self.h), 1000, pos, controller=self)
+        self.body = Body(Rect.from_cwh(v(0, self.h / 2), self.w, self.h), 1000, pos, controller=self, groups=GROUP_SCENERY)
 
     def spawn(self, world):
         world.physics.add_body(self.body)
@@ -345,7 +369,10 @@ class World(object):
                 seg = None
             else:
                 seg = seg.truncate(d)
-            # print obj
+
+            if hasattr(obj, 'hit'):
+                obj.on_hit()
+            print obj
             break
 
         if seg:

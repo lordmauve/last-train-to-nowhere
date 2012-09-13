@@ -60,6 +60,9 @@ class Physics(object):
     def add_body(self, b):
         self.dynamic.append(b)
 
+    def remove_body(self, b):
+        self.dynamic.remove(b)
+
     def add_static(self, s):
         self.static_objects.append(s)
         geom = []
