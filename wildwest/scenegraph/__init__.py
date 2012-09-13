@@ -171,10 +171,11 @@ class Animation(SpriteNode):
     
     The current animation can be changed using .play()
     """
+    loaded = {}
+
     def __init__(self, fname, pos, z=1):
-        self.animations = {}
         self.flip_x = False
-        self.load(os.path.join('assets', 'animations', fname))
+        self.default, self.animations = self.load(os.path.join('assets', 'animations', fname))
         self.playing = self.default
         super(Animation, self).__init__(pos, self.get_animation('default'))
 
@@ -187,18 +188,25 @@ class Animation(SpriteNode):
         self.play(self.playing, flip)
 
     def load(self, fname):
+        try:
+            default, animations = self.loaded[fname]
+        except KeyError:
+            pass
+
         from pyglet.image import Animation, AnimationFrame
 
         with open(fname) as f:
             self.doc = json.load(f)
 
+        animations = {}
+        default = None
         for name, a in self.doc.items():
             if name == 'default':
                 if isinstance(a, unicode):
-                    self.default = a
+                    default = a
                     continue
                 else:
-                    self.default = 'default'
+                    default = 'default'
             frames = []
             for f in a['frames']:
                 im = pyglet.resource.image(f['file']) 
@@ -212,7 +220,9 @@ class Animation(SpriteNode):
                     frames.append(frames[0])
                 frames[-1][1] = 0
 
-            self.animations[name] = Animation([AnimationFrame(*f) for f in frames])
+            animations[name] = Animation([AnimationFrame(*f) for f in frames])
+        self.loaded[fname] = default, animations
+        return default, animations
 
     def get_animation(self, name):
         if name == 'default':

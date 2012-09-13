@@ -5,7 +5,7 @@ from pyglet.window import key
 FPS = 60
 
 from .vector import v
-from .wild import make_scene, World
+from .wild import World
 from .scenegraph import Scenegraph, Camera, DebugGeometryNode
 
 
@@ -19,9 +19,7 @@ class Game(object):
         WIDTH = 800
         HEIGHT = 600
         self.window = pyglet.window.Window(width=WIDTH, height=HEIGHT)
-        self.scene = Scenegraph()
-        self.world = World(self.scene)
-        make_scene(self.scene, self.world)
+        self.world = World()
 
         self.objects = []
         self.camera = Camera((200.0, 200.0), WIDTH, HEIGHT)
@@ -32,8 +30,10 @@ class Game(object):
         )
         pyglet.clock.schedule_interval(self.update, 1.0 / FPS)
 
+        self.world.load_level('level1')
+
     def draw(self):
-        self.scene.draw(self.camera)
+        self.world.scene.draw(self.camera)
 
     def process_input(self):
         self.world.process_input(self.keys)
@@ -43,7 +43,7 @@ class Game(object):
         self.world.update(dt)
 
         self.camera.offset = self.world.hero.pos + v(0, 120)
-        self.scene.update(dt)
+        self.world.scene.update(dt)
 
     def set_debug(self):
-        self.scene.add(DebugGeometryNode(self.world.physics))
+        self.world.scene.add(DebugGeometryNode(self.world.physics))
