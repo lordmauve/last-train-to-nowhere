@@ -67,6 +67,10 @@ class Player(object):
         self.direction = RIGHT
 
     @property
+    def pos(self):
+        return self.body.pos
+
+    @property
     def jumping(self):
         return not self.body.on_floor
 
@@ -99,6 +103,20 @@ class Player(object):
     def crouch(self):
         self.running = 0
         self.crouching = True
+
+    @property
+    def hitlist(self):
+        if self.crouching:
+            off = v(self.direction * 69, 49)
+        elif not self.jumping:
+            off = v(self.direction * 58, 78)
+        else:
+            return []
+        p1 = self.node.pos + off
+        p2 = p1 + v(1000, random.uniform(-50, 50)) * self.direction
+        seg = Segment(p1, p2)
+        hit = physics.ray_query(seg)
+        return hit
 
     def shoot(self):
         if self.shooting:
@@ -141,7 +159,7 @@ class Player(object):
         self.direction = RIGHT
 
     def update(self, dt):
-        self.pos = self.node.pos = self.body.pos
+        self.node.pos = self.body.pos
         vx, vy = self.body.v
 
         if self.running:
@@ -170,6 +188,79 @@ class Player(object):
         return
 
 
+class AI(object):
+    MIN_DISTANCE = 700
+
+    def __init__(self, world):
+        self.world = world
+
+    def update(self, dt):
+        self.ai()
+
+    def ai(self):
+        hero = self.world.hero
+        lawmen = [obj for obj in self.world.objects\
+                    if isinstance(obj, Player) and\
+                    obj is not self.world.hero
+                ]
+
+        for lawman in lawmen:
+            # If hero is not in range, move towards him
+            if random.random() < 0.5:
+                self.defend(hero, lawman)
+            else:
+                self.attack(hero, lawman)
+
+    def defend(self, hero, lawman):
+        """A simple defensive strategy"""
+        # locate the hero: distance, vector
+        hero_pos = hero.pos
+        hero_hitlist = hero.hitlist
+        self_pos = lawman.pos
+        distance = self_pos.distance_to(hero_pos)
+
+        # Face the right direction
+        if (self_pos - hero_pos).x > 0:
+            # Hero is on the left
+            lawman.face_left()
+        else:
+            # Hero is on the right
+            lawman.face_right()
+
+        # Defence: if direct line of shooting
+        # 1. Crouch if hero is standing or jumping and preparing to shoot
+        if hero.jumping:
+            lawman.crouch()
+        # 2. Jump if hero is crouching
+        elif hero.crouching:
+            lawman.jump()
+
+    def attack(self, hero, lawman):
+        """A simple attack strategy"""
+        hero_pos = hero.pos
+        # hero_hitlist = hero.hitlist
+        self_pos = lawman.pos
+        # distance = self_pos.distance_to(hero_pos)
+        # Face the right direction
+        if (self_pos - hero_pos).x > 0:
+            # Hero is on the left
+            lawman.face_left()
+        else:
+            # Hero is on the right
+            lawman.face_right()
+
+        # Attack:
+        # 1. If hero is in direct range shoot
+        # hitlist = lawman.hitlist
+        lawman.shoot()
+
+    def move(self, hero, lawman):
+        # Motion:
+        # 1. If an object is blocking, go past it
+        # 2. Shoot and hide if hero is right in front
+        return
+
+
 class Crate(object):
     w = 74
     h = 77
@@ -192,9 +283,9 @@ class Hero(Player):
         Player.__init__(self, pos, IMG_PC_STANDING)
 
 
-class Lawman(StaticImage):
-    def __init__(self, pos):
-        StaticImage.__init__(self, pos, IMG_LAWMAN_STANDING)
+# class Lawman(StaticImage):
+#     def __init__(self, pos):
+#         StaticImage.__init__(self, pos, IMG_LAWMAN_STANDING)
 
 
 class Carriage(StaticImage):
@@ -234,6 +325,11 @@ class World(object):
         self.objects = []
         self.scene = scenegraph
         self.physics = physics
+        self.ai = AI(self)
+        # setup the scene
+        self.spawn_player()
+        self.spawn_crate()
+        self.spawn_lawman(v(600, 115))
 
     def spawn(self, obj):
         self.scene.add(obj.node)
@@ -244,16 +340,39 @@ class World(object):
         self.scene.add(crate.node)
         self.objects.append(crate)
 
+    def spawn_player(self):
+        # all this should be done elsewhere
+        start = v(90, 115)
+        node = Animation('pc.json', start)
+        # self.scene.add(node)
+        self.hero = Player(start, node)
+        self.spawn(self.hero)
+
     def spawn_lawman(self, pos):
         node = Animation('lawman.json', pos)
         lawman = Player(pos, node)
         self.spawn(lawman)
+
+    def process_input(self, keys):
+        if keys[KEY_DOWN]:
+            self.hero.down()
+
+        if keys[KEY_LEFT]:
+            self.hero.left()
+        elif keys[KEY_RIGHT]:
+            self.hero.right()
+
+        if keys[KEY_UP]:
+            self.hero.jump()
+        elif keys[KEY_SHOOT]:
+            self.hero.shoot()
 
     def update(self, dt):
         self.physics.update(dt)
 
         for o in self.objects:
             o.update(dt)
+        self.ai.update(dt)
 
 FPS = 60
 
@@ -276,42 +395,19 @@ class Game(object):
         self.window.push_handlers(
             on_draw=self.draw
         )
-        self.spawn_player()
         pyglet.clock.schedule_interval(self.update, 1.0 / FPS)
-        self.world.spawn_crate()
-
-        self.world.spawn_lawman(v(600, 115))
-
-    def spawn_player(self):
-        # all this should be done elsewhere
-        start = v(90, 115)
-        node = Animation('pc.json', start)
-        self.scene.add(node)
-        self.hero = Player(start, node)
-        self.world.spawn(self.hero)
 
     def draw(self):
         self.scene.draw(self.camera)
 
     def process_input(self):
-        if self.keys[KEY_DOWN]:
-            self.hero.down()
-
-        if self.keys[KEY_LEFT]:
-            self.hero.left()
-        elif self.keys[KEY_RIGHT]:
-            self.hero.right()
-
-        if self.keys[KEY_UP]:
-            self.hero.jump()
-        elif self.keys[KEY_SHOOT]:
-            self.hero.shoot()
+        self.world.process_input(self.keys)
 
     def update(self, dt):
         self.process_input()
         self.world.update(dt)
 
-        self.camera.offset = self.hero.pos + v(0, 120)
+        self.camera.offset = self.world.hero.pos + v(0, 120)
         self.scene.update(dt)
 
 
