@@ -11,12 +11,13 @@ import pyglet
 from pyglet.window import key
 
 
-from .scenegraph import StaticImage, Scenegraph, Animation
+from .scenegraph import Scenegraph, Animation
 from .scenegraph import SkyBox, GroundPlane, Bullet
-from .scenegraph.railroad import Wheels, Locomotive, RailTrack
+from .scenegraph.railroad import Locomotive, RailTrack, CarriageInterior, CarriageExterior
 
 from .ai import AI
 
+from .svg import load_geometry
 from geom import v, Rect, Segment
 
 from physics import Body, StaticBody, Physics
@@ -211,22 +212,79 @@ class Crate(object):
 #         StaticImage.__init__(self, pos, IMG_LAWMAN_STANDING)
 
 
-class Carriage(StaticImage):
-    def __init__(self, pos):
-        StaticImage.__init__(self, pos, IMG_CARRIAGE)
-        self.allow_fall_through = False
+class Carriage(object):
+    """Utility for linking a carriage interior and exterior"""
+
+    WIDTH = 1024
+
+    def __init__(self, pos, name):
+        self.interior = CarriageInterior(pos, name)
+        self.exterior = CarriageExterior(pos, name)
+        self.body = StaticBody(load_geometry(name), v(0, 53) + pos)
+
+        self.target_opacity = None
+        self.opacity = 1
+
+    def set_opacity(self, opacity):
+        self.opacity = opacity
+        self.exterior.set_opacity(opacity)
+
+    def get_pos(self):
+        return self.interior.pos
+
+    def set_pos(self, pos):
+        self.interior.pos = pos
+        self.body.pos = v(0, 53) + pos
+        self.exterior.pos = pos
+
+    pos = property(get_pos, set_pos)
+
+    def add(self, scenegraph):
+        scenegraph.add(self.interior)
+        scenegraph.add(self.exterior)
+
+    def remove(self, scenegraph):
+        scenegraph.remove(self.interior)
+        scenegraph.remove(self.exterior)
+
+    def intersects(self, rect):
+        l = self.pos.x
+        r = l + self.WIDTH
+        return rect.l < r and rect.r > l
+
+    def set_show_interior(self, show):
+        opacity = not show
+        if self.target_opacity is None:
+            self.set_opacity(opacity)
+        self.target_opacity = opacity
+
+    def update(self, dt):
+        if self.target_opacity is None:
+            return
+
+        if self.target_opacity != self.opacity:
+            new = 0.5 * self.target_opacity + 0.5 * self.opacity
+            if abs(self.target_opacity - new) < 0.001:
+                new = self.target_opacity
+            self.set_opacity(new)
 
 
-def make_scene():
-    s = Scenegraph()
-    s.add(Carriage((0, 53)))
-#    s.add(Hero((90, 115)))
-#    s.add(Lawman((600, 115)))
-#    s.add(Table((300, 115)))
+def make_scene(scenegraph, world):
+    # setup the scene
+
+    s = scenegraph
+    carriage = Carriage(pos=(0, 0), name='freightcar')
+    world.physics.add_static(carriage.body)
+    carriage.add(s)
+    world.carriages.append(carriage)
+
+    carriage = Carriage(pos=(1024, 0), name='car')
+    world.physics.add_static(carriage.body)
+    carriage.add(s)
+    world.carriages.append(carriage)
+
     s.add(RailTrack(pyglet.resource.texture('track.png')))
-    s.add(Wheels((91, 0)))
-    s.add(Wheels((992 - 236, 0)))
-    s.add(Locomotive((1024, 0)))
+    s.add(Locomotive((2048, 0)))
 
     ground = GroundPlane(
         (218, 176, 127, 255),
@@ -239,6 +297,9 @@ def make_scene():
         (49, 92, 142, 255)
     ))
 
+    world.spawn_player()
+    world.spawn_crate()
+    world.spawn_lawman(v(600, 115))
     return s
 
 
@@ -246,14 +307,10 @@ class World(object):
     """Collection of all the objects and geometry in the world."""
     def __init__(self, scenegraph):
         self.objects = []
+        self.carriages = []
+
         self.scene = scenegraph
         self.physics = Physics()
-
-        # setup the scene
-        self.physics.add_static(StaticBody([Rect.from_points((0, 0), (1024, 115))]))
-        self.spawn_player()
-        self.spawn_crate()
-        self.spawn_lawman(v(600, 115))
 
     def kill(self, obj):
         self.scene.remove(obj.node)
@@ -298,6 +355,11 @@ class World(object):
 
     def update(self, dt):
         self.physics.update(dt)
+    
+        hr = self.hero.body.get_rect()
+        for c in self.carriages:
+            c.set_show_interior(c.intersects(hr))
+            c.update(dt)
 
         for o in self.objects:
             if hasattr(o, 'ai'):

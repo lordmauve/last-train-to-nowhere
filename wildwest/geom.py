@@ -59,8 +59,9 @@ class Rect(BasePolygon, namedtuple('BaseRect', 'l r b t')):
     """2D rectangle class."""    
 
     @classmethod
-    def from_blwh(cls, b, l, w, h):
+    def from_blwh(cls, bl, w, h):
         """From bottom left and dimensions"""
+        l, b = bl
         return Rect(
             l,
             l + w,

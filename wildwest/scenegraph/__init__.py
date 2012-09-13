@@ -124,7 +124,7 @@ class CompoundNode(Node):
         """Subclasses can override this to populate the node."""
 
     def add_child(self, c):
-        assert isinstance(c, Node)
+        assert isinstance(c, Node), '%r is not a Node' % c
         c.set_scenegraph(self.scenegraph)
         self.children.append(c)
 
@@ -141,7 +141,7 @@ class CompoundNode(Node):
         gl.glPopMatrix()
 
 
-class AnimatedNode(Node):
+class SpriteNode(Node):
     def __init__(self, pos, animation, z=0):
         self.z = z
         self.sprite = pyglet.sprite.Sprite(animation)
@@ -160,13 +160,13 @@ class AnimatedNode(Node):
         self.sprite.draw()
 
 
-class StaticImage(AnimatedNode):
+class StaticImage(SpriteNode):
     def __init__(self, pos, img, z=-1):
         im = pyglet.resource.image(img)
         super(StaticImage, self).__init__(pos, im, z)
 
 
-class Animation(AnimatedNode):
+class Animation(SpriteNode):
     """Node that loads multiple animations from a JSON file.
     
     The current animation can be changed using .play()
