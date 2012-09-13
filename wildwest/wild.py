@@ -11,10 +11,10 @@ import pyglet
 from pyglet.window import key
 
 
-from scenegraph import StaticImage, Scenegraph, Fill, RailTrack, Animation
-from scenegraph import SkyBox, GroundPlane, Wheels, Locomotive, Bullet
-from scenegraph import DebugGeometryNode
-from scenegraph import Camera
+from .scenegraph import StaticImage, Scenegraph, Animation
+from .scenegraph import SkyBox, GroundPlane, Bullet
+from .scenegraph.railroad import Wheels, Locomotive, RailTrack
+
 from geom import v, Rect, Segment
 
 from physics import Body, StaticBody, Physics
