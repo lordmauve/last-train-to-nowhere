@@ -34,6 +34,11 @@ LEFT = -1
 
 FLOOR_Y = 115
 
+# Collision groups
+GROUP_ALL = MASK_ALL = 0xffff
+GROUP_PLAYER = 0x0001
+GROUP_ENEMY = 0x0002
+
 
 class Player(object):
     MAX_WALK = 200  # limit on walk speed
@@ -47,8 +52,8 @@ class Player(object):
 
     MAX_HEALTH = 100
 
-    groups = 0xffff  # collision groups
-    attack = 0xffff  # objects we can attack
+    groups = GROUP_ALL  # collision groups
+    attack = MASK_ALL  # objects we can attack
 
     def __init__(self, pos, node):
         self.node = node
@@ -191,8 +196,8 @@ class Player(object):
 
 
 class Lawman(Player):
-    groups = 0x0002     # collision groups
-    attack = 0xfffd     # objects we can attack
+    groups = GROUP_ENEMY     # collision groups
+    attack = MASK_ALL & ~GROUP_ENEMY  # objects we can attack
 
     def __init__(self, pos):
         node = Animation('lawman.json', pos)
@@ -200,8 +205,8 @@ class Lawman(Player):
 
 
 class Outlaw(Player):
-    groups = 0x0001     # collision groups
-    attack = 0xfffe
+    groups = GROUP_PLAYER     # collision groups
+    attack = MASK_ALL & ~GROUP_PLAYER
 
     def __init__(self, pos):
         node = Animation('pc.json', pos)
@@ -330,7 +335,7 @@ class World(object):
         ))
         return s
 
-    def shoot(self, source, direction, mask=0xffff):
+    def shoot(self, source, direction, mask=MASK_ALL):
         p1 = source
         p2 = p1 + v(1000, random.uniform(-50, 50)) * direction
         seg = Segment(p1, p2)
@@ -340,7 +345,7 @@ class World(object):
                 seg = None
             else:
                 seg = seg.truncate(d)
-            print obj
+            # print obj
             break
 
         if seg:
