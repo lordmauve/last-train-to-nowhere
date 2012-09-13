@@ -218,6 +218,7 @@ class Carriage(object):
     WIDTH = 1024
 
     def __init__(self, pos, name):
+        pos = v(1, 0).project(pos)
         self.interior = CarriageInterior(pos, name)
         self.exterior = CarriageExterior(pos, name)
         self.body = StaticBody(load_geometry(name), v(0, 53) + pos)
@@ -269,6 +270,16 @@ class Carriage(object):
             self.set_opacity(new)
 
 
+class LocomotiveObject(object):
+    def __init__(self, pos):
+        pos = v(1, 0).project(pos)
+        self.node = Locomotive(pos)
+        self.body = StaticBody(load_geometry('locomotive'), pos)
+
+    def add(self, scenegraph):
+        scenegraph.add(self.node)
+
+
 def make_scene(scenegraph, world):
     # setup the scene
 
@@ -283,8 +294,10 @@ def make_scene(scenegraph, world):
     carriage.add(s)
     world.carriages.append(carriage)
 
+    locomotive = LocomotiveObject((2048, 0))
+    locomotive.add(s)
+    world.physics.add_static(locomotive.body)
     s.add(RailTrack(pyglet.resource.texture('track.png')))
-    s.add(Locomotive((2048, 0)))
 
     ground = GroundPlane(
         (218, 176, 127, 255),

@@ -100,7 +100,7 @@ class WheelBar(StaticImage):
 
 
 class Locomotive(CompoundNode):
-    z = 1
+    z = 1.5
 
     def build(self):
         self.add_child(StaticImage((0, 0), 'locomotive.png'))

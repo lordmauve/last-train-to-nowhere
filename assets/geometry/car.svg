@@ -26,15 +26,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.15"
-     inkscape:cx="390.65217"
+     inkscape:cx="599.34782"
      inkscape:cy="200"
      inkscape:document-units="px"
      inkscape:current-layer="svg2"
      showgrid="false"
-     inkscape:window-width="1215"
-     inkscape:window-height="776"
+     inkscape:window-width="1301"
+     inkscape:window-height="744"
      inkscape:window-x="65"
-     inkscape:window-y="24"
+     inkscape:window-y="468"
      inkscape:window-maximized="1">
     <inkscape:grid
        type="xygrid"
@@ -48,7 +48,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -57,21 +57,21 @@
      inkscape:groupmode="layer"
      id="layer1">
     <image
-       sodipodi:absref="/home/arnav/code/pyweek15/assets/geometry/../sprites/car-interior.png"
+       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/geometry/../sprites/car-interior.png"
        xlink:href="../sprites/car-interior.png"
-       width="1024"
-       height="315"
-       id="image3044"
+       y="737.36218"
        x="0"
-       y="737.36218" />
+       id="image3044"
+       height="315"
+       width="1024" />
     <image
-       sodipodi:absref="/home/arnav/code/pyweek15/assets/geometry/../sprites/pc-standing.png"
+       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/geometry/../sprites/pc-standing.png"
        xlink:href="../sprites/pc-standing.png"
-       width="85"
-       height="109"
-       id="image3170"
+       y="878.36218"
        x="81.5"
-       y="878.36218" />
+       id="image3170"
+       height="109"
+       width="85" />
     <rect
        style="fill:#0000ff;fill-rule:evenodd;stroke:#000000;stroke-width:0.97124016px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        id="rect3173"
@@ -143,32 +143,4 @@
        x="91.478264"
        y="755.4057" />
   </g>
-  <rect
-     style="fill:#0000ff"
-     id="rect3327"
-     width="38.260868"
-     height="19.130434"
-     x="200"
-     y="736.71002" />
-  <rect
-     style="fill:#0000ff"
-     id="rect3327-8"
-     width="38.260868"
-     height="19.130434"
-     x="343.04349"
-     y="737.23175" />
-  <rect
-     style="fill:#0000ff"
-     id="rect3327-4"
-     width="38.260868"
-     height="19.130434"
-     x="646.52173"
-     y="737.75348" />
-  <rect
-     style="fill:#0000ff"
-     id="rect3327-2"
-     width="38.260868"
-     height="19.130434"
-     x="801.73914"
-     y="737.84045" />
 </svg>
