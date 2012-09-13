@@ -47,10 +47,13 @@ class Player(object):
 
     MAX_HEALTH = 100
 
+    groups = 0xffff  # collision groups
+    attack = 0xffff  # objects we can attack
+
     def __init__(self, pos, node):
         self.node = node
         node.z = 1
-        self.body = Body(Rect.from_cwh(v(0, self.h / 2), self.w, self.h), self.MASS, pos, controller=self)
+        self.body = Body(Rect.from_cwh(v(0, self.h / 2), self.w, self.h), self.MASS, pos, controller=self, groups=self.groups)
         self.running = 0
         self.crouching = False
         self.shooting = False
@@ -129,7 +132,7 @@ class Player(object):
             return
 
         p = self.node.pos + off
-        self.world.shoot(p, self.direction)
+        self.world.shoot(p, self.direction, mask=self.attack)
 
         self.body.apply_impulse(v(-10, 0) * self.direction)
         self.shooting = True
@@ -165,10 +168,10 @@ class Player(object):
                 self.face_right()
             elif vx < -10:
                 self.face_left()
-        if self.shooting:
-            pass
-        elif self.crouching:
+        if self.crouching:
             self.node.play('crouching')
+        elif self.shooting:
+            pass
         elif self.jumping:
             if vy < -300:
                 self.node.play('falling')
@@ -188,12 +191,18 @@ class Player(object):
 
 
 class Lawman(Player):
+    groups = 0x0002     # collision groups
+    attack = 0xfffd     # objects we can attack
+
     def __init__(self, pos):
         node = Animation('lawman.json', pos)
         super(Lawman, self).__init__(pos, node)
 
 
 class Outlaw(Player):
+    groups = 0x0001     # collision groups
+    attack = 0xfffe
+
     def __init__(self, pos):
         node = Animation('pc.json', pos)
         super(Outlaw, self).__init__(pos, node)
@@ -321,11 +330,11 @@ class World(object):
         ))
         return s
 
-    def shoot(self, source, direction):
+    def shoot(self, source, direction, mask=0xffff):
         p1 = source
         p2 = p1 + v(1000, random.uniform(-50, 50)) * direction
         seg = Segment(p1, p2)
-        hit = self.physics.ray_query(seg)
+        hit = self.physics.ray_query(seg, mask=mask)
         for d, obj in hit:
             if d <= 0:
                 seg = None

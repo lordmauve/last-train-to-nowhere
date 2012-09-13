@@ -5,11 +5,16 @@ GRAVITY = 1000
 
 
 class Body(object):
-    def __init__(self, rect, mass, pos=v(0, 0), controller=None):
+    def __init__(self, rect, mass, pos=v(0, 0), controller=None, groups=0x0001, mask=0xffff):
         assert mass > 0
         self.pos = pos
         self.rect = rect
         self.mass = mass
+
+        # Select what can collide with what
+        self.groups = groups
+        self.mask = mask
+
         self.controller = controller
         self.v = v(0, 0)
         self.on_floor = False
@@ -69,7 +74,7 @@ class Physics(object):
         for r in s._geom:
             self.static_geometry.remove(r)
 
-    def ray_query(self, segment):
+    def ray_query(self, segment, mask=0xffff):
         intersections = []
         for o in self.static_geometry:
             d = segment.intersects(o)
@@ -77,9 +82,10 @@ class Physics(object):
                 intersections.append((d, StaticBody))
 
         for o in self.dynamic:
-            d = segment.intersects(o.get_rect())
-            if d:
-                intersections.append((d, o.controller))
+            if o.groups & mask:
+                d = segment.intersects(o.get_rect())
+                if d:
+                    intersections.append((d, o.controller))
         intersections.sort()
         return intersections
 
@@ -99,6 +105,9 @@ class Physics(object):
                 d.v = v(x, y)
 
     def collide_dynamic(self, a, b):
+        if not (a.groups & b.mask or a.mask & b.groups):
+            return
+
         mtd = a.get_rect().intersects(b.get_rect())
         if mtd:
             return (a, mtd, b)
