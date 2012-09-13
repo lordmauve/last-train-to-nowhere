@@ -15,8 +15,6 @@ from .scenegraph import Scenegraph, Animation
 from .scenegraph import SkyBox, GroundPlane, Bullet
 from .scenegraph.railroad import Locomotive, RailTrack, CarriageInterior, CarriageExterior
 
-from .ai import AI
-
 from .svg import load_geometry
 from geom import v, Rect, Segment
 
@@ -44,20 +42,25 @@ class Player(object):
 
     w = 32  # bounding box width
     h = 106  # bounding box height
+    h_crouching = 70
     MASS = 100
 
     MAX_HEALTH = 100
 
-    def __init__(self, world, pos, node):
-        self.world = world
+    def __init__(self, pos, node):
         self.node = node
         node.z = 1
-        self.body = Body(Rect.from_cwh(v(0, self.h / 2), self.w, self.h), self.MASS, pos)
-        self.world.physics.add_body(self.body)
+        self.body = Body(Rect.from_cwh(v(0, self.h / 2), self.w, self.h), self.MASS, pos, controller=self)
         self.running = 0
         self.crouching = False
         self.shooting = False
         self.direction = RIGHT
+
+    def spawn(self, world):
+        self.world = world
+        world.objects.append(self)
+        world.scene.add(self.node)
+        world.physics.add_body(self.body)
 
     @property
     def pos(self):
@@ -95,6 +98,8 @@ class Player(object):
 
     def crouch(self):
         self.running = 0
+        if not self.crouching:
+            self.body.rect = Rect.from_cwh(v(0, self.h_crouching / 2), self.w, self.h_crouching)
         self.crouching = True
 
     @property
@@ -123,19 +128,9 @@ class Player(object):
         else:
             return
 
-        p1 = self.node.pos + off
-        p2 = p1 + v(1000, random.uniform(-50, 50)) * self.direction
-        seg = Segment(p1, p2)
-        hit = self.world.physics.ray_query(seg)
-        if hit:
-            d = hit[0][0]
-            if d <= 0:
-                seg = None
-            else:
-                seg = seg.truncate(d)
+        p = self.node.pos + off
+        self.world.shoot(p, self.direction)
 
-        if seg:
-            self.node.scenegraph.add(Bullet(seg))
         self.body.apply_impulse(v(-10, 0) * self.direction)
         self.shooting = True
         pyglet.clock.schedule_once(self.shooting_finish, 0.5)
@@ -186,8 +181,22 @@ class Player(object):
             else:
                 self.node.play('running')
 
+        if not self.crouching:
+            self.body.rect = Rect.from_cwh(v(0, self.h / 2), self.w, self.h)
         self.crouching = False
         self.running = 0
+
+
+class Lawman(Player):
+    def __init__(self, pos):
+        node = Animation('lawman.json', pos)
+        super(Lawman, self).__init__(pos, node)
+
+
+class Outlaw(Player):
+    def __init__(self, pos):
+        node = Animation('pc.json', pos)
+        super(Outlaw, self).__init__(pos, node)
 
 
 class Crate(object):
@@ -205,11 +214,6 @@ class Crate(object):
 
     def update(self, dt):
         self.node.pos = self.body.pos
-
-
-# class Lawman(StaticImage):
-#     def __init__(self, pos):
-#         StaticImage.__init__(self, pos, IMG_LAWMAN_STANDING)
 
 
 class Carriage(object):
@@ -317,21 +321,27 @@ class World(object):
         ))
         return s
 
-    def kill(self, obj):
-        self.scene.remove(obj.node)
-        self.objects.remove(obj)
+    def shoot(self, source, direction):
+        p1 = source
+        p2 = p1 + v(1000, random.uniform(-50, 50)) * direction
+        seg = Segment(p1, p2)
+        hit = self.physics.ray_query(seg)
+        for d, obj in hit:
+            if d <= 0:
+                seg = None
+            else:
+                seg = seg.truncate(d)
+            print obj
+            break
 
-    def spawn(self, obj):
-        self.scene.add(obj.node)
-        self.objects.append(obj)
+        if seg:
+            self.scene.add(Bullet(seg))
 
     def spawn_player(self):
         # all this should be done elsewhere
         start = v(90, 115)
-        node = Animation('pc.json', start)
-        # self.scene.add(node)
-        self.hero = Player(self, start, node)
-        self.spawn(self.hero)
+        self.hero = Outlaw(start)
+        self.hero.spawn(self)
 
     def process_input(self, keys):
         if keys[KEY_DOWN]:
