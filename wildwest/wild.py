@@ -64,6 +64,7 @@ class Player(object):
         self.crouching = False
         self.shooting = False
         self.hit = False
+        self.dead = False
         self.direction = RIGHT
 
         self.health = self.MAX_HEALTH
@@ -79,6 +80,12 @@ class Player(object):
         world.scene.remove(self.node)
         world.physics.remove_body(self.body)
 
+    def die(self):
+        self.dead = True
+        self.node.play('dead')
+        self.world.objects.remove(self)
+        self.world.physics.remove_body(self.body)
+
     @property
     def pos(self):
         return self.body.pos
@@ -90,7 +97,7 @@ class Player(object):
     def on_hit(self):
         self.health -= random.uniform(10, 20)
         if self.health <= 0:
-            self.kill(self.world)
+            self.die()
         else:
             self.node.play('hit')
             self.hit = True
@@ -187,7 +194,11 @@ class Player(object):
         based on what has happened in the physics, plus any input.
 
         """
+        
         self.node.pos = self.body.pos
+        if self.dead:
+            return
+
         vx, vy = self.body.v
 
         if self.running:
@@ -372,7 +383,6 @@ class World(object):
 
             if hasattr(obj, 'hit'):
                 obj.on_hit()
-            print obj
             break
 
         if seg:
@@ -385,6 +395,9 @@ class World(object):
         self.hero.spawn(self)
 
     def process_input(self, keys):
+        if self.hero.dead:
+            return
+
         if keys[KEY_DOWN]:
             self.hero.down()
 
