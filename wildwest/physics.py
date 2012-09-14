@@ -129,6 +129,8 @@ class Physics(object):
 
         if mtd.y > 0:
             a.on_floor = True
+        else:
+            b.on_floor = True
 
     def collide_velocities(self, c):
         """Work out the new velocities of objects in a collision."""
