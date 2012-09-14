@@ -256,15 +256,15 @@ class Outlaw(Player):
 
 
 class OutlawOnHorse(object):
-    VELOCITY = v(20, 0)
+    VELOCITY = v(30, 0)
     dead = False
     body = None
 
     def __init__(self, pos):
         self.pos = pos
         self.spawned = False  # has the player jumped off?
-        self.node = Depth(Animation('pc-horse.json', pos, z=2), 1)
-        self.node2 = Depth(Animation('horse.json', pos, z=2), 1)
+        self.anim = Animation('pc-horse.json', pos, z=2)
+        self.node = Depth(self.anim, 1)
 
     def spawn(self, world):
         self.world = world
@@ -289,13 +289,8 @@ class OutlawOnHorse(object):
         hero.spawn(self.world)
         self.world.hero = hero
         
-        self.world.scene.remove(self.node)
-        del self.node
-        self.node = self.node2
-        self.world.scene.add(self.node)
-
+        self.anim.play('horse')
         self.VELOCITY = -self.VELOCITY
-        print self.world.objects
 
     def update(self, dt):
         self.pos += self.VELOCITY * dt
