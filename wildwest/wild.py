@@ -311,8 +311,8 @@ class OutlawOnHorse(object):
 
 
 class Crate(object):
-    w = 74
-    h = 77
+    w = 65
+    h = 68
 
     def __init__(self, pos):
         self.node = Animation('crate.json', pos)
