@@ -239,6 +239,8 @@ class Lawman(Player):
     groups = GROUP_ENEMY     # collision groups
     attack = MASK_ALL & ~GROUP_ENEMY  # objects we can attack
 
+    MAX_HEALTH = 40
+
     def __init__(self, pos):
         node = Animation('lawman.json', pos)
         super(Lawman, self).__init__(pos, node)
