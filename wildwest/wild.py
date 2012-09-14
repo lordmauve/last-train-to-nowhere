@@ -113,7 +113,7 @@ class Player(object):
         self.hit = False
 
     def jump(self):
-        if not self.jumping:
+        if not self.jumping and self.body.v.y < 20:
             self.body.apply_impulse(v(0, 450))
             self.node.play('jumping')
 
@@ -282,6 +282,9 @@ class OutlawOnHorse(object):
     right = noop
     down = noop
     jump = noop
+
+    def shoot(self):
+        self.pos = v(15, 0)
 
     def start_player(self):
         start = self.pos + v(0, 115)
