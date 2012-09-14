@@ -258,9 +258,19 @@ class AnimatedEffect(Animation):
 
 
 class Depth(Node):
-    def __init__(self, node, dz):
+    def __init__(self, node, dz, pos=v(0, 0)):
         self.node = node
         self.dz = dz
+        self.pos = v(pos)
+
+    def get_position(self):
+        return self._pos
+
+    def set_position(self, pos):
+        self._pos = pos
+        self.node.pos = pos
+
+    pos = property(get_position, set_position)
 
     @property
     def z(self):
@@ -268,7 +278,7 @@ class Depth(Node):
 
     def draw(self, camera):
         gl.glPushMatrix()
-        gl.glTranslatef(0, 0, self.dz)
+        gl.glTranslatef(self.pos.x, self.pos.y, self.dz)
         self.node.draw(camera)
         gl.glPopMatrix()
 

@@ -12,7 +12,7 @@ from pyglet.window import key
 
 
 from .scenegraph import Scenegraph, Animation, AnimatedEffect
-from .scenegraph import SkyBox, GroundPlane, Bullet
+from .scenegraph import SkyBox, GroundPlane, Bullet, Depth
 from .scenegraph.railroad import Locomotive, RailTrack, CarriageInterior, CarriageExterior
 
 from .svg import load_geometry
@@ -255,6 +255,59 @@ class Outlaw(Player):
         super(Outlaw, self).__init__(pos, node)
 
 
+class OutlawOnHorse(object):
+    VELOCITY = v(20, 0)
+    dead = False
+    body = None
+
+    def __init__(self, pos):
+        self.pos = pos
+        self.spawned = False  # has the player jumped off?
+        self.node = Depth(Animation('pc-horse.json', pos, z=2), 1)
+        self.node2 = Depth(Animation('horse.json', pos, z=2), 1)
+
+    def spawn(self, world):
+        self.world = world
+        world.scene.add(self.node)
+        world.objects.append(self)
+
+    def kill(self):
+        self.node.scenegraph.remove(self.node)
+        self.world.objects.remove(self)
+
+    def noop(self):
+        """Don't accept input."""
+
+    left = noop
+    right = noop
+    down = noop
+    jump = noop
+
+    def start_player(self):
+        start = self.pos + v(0, 115)
+        hero = Outlaw(start)
+        hero.spawn(self.world)
+        self.world.hero = hero
+        
+        self.world.scene.remove(self.node)
+        del self.node
+        self.node = self.node2
+        self.world.scene.add(self.node)
+
+        self.VELOCITY = -self.VELOCITY
+        print self.world.objects
+
+    def update(self, dt):
+        self.pos += self.VELOCITY * dt
+        self.node.pos = self.pos
+        if self.pos.x > 15 and not self.spawned:
+            self.start_player()
+            self.spawned = True
+        if self.pos.x < -1020:
+            self.kill()
+
+
+
 class Crate(object):
     w = 74
     h = 77
@@ -400,10 +453,13 @@ class World(object):
         if seg:
             self.scene.add(Bullet(seg))
 
+    def is_hero_alive(self):
+        return self.hero.body and not self.hero.dead
+
     def spawn_player(self):
         # all this should be done elsewhere
-        start = v(90, 115)
-        self.hero = Outlaw(start)
+        start = v(-200, 0)
+        self.hero = OutlawOnHorse(start)
         self.hero.spawn(self)
 
     def process_input(self, keys):
@@ -426,14 +482,17 @@ class World(object):
     def update(self, dt):
         self.physics.update(dt)
 
-        hr = self.hero.body.get_rect()
-        for c in self.carriages:
-            c.set_show_interior(c.intersects(hr))
-            c.update(dt)
+        if self.is_hero_alive():
+            hr = self.hero.body.get_rect()
+            for c in self.carriages:
+                c.set_show_interior(c.intersects(hr))
+                c.update(dt)
+
         for o in self.objects:
             o.update(dt)
 
     def update_ai(self, dt):
-        for o in self.objects:
-            if hasattr(o, 'ai'):
-                o.ai.update(dt)
+        if self.is_hero_alive():
+            for o in self.objects:
+                if hasattr(o, 'ai'):
+                    o.ai.update(dt)
