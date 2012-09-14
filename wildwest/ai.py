@@ -2,7 +2,7 @@ import random
 
 
 class AI(object):
-    MIN_DISTANCE = 700
+    MIN_DISTANCE = 500
 
     def __init__(self, char):
         self.char = char
@@ -10,23 +10,28 @@ class AI(object):
 
     def update(self, dt):
         hero = self.world.hero
+        self.hero_pos = hero.pos
+        # locate the hero: distance, vector
+        self.hero_hitlist = hero.hitlist
+
+        self.pos = self.char.pos
+        self.distance = self.pos.distance_to(self.hero_pos)
+
+        # Don't act until hero is in range
+        if self.distance > self.MIN_DISTANCE:
+            return
 
         # If hero is not in range, move towards him
-        if random.random() < 0.5:
+        if random.random() < 0.8:
             self.defend(hero, self.char)
         else:
             self.attack(hero, self.char)
 
     def defend(self, hero, lawman):
         """A simple defensive strategy"""
-        # locate the hero: distance, vector
-        hero_pos = hero.pos
-        hero_hitlist = hero.hitlist
-        self_pos = lawman.pos
-        distance = self_pos.distance_to(hero_pos)
 
         # Face the right direction
-        if (self_pos - hero_pos).x > 0:
+        if (self.pos - self.hero_pos).x > 0:
             # Hero is on the left
             lawman.face_left()
         else:
@@ -43,12 +48,8 @@ class AI(object):
 
     def attack(self, hero, lawman):
         """A simple attack strategy"""
-        hero_pos = hero.pos
-        # hero_hitlist = hero.hitlist
-        self_pos = lawman.pos
-        # distance = self_pos.distance_to(hero_pos)
         # Face the right direction
-        if (self_pos - hero_pos).x > 0:
+        if (self.pos - self.hero_pos).x > 0:
             # Hero is on the left
             lawman.face_left()
         else:
@@ -58,7 +59,8 @@ class AI(object):
         # Attack:
         # 1. If hero is in direct range shoot
         # hitlist = lawman.hitlist
-        lawman.shoot()
+        if not hero.crouching and not hero.jumping:
+            lawman.shoot()
 
     def move(self, hero, lawman):
         # Motion:

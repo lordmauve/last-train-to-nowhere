@@ -425,13 +425,15 @@ class World(object):
 
     def update(self, dt):
         self.physics.update(dt)
-    
+
         hr = self.hero.body.get_rect()
         for c in self.carriages:
             c.set_show_interior(c.intersects(hr))
             c.update(dt)
+        for o in self.objects:
+            o.update(dt)
 
+    def update_ai(self, dt):
         for o in self.objects:
             if hasattr(o, 'ai'):
                 o.ai.update(dt)
-            o.update(dt)
