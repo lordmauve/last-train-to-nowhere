@@ -166,6 +166,16 @@ class StaticImage(SpriteNode):
         super(StaticImage, self).__init__(pos, im, z)
 
 
+class FloatyImage(StaticImage):
+    """An image that bounces up and down in space, in typical power-up fashion."""
+    def draw(self, camera):
+        gl.glPushMatrix()
+        gl.glTranslatef(0, 6 * math.sin(5 * self.scenegraph.t), 0)
+        super(FloatyImage, self).draw(camera)
+        gl.glPopMatrix()
+    
+
+
 class Animation(SpriteNode):
     """Node that loads multiple animations from a JSON file.
     

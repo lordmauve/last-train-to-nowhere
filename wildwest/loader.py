@@ -2,7 +2,7 @@ import re
 
 from .svg import load_level_data
 
-from .wild import LocomotiveObject, Carriage, Crate, Player, Lawman
+from .wild import LocomotiveObject, Carriage, Crate, Player, Lawman, Health, GoldBar
 from .ai import AI
 from .scenegraph import Animation
 
@@ -24,6 +24,10 @@ def load_level(world, name):
             lawman.ai = AI(lawman)
         elif name == 'table':
             pass
+        elif name == 'goldbar':
+            GoldBar(pos).spawn(world)
+        elif name == 'health':
+            Health(pos).spawn(world)
         else:
             raise ValueError("Unknown object %s" % name)
 

@@ -11,7 +11,7 @@ import pyglet
 from pyglet.window import key
 
 
-from .scenegraph import Scenegraph, Animation, AnimatedEffect
+from .scenegraph import Scenegraph, Animation, AnimatedEffect, FloatyImage
 from .scenegraph import SkyBox, GroundPlane, Bullet, Depth
 from .scenegraph.railroad import Locomotive, RailTrack, CarriageInterior, CarriageExterior
 
@@ -157,6 +157,10 @@ class Player(object):
         seg = Segment(p1, p2)
         hit = self.world.physics.ray_query(seg)
         return hit
+
+    def on_pick_up(self, object):
+        if isinstance(object, Health):
+            self.health = min(self.health + 40, self.MAX_HEALTH)
 
     def shoot(self):
         if self.shooting:
@@ -394,6 +398,41 @@ class LocomotiveObject(object):
         world.physics.add_static(self.body)
 
 
+class Pickup(object):
+    def __init__(self, pos):
+        self.pos = pos
+        self.node = FloatyImage(pos, self.IMAGE, 0)
+
+    def spawn(self, world):
+        self.world = world
+        world.objects.append(self)
+        world.scene.add(self.node)
+
+    def kill(self):
+        self.world.objects.remove(self)
+        self.world.scene.remove(self.node)
+
+    def get_rect(self):
+        return self.RECT.translate(self.pos)
+
+    def update(self, dt):
+        h = self.world.get_hero()
+        if h:
+            if h.body.get_rect().intersects(self.get_rect()):
+                h.on_pick_up(self)
+                self.kill()
+
+
+class Health(Pickup):
+    RECT = Rect.from_blwh((0, 0), 49, 32)
+    IMAGE = 'health.png'
+
+
+class GoldBar(Pickup):
+    RECT = Rect.from_blwh((0, 0), 36, 31)
+    IMAGE = 'goldbar.png'
+
+
 class World(object):
     """Collection of all the objects and geometry in the world."""
     def __init__(self):
@@ -453,6 +492,11 @@ class World(object):
 
     def is_hero_alive(self):
         return self.hero.body and not self.hero.dead
+
+    def get_hero(self):
+        if not self.is_hero_alive():
+            return None
+        return self.hero
 
     def spawn_player(self):
         # all this should be done elsewhere
