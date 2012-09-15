@@ -25,14 +25,14 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1215"
-     inkscape:window-height="776"
+     inkscape:window-width="1680"
+     inkscape:window-height="1026"
      id="namedview4202"
      showgrid="false"
      inkscape:zoom="2"
      inkscape:cx="-27.952759"
      inkscape:cy="66.181091"
-     inkscape:window-x="65"
+     inkscape:window-x="1366"
      inkscape:window-y="24"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg3980" />
@@ -51,18 +51,18 @@
     </rdf:RDF>
   </metadata>
   <image
-     sodipodi:absref="/home/arnav/code/pyweek15/assets/geometry/../sprites/table.png"
+     sodipodi:absref="/home/mauve/dev/traintonowhere/assets/geometry/../sprites/table.png"
      xlink:href="../sprites/table.png"
-     id="image4143"
-     height="55"
-     width="74"
+     x="0"
      y="997.36218"
-     x="0" />
+     width="74"
+     height="55"
+     id="image4143" />
   <rect
      style="fill:#0000ff"
      id="rect4148"
      y="1002.3622"
      x="0"
-     height="17.5"
+     height="50"
      width="74" />
 </svg>

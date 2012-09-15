@@ -11,7 +11,7 @@ import pyglet
 from pyglet.window import key
 
 
-from .scenegraph import Scenegraph, Animation, AnimatedEffect, FloatyImage
+from .scenegraph import Scenegraph, Animation, AnimatedEffect, FloatyImage, StaticImage
 from .scenegraph import SkyBox, GroundPlane, Bullet, Depth
 from .scenegraph.railroad import Locomotive, RailTrack, CarriageInterior, CarriageExterior
 from .scenegraph.backgrounds import BackgroundFactory, FarBackgroundFactory
@@ -311,24 +311,6 @@ class OutlawOnHorse(object):
             self.kill()
 
 
-
-class Crate(object):
-    w = 65
-    h = 68
-
-    def __init__(self, pos):
-        self.node = Animation('crate.json', pos)
-        self.body = Body(Rect.from_cwh(v(0, self.h / 2), self.w, self.h), 1000, pos, controller=self, groups=GROUP_SCENERY)
-
-    def spawn(self, world):
-        world.physics.add_body(self.body)
-        world.scene.add(self.node)
-        world.objects.append(self)
-
-    def update(self, dt):
-        self.node.pos = self.body.pos
-
-
 class Carriage(object):
     """Utility for linking a carriage interior and exterior"""
 
@@ -433,6 +415,60 @@ class Health(Pickup):
 class GoldBar(Pickup):
     RECT = Rect.from_blwh((0, 0), 36, 31)
     IMAGE = 'goldbar.png'
+
+
+class ForegroundScenery(object):
+    def __init__(self, pos):
+        self.pos = pos
+        self.node = StaticImage(pos, self.IMAGE, 1.9)
+
+    def spawn(self, world):
+        self.world = world
+        world.scene.add(self.node)
+
+    def kill(self):
+        self.world.scene.remove(self.node)
+
+
+class Light(ForegroundScenery):
+    IMAGE = 'light.png'
+
+
+class PhysicalScenery(object):
+    _geometries = {}
+
+    def __init__(self, pos):
+        self.node = StaticImage(pos, self.IMAGE, z=0)
+        rect = self.load_geometry()
+        self.body = Body(rect, self.MASS, pos, controller=self, groups=GROUP_SCENERY)
+
+    def load_geometry(self):
+        try:
+            return self._geometries[self.GEOMETRY]
+        except KeyError:
+            rect = load_geometry(self.GEOMETRY)[0]
+            self._geometries[self.GEOMETRY] = rect
+            return rect
+
+    def spawn(self, world):
+        world.physics.add_body(self.body)
+        world.scene.add(self.node)
+        world.objects.append(self)
+
+    def update(self, dt):
+        self.node.pos = self.body.pos
+
+
+class Crate(PhysicalScenery):
+    IMAGE = 'crate.png'
+    GEOMETRY = 'crate'
+    MASS = 1000
+
+
+class Table(PhysicalScenery):
+    IMAGE = 'table.png'
+    GEOMETRY = 'table'
+    MASS = 100
 
 
 class World(object):
