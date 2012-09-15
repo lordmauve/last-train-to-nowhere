@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg3318"
+   version="1.1"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="level4.svg">
+  <defs
+     id="defs3320" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1"
+     inkscape:cx="692.31602"
+     inkscape:cy="182.88115"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1680"
+     inkscape:window-height="1026"
+     inkscape:window-x="1366"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata3323">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <image
+       y="602.36218"
+       x="0"
+       id="image7091"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/mailcar-interior.png"
+       height="397"
+       width="1024" />
+    <image
+       y="682.36218"
+       x="1024"
+       id="image3050"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/freightcar-interior.png"
+       height="317"
+       width="1024" />
+    <image
+       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/car-interior.png"
+       xlink:href="../sprites/car-interior.png"
+       width="1024"
+       height="315"
+       id="image3187"
+       x="3531"
+       y="684.36218" />
+    <image
+       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/lawman-standing.png"
+       xlink:href="../sprites/lawman-standing.png"
+       width="90"
+       height="112"
+       id="image3431"
+       x="4182.9697"
+       y="822.13635" />
+    <image
+       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/lawman-standing.png"
+       xlink:href="../sprites/lawman-standing.png"
+       width="90"
+       height="112"
+       id="image3431-0"
+       x="4875.9189"
+       y="761.3252" />
+    <image
+       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/lawman-standing.png"
+       xlink:href="../sprites/lawman-standing.png"
+       width="90"
+       height="112"
+       id="image3431-7"
+       x="3825.426"
+       y="822.13635" />
+    <image
+       y="627.36218"
+       x="4555"
+       id="image3098"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/locomotive.png"
+       height="425"
+       width="1097" />
+    <image
+       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/lawman-standing.png"
+       xlink:href="../sprites/lawman-standing.png"
+       y="822.13635"
+       x="805.16766"
+       id="image3085"
+       height="112"
+       width="90" />
+    <image
+       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/lawman-standing.png"
+       xlink:href="../sprites/lawman-standing.png"
+       width="90"
+       height="112"
+       id="image3093"
+       x="4107.624"
+       y="822.13635" />
+    <image
+       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/lawman-standing.png"
+       xlink:href="../sprites/lawman-standing.png"
+       y="819.30792"
+       x="1407.8834"
+       id="image3095"
+       height="112"
+       width="90" />
+    <image
+       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/lawman-standing.png"
+       xlink:href="../sprites/lawman-standing.png"
+       width="90"
+       height="112"
+       id="image3097"
+       x="2347.3872"
+       y="822.13635" />
+    <image
+       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/crate.png"
+       xlink:href="../sprites/crate.png"
+       width="74"
+       height="80"
+       id="image3249-5-5"
+       x="1479.24"
+       y="855.55054" />
+    <image
+       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/crate.png"
+       xlink:href="../sprites/crate.png"
+       y="856.96478"
+       x="1247.0197"
+       id="image3099"
+       height="80"
+       width="74" />
+    <image
+       y="732.78394"
+       x="1752.1219"
+       id="image8384"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/goldbar.png"
+       height="31"
+       width="36" />
+    <image
+       y="707.53882"
+       x="2394.0662"
+       id="image8317-5"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/health.png"
+       height="32"
+       width="49" />
+    <image
+       width="42"
+       height="88"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/light.png"
+       id="image11337"
+       x="3799"
+       y="713.36218" />
+    <image
+       y="713.36218"
+       x="4028.0002"
+       id="image11339"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/light.png"
+       height="88"
+       width="42" />
+    <image
+       width="42"
+       height="88"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/light.png"
+       id="image11341"
+       x="4250"
+       y="713.36218" />
+    <image
+       y="850.36218"
+       x="3680"
+       id="image11715"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/seats.png"
+       height="78"
+       width="104" />
+    <image
+       width="104"
+       height="78"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/seats.png"
+       id="image3239"
+       x="4034.0002"
+       y="850.36218" />
+    <image
+       y="881.86218"
+       x="2256.2195"
+       id="image3057"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/table.png"
+       height="55"
+       width="74" />
+    <image
+       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/lawman-standing.png"
+       xlink:href="../sprites/lawman-standing.png"
+       y="582.47949"
+       x="1743.2701"
+       id="image3266"
+       height="112"
+       width="90" />
+    <image
+       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/lawman-standing.png"
+       xlink:href="../sprites/lawman-standing.png"
+       width="90"
+       height="112"
+       id="image3268"
+       x="988.93219"
+       y="821.06738" />
+    <image
+       width="111"
+       height="11"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/hatch.png"
+       id="image5296"
+       x="1236.558"
+       y="692.86218" />
+    <image
+       y="860.36218"
+       x="376.17664"
+       id="image5366"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/crate.png"
+       height="72"
+       width="66" />
+    <image
+       y="758.36218"
+       x="2048"
+       id="image7029"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/tanker-interior.png"
+       height="241"
+       width="742" />
+    <image
+       width="69"
+       height="88"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/mailsack.png"
+       id="image11971"
+       x="511.38641"
+       y="844.31342" />
+    <image
+       y="842.89917"
+       x="579.26868"
+       id="image7101"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/mailsack.png"
+       height="88"
+       width="69" />
+    <image
+       width="69"
+       height="88"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/mailsack.png"
+       id="image7103"
+       x="440.26151"
+       y="843.31342" />
+    <image
+       width="66"
+       height="72"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/crate.png"
+       id="image7105"
+       x="308.29437"
+       y="861.36218" />
+    <image
+       width="69"
+       height="88"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/mailsack.png"
+       id="image7107"
+       x="739.07477"
+       y="844.31342" />
+    <image
+       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/crate.png"
+       xlink:href="../sprites/crate.png"
+       width="74"
+       height="80"
+       id="image7109"
+       x="1319.1447"
+       y="856.96478" />
+    <image
+       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/crate.png"
+       xlink:href="../sprites/crate.png"
+       y="856.96478"
+       x="1173.7699"
+       id="image7130"
+       height="80"
+       width="74" />
+    <image
+       y="692.86218"
+       x="1715.9764"
+       id="image3153"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/hatch.png"
+       height="11"
+       width="111" />
+    <image
+       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/lawman-standing.png"
+       xlink:href="../sprites/lawman-standing.png"
+       width="90"
+       height="112"
+       id="image3155"
+       x="1192.923"
+       y="748.59723" />
+    <image
+       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/lawman-standing.png"
+       xlink:href="../sprites/lawman-standing.png"
+       width="90"
+       height="112"
+       id="image3157"
+       x="1664.0742"
+       y="824.31" />
+    <image
+       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/lawman-standing.png"
+       xlink:href="../sprites/lawman-standing.png"
+       y="824.31"
+       x="1804.0814"
+       id="image3159"
+       height="112"
+       width="90" />
+    <image
+       width="742"
+       height="241"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/tanker-interior.png"
+       id="image3161"
+       x="2789.0479"
+       y="758.36218" />
+    <image
+       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/lawman-standing.png"
+       xlink:href="../sprites/lawman-standing.png"
+       width="90"
+       height="112"
+       id="image3163"
+       x="2757.2615"
+       y="824.31" />
+    <image
+       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/lawman-standing.png"
+       xlink:href="../sprites/lawman-standing.png"
+       y="670.16071"
+       x="3170.2119"
+       id="image3165"
+       height="112"
+       width="90" />
+    <image
+       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/lawman-standing.png"
+       xlink:href="../sprites/lawman-standing.png"
+       y="592.37897"
+       x="3783.3608"
+       id="image3167"
+       height="112"
+       width="90" />
+    <image
+       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/lawman-standing.png"
+       xlink:href="../sprites/lawman-standing.png"
+       width="90"
+       height="112"
+       id="image3169"
+       x="4035.0906"
+       y="592.37897" />
+    <image
+       y="882.82666"
+       x="1553.5858"
+       id="image3230"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/table.png"
+       height="52"
+       width="74" />
+    <image
+       width="74"
+       height="52"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/table.png"
+       id="image3233"
+       x="658.58582"
+       y="882.82666" />
+    <image
+       y="792.06573"
+       x="422.06393"
+       id="image3151"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/crate.png"
+       height="72"
+       width="66" />
+  </g>
+</svg>
