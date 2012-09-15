@@ -417,10 +417,11 @@ class GoldBar(Pickup):
     IMAGE = 'goldbar.png'
 
 
-class ForegroundScenery(object):
+class Scenery(object):
+    Z = -0.1
     def __init__(self, pos):
         self.pos = pos
-        self.node = StaticImage(pos, self.IMAGE, 1.9)
+        self.node = StaticImage(pos, self.IMAGE, self.Z)
 
     def spawn(self, world):
         self.world = world
@@ -430,8 +431,16 @@ class ForegroundScenery(object):
         self.world.scene.remove(self.node)
 
 
+class ForegroundScenery(Scenery):
+    Z = 1.9
+
+
 class Light(ForegroundScenery):
     IMAGE = 'light.png'
+
+
+class Seats(Scenery):
+    IMAGE = 'seats.png'
 
 
 class PhysicalScenery(object):
