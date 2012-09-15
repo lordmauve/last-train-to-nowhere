@@ -3,8 +3,19 @@ from geom import v
 
 GRAVITY = 1000
 
+inf = float('inf')
+NaN = float('NaN')
+
+def is_nan(v):
+    return v != v
+
+def is_inf(v):
+    return v == inf
+
 
 class Body(object):
+    on_collide = None
+
     def __init__(self, rect, mass, pos=v(0, 0), controller=None, groups=0x0001, mask=0xffff):
         assert mass > 0
         self.pos = pos
@@ -33,8 +44,9 @@ class Body(object):
         self.v += impulse
 
     def update(self, dt):
-        if self.mass == 0:
+        if is_inf(self.mass):
             return
+
         u = self.v
         self.v += dt * self.f / self.mass
 
@@ -43,6 +55,15 @@ class Body(object):
         self.on_floor = False
 
         self.pos += 0.5 * (u + self.v) * dt
+
+    def set_collision_handler(self, handler):
+        self.on_collide = handler
+
+
+class FloatingBody(Body):
+    """A dynamic body on which gravity does not apply."""
+    def reset_forces(self):
+        self.f = v(0, 0)
 
 
 class StaticBody(object):
@@ -123,6 +144,11 @@ class Physics(object):
         tm = ma + mb  # total mass
         frac = mb / tm
 
+        if is_inf(a.mass):
+            frac = 0
+        elif is_inf(b.mass):
+            frac = 1
+
         # Move the objects so as not to intersect
         a.pos += frac * mtd
         b.pos -= (1 - frac) * mtd
@@ -141,6 +167,11 @@ class Physics(object):
         ma = a.mass
         mb = b.mass
         tm = ma + mb  # total mass
+    
+        if is_inf(tm):
+            a.v = a.v - ua
+            b.v = b.v - ub
+            return True
 
         # Inelastic collision, see http://en.wikipedia.org/wiki/Inelastic_collision
         com = (ma * ua + mb * ub) / tm
@@ -153,7 +184,12 @@ class Physics(object):
         b.v = perp.project(b.v) - dm + com
         return True
 
-    def do_collisions(self):
+    def call_collision_callback(self, a, b, dt):
+        ch = a.on_collide
+        if ch is not None:
+            ch(b, dt)
+
+    def do_collisions(self, dt):
         for d in self.dynamic:
             self.collide_static(d)
 
@@ -162,6 +198,9 @@ class Physics(object):
             for d2 in self.dynamic[i + 1:]:
                 c = self.collide_dynamic(d, d2)
                 if c:
+                    a, mtd, b = c
+                    self.call_collision_callback(a, b, dt)
+                    self.call_collision_callback(b, a, dt)
                     self.collide_velocities(c)
                     collisions.append(c)
 
@@ -185,12 +224,11 @@ class Physics(object):
                         if c:
                             collisions.append(c)
 
-
     def update(self, dt):
         for d in self.dynamic:
             d.update(dt)
 
-        self.do_collisions()
+        self.do_collisions(dt)
 
         for d in self.dynamic:
             d.reset_forces()
