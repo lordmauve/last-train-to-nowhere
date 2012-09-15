@@ -58,9 +58,11 @@ class Player(object):
     groups = GROUP_ALL  # collision groups
     attack = MASK_ALL  # objects we can attack
 
+    Z = 1
+
     def __init__(self, pos, node):
         self.node = node
-        node.z = 1
+        node.z = self.Z
         self.body = Body(Rect.from_cwh(v(0, self.h / 2), self.w, self.h), self.MASS, pos, controller=self, groups=self.groups)
         self.running = 0
         self.crouching = False
@@ -255,6 +257,8 @@ class Lawman(Player):
 class Outlaw(Player):
     groups = GROUP_PLAYER     # collision groups
     attack = MASK_ALL & ~GROUP_PLAYER
+
+    Z = 1.01
 
     def __init__(self, pos):
         node = Animation('pc.json', pos)
@@ -468,10 +472,29 @@ class PhysicalScenery(object):
         self.node.pos = self.body.pos
 
 
-class Crate(PhysicalScenery):
+class StaticScenery(PhysicalScenery):
+    def __init__(self, pos):
+        self.node = StaticImage(pos, self.IMAGE, z=0)
+        rect = self.load_geometry()
+        self.body = StaticBody([rect], pos)
+
+    def spawn(self, world):
+        world.physics.add_static(self.body)
+        world.scene.add(self.node)
+
+    def update(self, dt):
+        pass
+
+
+class Crate(StaticScenery):
     IMAGE = 'crate.png'
     GEOMETRY = 'crate'
-    MASS = 1000
+
+
+class MailSack(PhysicalScenery):
+    IMAGE = 'mailsack.png'
+    GEOMETRY = 'mailsack'
+    MASS = 2000
 
 
 class Table(PhysicalScenery):

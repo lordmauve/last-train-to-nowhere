@@ -26,7 +26,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="1041.6457"
+     inkscape:cx="641.64567"
      inkscape:cy="307.92053"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -78,16 +78,8 @@
        sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/crate.png"
        xlink:href="../sprites/crate.png"
        y="302"
-       x="326"
+       x="277"
        id="image3249"
-       height="80"
-       width="74" />
-    <image
-       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/crate.png"
-       xlink:href="../sprites/crate.png"
-       y="302"
-       x="560"
-       id="image3249-5"
        height="80"
        width="74" />
     <image
@@ -102,7 +94,7 @@
        sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/lawman-standing.png"
        xlink:href="../sprites/lawman-standing.png"
        y="270"
-       x="772.30695"
+       x="818.30695"
        id="image3431-7-0"
        height="112"
        width="90" />
@@ -136,22 +128,6 @@
        id="image3181"
        x="1662.406"
        y="270" />
-    <image
-       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/crate.png"
-       xlink:href="../sprites/crate.png"
-       width="74"
-       height="80"
-       id="image2992"
-       x="578"
-       y="227" />
-    <image
-       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/crate.png"
-       xlink:href="../sprites/crate.png"
-       width="74"
-       height="80"
-       id="image2996"
-       x="252"
-       y="302" />
     <image
        y="326.5"
        x="1559"
@@ -222,5 +198,34 @@
        id="image11722"
        x="1808.0001"
        y="298" />
+    <image
+       width="69"
+       height="88"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/mailsack.png"
+       id="image11969"
+       x="526.5"
+       y="293" />
+    <image
+       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/crate.png"
+       xlink:href="../sprites/crate.png"
+       width="74"
+       height="80"
+       id="image11973"
+       x="592"
+       y="302" />
+    <image
+       width="69"
+       height="88"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/mailsack.png"
+       id="image11971"
+       x="579.5"
+       y="221" />
+    <image
+       y="292"
+       x="751.5"
+       id="image11975"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/mailsack.png"
+       height="88"
+       width="69" />
   </g>
 </svg>
