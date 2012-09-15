@@ -103,7 +103,7 @@ class Physics(object):
         for o in self.static_geometry:
             d = segment.intersects(o)
             if d:
-                intersections.append((d, StaticBody))
+                intersections.append((d, o))
 
         for o in self.dynamic:
             if o.groups & mask:
