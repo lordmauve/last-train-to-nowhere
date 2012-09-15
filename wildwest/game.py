@@ -73,13 +73,15 @@ class Game(object):
 
         self.restart()
 
-    def restart(self):
+    def restart(self, gamestate=None):
         self.world = World()
         self.world.spawn_player()
         self.camera = Camera(v(self.world.hero.pos) + v(0, 220) - v(WIDTH * 0.5, 0), WIDTH, HEIGHT)
         self.camera_controller = LissajousCameraController(self.camera)
 
-        self.set_gamestate(IntroGameState(self, self.world))
+        if gamestate is None:
+            gamestate = IntroGameState
+        self.set_gamestate(gamestate(self, self.world))
 
     def load(self):
         HUD.load()
@@ -123,20 +125,43 @@ class IntroGameState(GameState):
 
     def update(self, dt):
         if self.game.keys[key.ENTER]:
-            self.world.load_level('level1')
             self.world.scene.remove(self.pressenter)
             self.game.set_gamestate(PlayGameState(self.game, self.world))
         self.world.scene.update(dt)
 
 
 class PlayGameState(GameState):
+    level = 1
+
     def start(self):
+        self.welldone = StaticImage((0, 0), 'well-done.png', 10)
+        self.welcome = StaticImage((0, 0), 'welcome.png', 10)
+
+        self.world.load_level('level%d' % self.level)
         pyglet.clock.schedule_interval(self.update_ai, 0.5)
         self.world.hero.hero.set_handler('on_death', self.on_hero_death)
+        self.world.set_handler('on_goal', self.on_goal)
+
+        self.won = False
+
+    def show_message(self, node):
+        w = node.sprite.image.width
+        node.pos = v(self.world.hero.pos) + v(-w * 0.5, 100)
+        self.world.scene.add(node)
 
     def on_hero_death(self, char):
-        print "We died!"
+        self.show_message(self.welcome)
         pyglet.clock.schedule_once(self.end_game, 4)
+
+    def on_goal(self, char):
+        if not self.won:
+            self.show_message(self.welldone)
+            pyglet.clock.schedule_once(self.next_level, 4)
+            self.won = True
+
+    def next_level(self, dt):
+        PlayGameState.level += 1
+        self.game.restart(PlayGameState)
 
     def process_input(self):
         self.world.process_input(self.game.keys)
