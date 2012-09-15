@@ -19,9 +19,10 @@ from .scenegraph.backgrounds import BackgroundFactory, FarBackgroundFactory
 from .hud import HUD
 
 from .svg import load_geometry
-from geom import v, Rect, Segment
+from .geom import v, Rect, Segment
+from .physics import Body, StaticBody, Physics
 
-from physics import Body, StaticBody, Physics
+from .sounds import GUNSHOT, PICKUP, THUD, Channel
 
 
 # Key Bindings
@@ -77,9 +78,12 @@ class Player(object):
         self.shooting = False
         self.hit = False
         self.dead = False
+        self.was_jumping = False
         self.direction = RIGHT
 
         self.health = self.MAX_HEALTH
+        self.sound_channel = Channel()
+
 
     def spawn(self, world):
         self.world = world
@@ -180,6 +184,7 @@ class Player(object):
         return hit
 
     def on_pick_up(self, object):
+        self.sound_channel.play(PICKUP)
         if isinstance(object, Health):
             self.health = min(self.health + 40, self.MAX_HEALTH)
         elif isinstance(object, GoldBar):
@@ -212,6 +217,7 @@ class Player(object):
         pyglet.clock.schedule_once(self.shooting_finish, 0.5)
 
     def do_shoot(self):
+        self.sound_channel.play(GUNSHOT)
         if self.crouching:
             self.node.play('crouching-shooting')
             off = v(self.direction * 69, 49)
@@ -257,6 +263,10 @@ class Player(object):
 
         vx, vy = self.body.v
 
+        if self.was_jumping and not self.jumping:
+            self.sound_channel.play(THUD)
+            self.was_jumping = False
+
         if self.running:
             if vx > 10:
                 self.face_right()
@@ -273,6 +283,7 @@ class Player(object):
                 self.node.play('falling')
             elif vy < -100:
                 self.node.play('standing')
+            self.was_jumping = True
         else:
             if abs(vx) < 50 and not self.running:
                 self.body.v = v(0, self.body.v.y)
