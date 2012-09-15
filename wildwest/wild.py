@@ -319,6 +319,8 @@ class Outlaw(Player):
     groups = GROUP_PLAYER     # collision groups
     attack = MASK_DEFAULT & ~GROUP_PLAYER
 
+    MAX_HEALTH = 120
+
     Z = 1.01
 
     def __init__(self, pos):

@@ -24,7 +24,7 @@ class CameraController(object):
 
 
 class LaggyCameraController(CameraController):
-    RATE = 0.8
+    RATE = 0.9
 
     def update(self, dt):
         r = (1 - self.RATE) ** dt
