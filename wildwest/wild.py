@@ -9,6 +9,7 @@ import random
 
 import pyglet
 from pyglet.window import key
+from pyglet import media
 
 
 from .scenegraph import Scenegraph, Animation, AnimatedEffect, FloatyImage, StaticImage
@@ -22,7 +23,7 @@ from .svg import load_geometry
 from .geom import v, Rect, Segment
 from .physics import Body, StaticBody, Physics
 
-from .sounds import GUNSHOT, PICKUP, THUD, Channel
+from .sounds import GUNSHOT, PICKUP, THUD, GALLOP, Channel
 
 
 # Key Bindings
@@ -324,20 +325,28 @@ class OutlawOnHorse(object):
     dead = False
     body = None
 
+    FADE = 0.8
+
     def __init__(self, pos):
         self.pos = pos
         self.spawned = False  # has the player jumped off?
         self.anim = Animation('pc-horse.json', pos, z=2)
         self.node = Depth(self.anim, 1)
+        
+        self.gallop = media.Player()
+        self.gallop.queue(GALLOP)
 
     def spawn(self, world):
         self.world = world
         world.scene.add(self.node)
         world.objects.append(self)
+        self.gallop.eos_action = media.Player.EOS_LOOP
+        self.gallop.play()
 
     def kill(self):
         self.node.scenegraph.remove(self.node)
         self.world.objects.remove(self)
+        self.gallop.stop()
 
     def noop(self):
         """Don't accept input."""
@@ -364,6 +373,8 @@ class OutlawOnHorse(object):
         self.VELOCITY = -self.VELOCITY
 
     def update(self, dt):
+        if self.spawned:
+            self.gallop.volume *= self.FADE ** dt
         self.pos += self.VELOCITY * dt
         self.node.pos = self.pos
         if self.pos.x > 15 and not self.spawned:

@@ -10,11 +10,15 @@ def load_sound(filename):
 GUNSHOT = load_sound('gunshot.wav')
 PICKUP = load_sound('pickup.wav')
 THUD = load_sound('thud.wav')
+GALLOP = load_sound('gallop.wav')
 
 
-music = media.Player()
-music.queue(media.load(os.path.join('assets', 'music', 'oh_hi_oleandro.mp3')))
-music.play()
+if not media.have_avbin:
+    print "You're missing out on the music! You need to install AVBin."
+else:
+    music = media.Player()
+    music.queue(media.load(os.path.join('assets', 'music', 'oh_hi_oleandro.mp3')))
+    music.play()
 
 
 class Channel(object):
