@@ -106,6 +106,7 @@ class Player(pyglet.event.EventDispatcher):
         self.body.rect = Rect.from_blwh((0, 0), 117, 24)
         self.body.groups = GROUP_CORPSE
         self.body.mask = 0x8000
+        self.dispatch_event('on_death', self)
 
     @property
     def pos(self):
@@ -324,7 +325,7 @@ class Outlaw(Player):
 
 
 class OutlawOnHorse(object):
-    VELOCITY = v(30, 0)
+    VELOCITY = v(40, 0)
     dead = False
     body = None
 
@@ -336,6 +337,8 @@ class OutlawOnHorse(object):
         self.anim = Animation('pc-horse.json', pos, z=2)
         self.node = Depth(self.anim, 1)
         self.node.pos = pos
+
+        self.hero = Outlaw(v(15, 115))
         
         self.gallop = media.Player()
         self.gallop.queue(GALLOP)
@@ -352,6 +355,9 @@ class OutlawOnHorse(object):
         self.world.objects.remove(self)
         self.gallop.pause()
 
+    def __del__(self):
+        self.gallop.pause()
+
     def noop(self):
         """Don't accept input."""
 
@@ -364,12 +370,10 @@ class OutlawOnHorse(object):
         self.pos = v(15, 0)
 
     def start_player(self):
-        start = self.pos + v(0, 115)
-        hero = Outlaw(start)
-        hero.spawn(self.world)
-        self.world.hero = hero
+        self.hero.spawn(self.world)
+        self.world.hero = self.hero
         
-        hud = HUD(hero)
+        hud = HUD(self.hero)
         self.world.scene.add(hud)
         self.world.hud = hud
         
