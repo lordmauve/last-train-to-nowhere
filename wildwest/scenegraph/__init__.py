@@ -356,7 +356,7 @@ class RectNode(Node):
 
 
 class Bullet(Node):
-    z = -0.1
+    z = 0.1
     trail_width = 2
 
     batch = pyglet.graphics.Batch()
