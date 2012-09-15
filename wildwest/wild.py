@@ -166,6 +166,8 @@ class Player(pyglet.event.EventDispatcher):
         self.crouch()
 
     def crouch(self):
+        if self.hit:
+            pass
         self.running = 0
         if not self.crouching:
             self.body.rect = Rect.from_cwh(v(0, self.h_crouching / 2), self.w, self.h_crouching)

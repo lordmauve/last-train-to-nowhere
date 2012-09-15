@@ -24,7 +24,7 @@ class CameraController(object):
 
 
 class LaggyCameraController(CameraController):
-    RATE = 0.5
+    RATE = 0.8
 
     def update(self, dt):
         r = (1 - self.RATE) ** dt
@@ -117,7 +117,7 @@ class IntroGameState(GameState):
     def start(self):
         pos = v(self.world.hero.pos)
         self.logo = StaticImage(pos + v(-670, 270), 'logo.png', 10)
-        self.pressenter = StaticImage(pos + v(-580, -70), 'press-enter.png', 10)
+        self.pressenter = StaticImage(pos + v(-580, -60), 'press-enter.png', 10)
         self.world.scene.add(self.logo)
         self.world.scene.add(self.pressenter)
 
