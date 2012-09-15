@@ -7,7 +7,7 @@ FPS = 60
 
 from .vector import v
 from .wild import World
-from .scenegraph import Scenegraph, Camera, DebugGeometryNode
+from .scenegraph import Scenegraph, Camera, DebugGeometryNode, StaticImage
 
 from .hud import HUD
 
@@ -27,7 +27,7 @@ class LaggyCameraController(CameraController):
     RATE = 0.5
 
     def update(self, dt):
-        r = (1 - self.RATE ** dt)
+        r = (1 - self.RATE) ** dt
         self.camera.offset = (
             (1 - r) * self.target +
             r * v(self.camera.offset)
@@ -51,7 +51,6 @@ class LissajousCameraController(LaggyCameraController):
         super(LissajousCameraController, self).update(dt)
 
 
-
 class Game(object):
     """Control the game.
 
@@ -64,28 +63,75 @@ class Game(object):
         self.load()
 
         self.world = World()
+        self.world.spawn_player()
 
         self.objects = []
-        self.camera = Camera((200.0, 200.0), WIDTH, HEIGHT)
+        self.camera = Camera(v(self.world.hero.pos) + v(0, 220) - v(WIDTH * 0.5, 0), WIDTH, HEIGHT)
         self.keys = key.KeyStateHandler()
         self.window.push_handlers(self.keys)
         self.window.push_handlers(
             on_draw=self.draw
         )
         pyglet.clock.schedule_interval(self.update, 1.0 / FPS)
-        pyglet.clock.schedule_interval(self.update_ai, 0.5)
-        self.world.load_level('level1')
 
         self.camera_controller = LissajousCameraController(self.camera)
+
+        self.set_gamestate(IntroGameState(self, self.world))
 
     def load(self):
         HUD.load()
 
     def draw(self):
-        self.world.scene.draw(self.camera)
+        self.gamestate.draw(self.camera)
+
+    def set_gamestate(self, gs):
+        self.gamestate = gs
+        gs.start()
+
+    def update(self, dt):
+        self.gamestate.update(dt)
+
+    def set_debug(self):
+        self.world.scene.add(DebugGeometryNode(self.world.physics))
+
+
+class GameState(object):
+    def __init__(self, game, world):
+        self.game = game
+        self.world = world
+
+    def draw(self, camera):
+        self.world.scene.draw(camera)
+
+    def start(self):
+        pass
+
+    def update(self, dt):
+        pass
+
+
+class IntroGameState(GameState):
+    def start(self):
+        pos = v(self.world.hero.pos)
+        self.logo = StaticImage(pos + v(-670, 250), 'logo.png', 10)
+        self.pressenter = StaticImage(pos + v(-580, -70), 'press-enter.png', 10)
+        self.world.scene.add(self.logo)
+        self.world.scene.add(self.pressenter)
+
+    def update(self, dt):
+        if self.game.keys[key.ENTER]:
+            self.world.load_level('level1')
+            self.world.scene.remove(self.pressenter)
+            self.game.set_gamestate(PlayGameState(self.game, self.world))
+        self.world.scene.update(dt)
+
+
+class PlayGameState(GameState):
+    def start(self):
+        pyglet.clock.schedule_interval(self.update_ai, 0.5)
 
     def process_input(self):
-        self.world.process_input(self.keys)
+        self.world.process_input(self.game.keys)
 
     def update(self, dt):
         dt = min(dt, 0.08)
@@ -93,12 +139,9 @@ class Game(object):
         self.world.update(dt)
 
         if not getattr(self.world.hero, 'dead', False):
-            self.camera_controller.track(self.world.hero)
-        self.camera_controller.update(dt)
+            self.game.camera_controller.track(self.world.hero)
+        self.game.camera_controller.update(dt)
         self.world.scene.update(dt)
 
     def update_ai(self, dt):
         self.world.update_ai(dt)
-
-    def set_debug(self):
-        self.world.scene.add(DebugGeometryNode(self.world.physics))

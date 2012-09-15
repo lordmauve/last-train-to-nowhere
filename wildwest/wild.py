@@ -335,6 +335,7 @@ class OutlawOnHorse(object):
         self.spawned = False  # has the player jumped off?
         self.anim = Animation('pc-horse.json', pos, z=2)
         self.node = Depth(self.anim, 1)
+        self.node.pos = pos
         
         self.gallop = media.Player()
         self.gallop.queue(GALLOP)
@@ -597,7 +598,6 @@ class World(pyglet.event.EventDispatcher):
 
         self.scene = Scenegraph()
         self.make_scene()
-        self.spawn_player()
 
     def load_level(self, name):
         from .loader import load_level
@@ -658,7 +658,7 @@ class World(pyglet.event.EventDispatcher):
 
     def spawn_player(self):
         # all this should be done elsewhere
-        start = v(-200, 0)
+        start = v(-400, 0)
         self.hero = OutlawOnHorse(start)
         self.hero.spawn(self)
 
