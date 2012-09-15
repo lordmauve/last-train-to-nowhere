@@ -197,7 +197,7 @@ class Animation(SpriteNode):
         super(Animation, self).set_scenegraph(sg)
 
     def on_animation_end(self, *args):
-        if self.sprite.image.frames[-1].duration is None:
+        if self.sprite.image.frames[-1].duration == 0:
             self.play('default')
 
     def set_flip(self, flip):

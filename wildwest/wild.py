@@ -42,6 +42,8 @@ GROUP_PLAYER = 0x0001
 GROUP_ENEMY = 0x0002
 GROUP_SCENERY = 0x0004
 
+PUNCH_DAMAGE = 10
+
 
 class Player(object):
     MAX_WALK = 200  # limit on walk speed
@@ -98,17 +100,22 @@ class Player(object):
     def jumping(self):
         return not self.body.on_floor
 
-    def on_hit(self, pos, vel):
+    def on_hit(self, pos, vel, damage=None):
+        if damage is None:
+            damage = random.uniform(11, 20)
         flip = v(1, 0).dot(vel) > 0
-        blood = AnimatedEffect('bloodspray.json', pos, 1.1)
-        blood.set_flip(flip)
-        self.world.scene.add(blood)
 
-        self.health -= random.uniform(10, 20)
+        if damage > 10:
+            blood = AnimatedEffect('bloodspray.json', pos, 1.1)
+            blood.set_flip(flip)
+            self.world.scene.add(blood)
+
+        self.health -= damage
         if self.health <= 0:
             self.die()
         else:
-            self.node.play('hit')
+            if not self.shooting:
+                self.node.play('hit')
             self.hit = True
             pyglet.clock.schedule_once(self.hit_finish, 0.3)
 
@@ -167,8 +174,32 @@ class Player(object):
             self.health = min(self.health + 40, self.MAX_HEALTH)
 
     def shoot(self):
-        if self.shooting:
+        if self.shooting or self.hit:
             return
+
+        if not self.crouching:
+            p1 = self.node.pos + v(0, 78)
+            p2 = p1 + v(80, 0) * self.direction
+            seg = Segment(p1, p2)
+            hit = self.world.physics.ray_query(seg, mask=self.attack)
+            for d, obj in hit:
+                if isinstance(obj, Player):
+                    self.do_punch(seg, hit)
+                    return
+        self.do_shoot()
+
+    def do_punch(self, seg, objs):
+        self.shooting = True
+        self.node.play('punching')
+
+        vel = seg.edge
+        for d, obj in objs:
+            pos = seg.truncate(d).points[1]
+            obj.on_hit(pos, vel, PUNCH_DAMAGE)
+
+        pyglet.clock.schedule_once(self.shooting_finish, 0.5)
+
+    def do_shoot(self):
         if self.crouching:
             self.node.play('crouching-shooting')
             off = v(self.direction * 69, 49)

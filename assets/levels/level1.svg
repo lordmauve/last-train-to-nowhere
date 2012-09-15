@@ -62,11 +62,11 @@
     <image
        sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/car-interior.png"
        xlink:href="../sprites/car-interior.png"
-       width="1024"
-       height="315"
-       id="use4196"
+       y="132"
        x="1024"
-       y="132" />
+       id="use4196"
+       height="315"
+       width="1024" />
     <image
        width="104"
        height="78"
@@ -77,27 +77,27 @@
     <image
        sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/crate.png"
        xlink:href="../sprites/crate.png"
-       y="302"
-       x="277"
-       id="image3249"
+       width="74"
        height="80"
-       width="74" />
+       id="image3249"
+       x="277"
+       y="302" />
     <image
        sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/lawman-standing.png"
        xlink:href="../sprites/lawman-standing.png"
-       y="270"
-       x="397.61386"
+       width="90"
+       height="112"
        id="image3431-7"
-       height="112"
-       width="90" />
+       x="397.61386"
+       y="270" />
     <image
        sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/lawman-standing.png"
        xlink:href="../sprites/lawman-standing.png"
-       y="270"
-       x="818.30695"
-       id="image3431-7-0"
+       width="90"
        height="112"
-       width="90" />
+       id="image3431-7-0"
+       x="818.30695"
+       y="270" />
     <image
        y="75"
        x="2048"
@@ -108,11 +108,11 @@
     <image
        sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/lawman-standing.png"
        xlink:href="../sprites/lawman-standing.png"
-       width="90"
-       height="112"
-       id="image3179"
+       y="270"
        x="1487.7129"
-       y="270" />
+       id="image3179"
+       height="112"
+       width="90" />
     <image
        y="298"
        x="1593.6667"
@@ -123,11 +123,11 @@
     <image
        sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/lawman-standing.png"
        xlink:href="../sprites/lawman-standing.png"
-       width="90"
-       height="112"
-       id="image3181"
+       y="270"
        x="1662.406"
-       y="270" />
+       id="image3181"
+       height="112"
+       width="90" />
     <image
        y="326.5"
        x="1559"
@@ -203,16 +203,16 @@
        height="88"
        xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/mailsack.png"
        id="image11969"
-       x="526.5"
+       x="498.5"
        y="293" />
     <image
        sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/crate.png"
        xlink:href="../sprites/crate.png"
-       width="74"
-       height="80"
+       y="302"
+       x="564"
        id="image11973"
-       x="592"
-       y="302" />
+       height="80"
+       width="74" />
     <image
        width="69"
        height="88"
