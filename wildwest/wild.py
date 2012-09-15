@@ -164,7 +164,7 @@ class Player(object):
         else:
             return []
         p1 = self.node.pos + off
-        p2 = p1 + v(1000, random.uniform(-50, 50)) * self.direction
+        p2 = p1 + v(1000, 0) * self.direction
         seg = Segment(p1, p2)
         hit = self.world.physics.ray_query(seg)
         return hit
@@ -574,7 +574,7 @@ class World(object):
 
     def shoot(self, source, direction, mask=MASK_ALL):
         p1 = source
-        p2 = p1 + v(1000, random.uniform(-50, 50)) * direction
+        p2 = p1 + v(1000, random.normalvariate(0, 25)) * direction
         seg = Segment(p1, p2)
         hit = self.physics.ray_query(seg, mask=mask)
         for d, obj in hit:
