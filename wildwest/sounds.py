@@ -18,6 +18,7 @@ if not media.have_avbin:
 else:
     music = media.Player()
     music.queue(media.load(os.path.join('assets', 'music', 'oh_hi_oleandro.mp3')))
+    music.eos_action = media.Player.EOS_LOOP
     music.play()
 
 
