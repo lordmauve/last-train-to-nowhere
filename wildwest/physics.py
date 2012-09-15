@@ -1,4 +1,6 @@
-from geom import v
+from .geom import v, Vector
+
+from .spatialhash import SpatialHash
 
 
 GRAVITY = 1000
@@ -27,7 +29,7 @@ class Body(object):
         self.mask = mask
 
         self.controller = controller
-        self.v = v(0, 0)
+        self.v = Vector((0, 0))
         self.on_floor = False
         self.reset_forces()
 
@@ -35,7 +37,7 @@ class Body(object):
         return self.rect.translate(self.pos)
 
     def reset_forces(self):
-        self.f = v(0, -GRAVITY * self.mass)
+        self.f = Vector((0, -GRAVITY * self.mass))
 
     def apply_force(self, f):
         self.f += f
@@ -50,7 +52,7 @@ class Body(object):
         u = self.v
         self.v += dt * self.f / self.mass
 
-        self.v = v(self.v.x * 0.05 ** dt, self.v.y)
+        self.v = Vector((self.v.x * 0.05 ** dt, self.v.y))
 
         self.on_floor = False
 
@@ -76,6 +78,7 @@ class Physics(object):
     def __init__(self):
         self.static_geometry = []
         self.static_objects = []
+        self.static_hash = SpatialHash()
         self.dynamic = []
 
     def add_body(self, b):
@@ -89,6 +92,7 @@ class Physics(object):
         geom = []
         for o in s.rectangles:
             r = o.translate(s.pos)
+            self.static_hash.add_rect(r, (r, s))
             self.static_geometry.append(r)
             geom.append(r)
         s._geom = geom
@@ -97,6 +101,7 @@ class Physics(object):
         self.static_objects.remove(s)
         for r in s._geom:
             self.static_geometry.remove(r)
+            self.static_hash.remove_rect(r, (r, s))
 
     def ray_query(self, segment, mask=0xffff):
         intersections = []
@@ -115,7 +120,8 @@ class Physics(object):
 
     def collide_static(self, d):
         r = d.get_rect()
-        for s in self.static_geometry:
+        col = self.static_hash.potential_intersection(r)
+        for s, body in col:
             mtd = r.intersects(s)
             if mtd:
                 d.pos += mtd
@@ -126,7 +132,7 @@ class Physics(object):
                         d.on_floor = True
                 if mtd.x:
                     x = 0
-                d.v = v(x, y)
+                d.v = Vector((x, y))
 
     def collide_dynamic(self, a, b):
         if not (a.groups & b.mask or a.mask & b.groups):
