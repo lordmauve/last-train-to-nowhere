@@ -85,7 +85,6 @@ class Player(pyglet.event.EventDispatcher):
         self.health = self.MAX_HEALTH
         self.sound_channel = Channel()
 
-
     def spawn(self, world):
         self.world = world
         world.objects.append(self)
@@ -103,7 +102,7 @@ class Player(pyglet.event.EventDispatcher):
         self.dead = True
         self.health = 0
         self.node.play('dead')
-        self.body.rect = Rect.from_blwh((0, 0), 117, 24)
+        self.body.rect = Rect.from_blwh((0, 10), 117, 24)
         self.body.groups = GROUP_CORPSE
         self.body.mask = 0x8000
         self.dispatch_event('on_death', self)
@@ -199,7 +198,7 @@ class Player(pyglet.event.EventDispatcher):
             return
 
         if not self.crouching:
-            p1 = self.node.pos + v(0, 78)
+            p1 = self.node.pos + v(0, 78) - v(20, 0) * self.direction
             p2 = p1 + v(80, 0) * self.direction
             seg = Segment(p1, p2)
             hit = self.world.physics.ray_query(seg, mask=self.attack)
@@ -476,7 +475,7 @@ class LocomotiveObject(object):
         if hero:
             r = hero.body.get_rect()
             if r.intersects(self.goal):
-                self.world.dispatch_event('on_goal', hero)
+                self.world.in_goal(hero)
 
 
 class Pickup(object):
@@ -584,6 +583,11 @@ class Crate(StaticScenery):
     GEOMETRY = 'crate'
 
 
+class Hatch(StaticScenery):
+    IMAGE = 'hatch.png'
+    GEOMETRY = 'hatch'
+
+
 class MailSack(PhysicalScenery):
     IMAGE = 'mailsack.png'
     GEOMETRY = 'mailsack'
@@ -598,6 +602,9 @@ class Table(PhysicalScenery):
 
 class World(pyglet.event.EventDispatcher):
     """Collection of all the objects and geometry in the world."""
+
+    GOLD_NEEDED = 3
+
     def __init__(self):
         self.objects = []
         self.carriages = []
@@ -610,6 +617,39 @@ class World(pyglet.event.EventDispatcher):
     def load_level(self, name):
         from .loader import load_level
         load_level(self, name)
+
+        bars = self.GOLD_NEEDED
+        bars -= len(self.get_objects_by_class(GoldBar))
+
+        if bars > 0:
+            lawmen = self.get_objects_by_class(Lawman)
+            num = min(len(lawmen), bars)
+            holding_bars = random.sample(lawmen, num)
+            for lm in holding_bars:
+                lm.gold = 1
+                lm.set_handler('on_death', self.drop_bar)
+            bars -= num
+
+        # Reduce the requirement if we still can't satisfy it
+        self.GOLD_NEEDED -= bars
+
+    def drop_bar(self, char):
+        if not char.gold:
+            return
+        pos = char.pos
+        GoldBar(pos).spawn(self)
+        char.gold = 0
+
+    def in_goal(self, char):
+        if char.gold >= self.GOLD_NEEDED:
+            self.dispatch_event('on_goal', char)
+
+    def get_objects_by_class(self, cls):
+        objs = []
+        for o in self.objects:
+            if isinstance(o, cls):
+                objs.append(o)
+        return objs
 
     def make_scene(self):
         # setup the scene
