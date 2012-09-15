@@ -30,8 +30,8 @@ class BasePolygon(object):
             if not intersection1:
                 return False
                 
-            proj_vector1 = v(axis.x * intersection1, axis.y * intersection1)
-            proj_vector2 = v(axis.x * intersection2, axis.y * intersection2)
+            proj_vector1 = Vector((axis.x * intersection1, axis.y * intersection1))
+            proj_vector2 = Vector((axis.x * intersection2, axis.y * intersection2))
             projections.append(proj_vector1)
             projections.append(proj_vector2)
         
@@ -101,10 +101,10 @@ class Rect(BasePolygon, namedtuple('BaseRect', 'l r b t')):
     @property
     def points(self):
         return [
-            v(self.l, self.b),
-            v(self.l, self.t),
-            v(self.r, self.t),
-            v(self.r, self.b),
+            Vector((self.l, self.b)),
+            Vector((self.l, self.t)),
+            Vector((self.r, self.t)),
+            Vector((self.r, self.b)),
         ]
 
     @property
@@ -156,11 +156,11 @@ class Projection(object):
 class ConvexPolygon(BasePolygon):
     def __init__(self, pos, points):
         if type(pos) in [type(()), type([])]:
-            self.pos = v(pos)
+            self.pos = Vector(pos)
 
         self.points = []
         for p in points:
-            self.points.append(v(*p))
+            self.points.append(Vector(p))
         
         self.edges = []
         for i in range(len(self.points)):
