@@ -176,7 +176,6 @@ class AI(object):
             if self.strategy_time > 10:
                 self.shot = False
         if not self.target.crouching and not self.target.jumping:
-            self.char.crouching = False
             self.shoot()
             self.shot = True
 

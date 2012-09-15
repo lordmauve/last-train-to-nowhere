@@ -14,6 +14,7 @@ CLASSES = {
     'health': wild.Health,
     'goldbar': wild.GoldBar,
     'crate': wild.Crate,
+    'hatch': wild.Hatch,
     'table': wild.Table,
     'seats': wild.Seats,
     'mailsack': wild.MailSack,

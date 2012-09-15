@@ -26,8 +26,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="1016.2552"
-     inkscape:cy="61.221616"
+     inkscape:cx="511.92174"
+     inkscape:cy="57.642453"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -106,14 +106,6 @@
        height="425"
        width="1097" />
     <image
-       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/crate.png"
-       xlink:href="../sprites/crate.png"
-       width="74"
-       height="80"
-       id="image3083"
-       x="434.68256"
-       y="854.13635" />
-    <image
        sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/lawman-standing.png"
        xlink:href="../sprites/lawman-standing.png"
        width="90"
@@ -121,30 +113,6 @@
        id="image3085"
        x="805.16766"
        y="822.13635" />
-    <image
-       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/crate.png"
-       xlink:href="../sprites/crate.png"
-       y="854.13635"
-       x="250.68256"
-       id="image3087"
-       height="80"
-       width="74" />
-    <image
-       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/crate.png"
-       xlink:href="../sprites/crate.png"
-       width="74"
-       height="80"
-       id="image3089"
-       x="174.68256"
-       y="854.13635" />
-    <image
-       sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/crate.png"
-       xlink:href="../sprites/crate.png"
-       y="778.13635"
-       x="250.68256"
-       id="image3091"
-       height="80"
-       width="74" />
     <image
        sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/lawman-standing.png"
        xlink:href="../sprites/lawman-standing.png"
@@ -197,11 +165,11 @@
        height="31"
        xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/goldbar.png"
        id="image3194"
-       x="723"
-       y="871.86218" />
+       x="415"
+       y="872.86218" />
     <image
-       y="879.36218"
-       x="358.5"
+       y="648.36218"
+       x="1894.5"
        id="image8317"
        xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/health.png"
        height="32"
@@ -271,5 +239,68 @@
        id="image3268"
        height="112"
        width="90" />
+    <image
+       y="692.86218"
+       x="1716.5"
+       id="image5293"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/hatch.png"
+       height="11"
+       width="111" />
+    <image
+       width="111"
+       height="11"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/hatch.png"
+       id="image5296"
+       x="693.5"
+       y="692.86218" />
+    <image
+       y="862.36218"
+       x="175"
+       id="image5357"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/crate.png"
+       height="72"
+       width="66" />
+    <image
+       width="66"
+       height="72"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/crate.png"
+       id="image5360"
+       x="240"
+       y="862.36218" />
+    <image
+       y="794.36218"
+       x="246"
+       id="image5362"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/crate.png"
+       height="72"
+       width="66" />
+    <image
+       y="862.36218"
+       x="324"
+       id="image5370"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/crate.png"
+       height="72"
+       width="66" />
+    <image
+       width="66"
+       height="72"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/crate.png"
+       id="image5368"
+       x="312"
+       y="793.36218" />
+    <image
+       width="66"
+       height="72"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/crate.png"
+       id="image5364"
+       x="301"
+       y="727.36218" />
+    <image
+       y="861.36218"
+       x="478"
+       id="image5366"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/crate.png"
+       height="72"
+       width="66" />
   </g>
 </svg>

@@ -165,7 +165,7 @@ class PlayGameState(GameState):
 
     def on_goal(self, char):
         if not self.won:
-            self.show_message(self.welldone)
+            self.show_message(self.welldone, off=v(0, 200))
             pyglet.clock.schedule_once(self.next_level, 4)
             self.won = True
 
