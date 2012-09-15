@@ -637,6 +637,8 @@ class World(object):
 
         for o in self.objects:
             o.update(dt)
+            if hasattr(o, 'ai'):
+                o.ai.update_frame(dt)
 
     def update_ai(self, dt):
         if self.is_hero_alive():
