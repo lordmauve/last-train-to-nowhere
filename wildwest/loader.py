@@ -2,9 +2,24 @@ import re
 
 from .svg import load_level_data
 
-from .wild import LocomotiveObject, Carriage, Crate, Player, Lawman, Health, GoldBar
+from . import wild
 from .ai import AI
-from .scenegraph import Animation
+
+
+CLASSES = {
+    'locomotive': wild.LocomotiveObject,
+    'light': wild.Light,
+    'health': wild.Health,
+    'goldbar': wild.GoldBar,
+    'crate': wild.Crate,
+    'table': wild.Table,
+}
+
+CARRIAGES = ['car', 'freightcar', 'mailcar']
+
+
+class UnknownObject(Exception):
+    """Don't know how to instantiate this object."""
 
 
 def load_level(world, name):
@@ -12,28 +27,15 @@ def load_level(world, name):
         name = re.sub(r'-(interior|exterior|standing)$', '', name)
         pos = rect.points[0]
 
-        if name == 'locomotive':
-            LocomotiveObject(pos).spawn(world)
-        elif name in ['car', 'freightcar', 'mailcar']:
-            Carriage(pos=pos, name=name).spawn(world)
-        elif name == 'crate':
-            Crate(pos).spawn(world)
+        if name in CARRIAGES:
+            wild.Carriage(pos=pos, name=name).spawn(world)
         elif name == 'lawman':
-            lawman = Lawman(pos)
+            lawman = wild.Lawman(pos)
             lawman.spawn(world)
             lawman.ai = AI(lawman)
-        elif name == 'table':
-            pass
-        elif name == 'goldbar':
-            GoldBar(pos).spawn(world)
-        elif name == 'health':
-            Health(pos).spawn(world)
         else:
-            raise ValueError("Unknown object %s" % name)
-
-
-def spawn_lawman(world, pos):
-    node = Animation('lawman.json', pos)
-    lawman = Player(world, pos, node)
-    lawman.ai = AI(lawman)
-    world.spawn(lawman)
+            try:
+                cls = CLASSES[name]
+            except KeyError:
+                raise UnknownObject("Unknown object %s" % name)
+            cls(pos).spawn(world)

@@ -26,8 +26,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="1613.249"
-     inkscape:cy="319.43274"
+     inkscape:cx="1352.2587"
+     inkscape:cy="327.79228"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -173,5 +173,26 @@
        xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/goldbar.png"
        height="31"
        width="36" />
+    <image
+       width="42"
+       height="88"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/light.png"
+       id="image11337"
+       x="1295"
+       y="161" />
+    <image
+       y="161"
+       x="1524"
+       id="image11339"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/light.png"
+       height="88"
+       width="42" />
+    <image
+       width="42"
+       height="88"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/light.png"
+       id="image11341"
+       x="1746"
+       y="161" />
   </g>
 </svg>
