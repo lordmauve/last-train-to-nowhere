@@ -62,6 +62,7 @@ class Player(pyglet.event.EventDispatcher):
     MASS = 100
 
     MAX_HEALTH = 100
+    MIN_CROUCH_TIME = 0.15
 
     groups = GROUP_ALL  # collision groups
     attack = MASK_DEFAULT  # objects we can attack
@@ -79,6 +80,7 @@ class Player(pyglet.event.EventDispatcher):
         self.shooting = False
         self.hit = False
         self.dead = False
+        self.can_change_crouch = True
         self.was_jumping = False
         self.direction = RIGHT
 
@@ -172,12 +174,21 @@ class Player(pyglet.event.EventDispatcher):
         self.crouch()
 
     def crouch(self):
-        if self.dead or self.hit:
+        if self.dead or self.hit or not self.can_change_crouch:
             return
         self.running = 0
         if not self.crouching:
             self.body.rect = Rect.from_cwh(v(0, self.h_crouching / 2), self.w, self.h_crouching)
-        self.crouching = True
+        self.set_crouching(True)
+
+    def set_crouching(self, crouching):
+        self.crouching = crouching
+        if self.MIN_CROUCH_TIME:
+            self.can_change_crouch = False
+            pyglet.clock.schedule_once(self.cancel_crouch, self.MIN_CROUCH_TIME)
+
+    def cancel_crouch(self, dt):
+        self.can_change_crouch = True
 
     @property
     def hitlist(self):
@@ -301,9 +312,11 @@ class Player(pyglet.event.EventDispatcher):
             else:
                 self.node.play('running')
 
+        if self.can_change_crouch:
+            self.set_crouching(False)
+
         if not self.crouching:
             self.body.rect = Rect.from_cwh(v(0, self.h / 2), self.w, self.h)
-        self.crouching = False
         self.running = 0
 
 
@@ -315,6 +328,7 @@ class Lawman(Player):
     attack = MASK_DEFAULT & ~GROUP_ENEMY  # objects we can attack
 
     MAX_HEALTH = 40
+    MIN_CROUCH_TIME = 0.3
 
     def __init__(self, pos):
         node = Animation('lawman.json', pos)
@@ -326,6 +340,7 @@ class Outlaw(Player):
     attack = MASK_DEFAULT & ~GROUP_PLAYER
 
     MAX_HEALTH = 120
+    MIN_CROUCH_TIME = 0
 
     Z = 1.01
 
