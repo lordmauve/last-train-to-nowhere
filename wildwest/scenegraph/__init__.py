@@ -294,7 +294,7 @@ class Depth(Node):
 
 
 class GroundPlane(Node):
-    z = -900
+    z = -9999
 
     def __init__(self, near_colour, far_colour, y=0):
         self.near_colour = list(near_colour)
@@ -316,7 +316,7 @@ class GroundPlane(Node):
 
 
 class SkyBox(Node):
-    z = -901
+    z = -10000
 
     def __init__(self, horizon_colour, zenith_colour):
         self.horizon_colour = list(horizon_colour)
@@ -455,6 +455,7 @@ class Scenegraph(object):
         camera.setup_matrixes()
         obs = list(self.objects)
         obs.sort(key=lambda x: x.z)
+        gl.glDisable(gl.GL_DEPTH_TEST)
         for o in obs:
             o.draw(camera)
 
