@@ -9,6 +9,8 @@ from .vector import v
 from .wild import World
 from .scenegraph import Scenegraph, Camera, DebugGeometryNode
 
+from .hud import HUD
+
 
 class CameraController(object):
     def __init__(self, camera):
@@ -59,6 +61,8 @@ class Game(object):
         WIDTH = 800
         HEIGHT = 600
         self.window = pyglet.window.Window(width=WIDTH, height=HEIGHT)
+        self.load()
+
         self.world = World()
 
         self.objects = []
@@ -73,6 +77,9 @@ class Game(object):
         self.world.load_level('level1')
 
         self.camera_controller = LissajousCameraController(self.camera)
+
+    def load(self):
+        HUD.load()
 
     def draw(self):
         self.world.scene.draw(self.camera)

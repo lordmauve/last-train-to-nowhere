@@ -16,6 +16,7 @@ from .scenegraph import SkyBox, GroundPlane, Bullet, Depth
 from .scenegraph.railroad import Locomotive, RailTrack, CarriageInterior, CarriageExterior
 from .scenegraph.backgrounds import BackgroundFactory, FarBackgroundFactory
 
+from .hud import HUD
 
 from .svg import load_geometry
 from geom import v, Rect, Segment
@@ -59,6 +60,8 @@ class Player(object):
 
     groups = GROUP_ALL  # collision groups
     attack = MASK_ALL  # objects we can attack
+
+    gold = 0    # gold bars collected
 
     Z = 1
 
@@ -172,6 +175,8 @@ class Player(object):
     def on_pick_up(self, object):
         if isinstance(object, Health):
             self.health = min(self.health + 40, self.MAX_HEALTH)
+        elif isinstance(object, GoldBar):
+            self.gold += 1
 
     def shoot(self):
         if self.shooting or self.hit:
@@ -333,6 +338,10 @@ class OutlawOnHorse(object):
         hero.spawn(self.world)
         self.world.hero = hero
         
+        hud = HUD(hero)
+        self.world.scene.add(hud)
+        self.world.hud = hud
+        
         self.anim.play('horse')
         self.VELOCITY = -self.VELOCITY
 
@@ -453,7 +462,7 @@ class GoldBar(Pickup):
 
 
 class Scenery(object):
-    Z = -0.1
+    Z = -0.2
     def __init__(self, pos):
         self.pos = pos
         self.node = StaticImage(pos, self.IMAGE, self.Z)
