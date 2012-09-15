@@ -181,7 +181,7 @@ class Player(pyglet.event.EventDispatcher):
         else:
             return []
         p1 = self.node.pos + off
-        p2 = p1 + v(1000, 0) * self.direction
+        p2 = p1 + v(500, 0) * self.direction
         seg = Segment(p1, p2)
         hit = self.world.physics.ray_query(seg)
         return hit
@@ -706,7 +706,7 @@ class World(pyglet.event.EventDispatcher):
 
     def shoot(self, source, direction, mask=MASK_DEFAULT):
         p1 = source
-        p2 = p1 + v(1000, random.normalvariate(0, 25)) * direction
+        p2 = p1 + v(500, random.normalvariate(0, 12.5)) * direction
         seg = Segment(p1, p2)
         hit = self.physics.ray_query(seg, mask=mask)
         for d, obj in hit:
