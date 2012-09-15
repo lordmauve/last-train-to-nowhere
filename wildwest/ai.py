@@ -1,6 +1,7 @@
 import random
 from operator import itemgetter
 from vector import v
+import pyglet
 from geom import Segment, Rect
 from wild import RIGHT, LEFT
 from wild import Outlaw, Crate
@@ -59,9 +60,18 @@ class AI(object):
             return True
         return False
 
+    def shoot_bullet(self, dt):
+        self.char.shoot()
+
     def shoot(self):
-        if self.is_outlaw_shootable():
-            self.char.shoot()
+        if self.is_outlaw_shootable():  # and self.strategy_time % 5 == 0:
+            pyglet.clock.schedule_once(self.shoot_bullet, 0.3)
+
+    def crouch_later(self, dt):
+        self.char.crouch()
+
+    def crouch(self):
+        pyglet.clock.schedule_once(self.crouch_later, 0.1)
 
     def objects_in_direction(self, direction):
         p1 = self.char.body.pos + v(50 * direction, 50)
@@ -129,7 +139,7 @@ class AI(object):
 
     def update(self, dt):
         """Update method called at AI refresh rate"""
-        if self.world.hero.dead:
+        if self.world.hero.dead or self.char.dead:
             return
         self.target = self.world.hero
         self.target_pos = self.target.pos
@@ -138,6 +148,8 @@ class AI(object):
 
     def update_frame(self, dt):
         """Update method called every frame"""
+        if self.char.dead:
+            return
         if not self.strategy or self.strategy_time < 1 or self.target.dead:
             return
         self.target_pos = self.target.pos
@@ -152,12 +164,12 @@ class AI(object):
         # Defence: if direct line of shooting
         # 1. Crouch if hero is standing or jumping and preparing to shoot
         if not self.target.crouching:
-            self.char.crouch()
+            self.crouch()
         # 2. Jump if hero is crouching
         elif self.target.crouching:
             self.char.jump()
         # 3. Shoot from time to time
-        if self.strategy_time % 20 == 0:
+        if self.strategy_time % 10 == 0:
             self.shoot()
 
     def strategy_shoot_first(self):
@@ -172,10 +184,12 @@ class AI(object):
     def strategy_shoot_and_duct(self):
         self.face_towards(self.target_pos)
         if self.shot:
-            self.char.crouch()
+            self.crouch()
             if self.strategy_time > 10:
                 self.shot = False
         if not self.target.crouching and not self.target.jumping:
+            if self.char.crouching:
+                return
             self.shoot()
             self.shot = True
 
@@ -188,9 +202,9 @@ class AI(object):
             if self.strategy_time % 4 == 0:
                 self.shoot()
             else:
-                self.char.crouch()
+                self.crouch()
         else:
-            self.char.crouch()
+            self.crouch()
 
     def object_width(self, obj):
         w = None
@@ -225,10 +239,10 @@ class AI(object):
                 self.jumping_over = obj
             else:
                 # print 'obj close by: crouching'
-                self.char.crouch()
+                self.crouch()
                 self.face_towards(self.target_pos)
                 self.jumping_over = None
-                self.strategy = self.strategy_shoot_and_duct
+                self.strategy = self.strategy_lie_in_wait
         else:
             if self.jumping_over:
                 obj = self.jumping_over
