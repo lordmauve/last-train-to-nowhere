@@ -118,6 +118,8 @@ class AI(object):
 
     def update(self, dt):
         """Update method called at AI refresh rate"""
+        if self.world.hero.dead:
+            return
         self.target = self.world.hero
         self.target_pos = self.target.pos
         self.pos = self.char.pos
@@ -125,7 +127,7 @@ class AI(object):
 
     def update_frame(self, dt):
         """Update method called every frame"""
-        if not self.strategy or self.strategy_time < 1:
+        if not self.strategy or self.strategy_time < 1 or self.target.dead:
             return
         self.target_pos = self.target.pos
         self.pos = self.char.pos
@@ -150,7 +152,8 @@ class AI(object):
         # Attack:
         # 1. If hero is in direct range shoot
         if not self.target.crouching and not self.target.jumping:
-            self.char.shoot()
+            if self.strategy_time % 4 == 0:
+                self.char.shoot()
 
     def strategy_shoot_and_duct(self):
         self.face_towards(self.target_pos)
@@ -168,7 +171,6 @@ class AI(object):
         hitlist = self.char.hitlist
         if not hitlist:
             return
-        print 'hitlist:', hitlist
         if isinstance(hitlist[0][1], Outlaw):
             if self.strategy_time % 4 == 0:
                 self.char.shoot()
@@ -213,8 +215,7 @@ class AI(object):
                 self.char.crouch()
                 self.face_towards(self.target_pos)
                 self.jumping_over = None
-                # objective reached, clear strategy
-                # self.strategy = None
+                self.strategy = self.strategy_shoot_and_duct
         else:
             if self.jumping_over:
                 obj = self.jumping_over
