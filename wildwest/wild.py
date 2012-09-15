@@ -233,7 +233,8 @@ class Player(pyglet.event.EventDispatcher):
         vel = seg.edge
         for d, obj in objs:
             pos = seg.truncate(d).points[1]
-            obj.on_hit(pos, vel, PUNCH_DAMAGE)
+            if hasattr(obj, 'on_hit'):
+                obj.on_hit(pos, vel, PUNCH_DAMAGE)
 
         pyglet.clock.schedule_once(self.shooting_finish, 0.5)
 
