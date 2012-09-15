@@ -91,7 +91,8 @@ class Game(object):
         self.process_input()
         self.world.update(dt)
 
-        self.camera_controller.track(self.world.hero)
+        if not getattr(self.world.hero, 'dead', False):
+            self.camera_controller.track(self.world.hero)
         self.camera_controller.update(dt)
         self.world.scene.update(dt)
 
