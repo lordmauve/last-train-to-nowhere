@@ -3,6 +3,8 @@ import random
 import pyglet
 from pyglet import gl
 
+from weakref import WeakSet
+
 from ..geom import v, Rect
 from . import Node, SpriteNode
 
@@ -42,28 +44,31 @@ class BackgroundFactory(Node):
     ]
 
     INTERVAL = 0.5
+    MAX_OBJECTS = 30
 
     def __init__(self):
         self.load_sprites()
         self.last_t = None
+        self.objects = WeakSet()
 
     def load_sprites(self):
         self.sprites = [pyglet.resource.image(s) for s in self.SPRITES]
 
-    def spawn(self, camera):
+    def spawn(self, camera, anywhere=False):
         s = random.choice(self.sprites)
         z = random.uniform(camera.focus * 1.5, camera.far)
         bounds = camera.get_plane_rect(z + camera.focus)
-        pos = v(bounds.r, 0)
-        self.scenegraph.add(BackgroundObject(pos, s, -z))
+        if anywhere: 
+            pos = v(random.uniform(bounds.l, bounds.r), 0)
+        else:
+            pos = v(bounds.r, 0)
+        o = BackgroundObject(pos, s, -z)
+        self.scenegraph.add(o)
+        self.objects.add(o)
 
     def populate(self, camera):
         for i in xrange(30):
-            s = random.choice(self.sprites)
-            z = random.uniform(camera.focus * 1.5, camera.far)
-            bounds = camera.get_plane_rect(z + camera.focus)
-            pos = v(random.uniform(bounds.l, bounds.r), 0)
-            self.scenegraph.add(BackgroundObject(pos, s, -z))
+            self.spawn(camera, True)
 
     def draw(self, camera):
         if self.last_t is None:
@@ -71,6 +76,6 @@ class BackgroundFactory(Node):
             self.populate(camera)
             return
         
-        if self.scenegraph.t - self.last_t > self.INTERVAL:
+        if self.scenegraph.t - self.last_t > self.INTERVAL and len(self.objects) < self.MAX_OBJECTS:
             self.spawn(camera)
             self.last_t = self.scenegraph.t
