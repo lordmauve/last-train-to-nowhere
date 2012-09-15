@@ -31,10 +31,10 @@
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1301"
-     inkscape:window-height="744"
-     inkscape:window-x="65"
-     inkscape:window-y="468"
+     inkscape:window-width="1680"
+     inkscape:window-height="1026"
+     inkscape:window-x="1366"
+     inkscape:window-y="24"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata3366">
@@ -55,19 +55,19 @@
     <image
        sodipodi:absref="/home/mauve/dev/traintonowhere/assets/geometry/../sprites/freightcar-interior.png"
        xlink:href="../sprites/freightcar-interior.png"
-       width="1024"
-       height="317"
-       id="image3444"
+       y="735.36218"
        x="0"
-       y="735.36218" />
+       id="image3444"
+       height="317"
+       width="1024" />
     <image
        sodipodi:absref="/home/mauve/dev/traintonowhere/assets/geometry/../sprites/pc-standing.png"
        xlink:href="../sprites/pc-standing.png"
-       width="85"
-       height="109"
-       id="image3506"
+       y="878.36218"
        x="81.5"
-       y="878.36218" />
+       id="image3506"
+       height="109"
+       width="85" />
     <rect
        style="fill:#0000ff"
        id="rect3509"
@@ -78,7 +78,7 @@
     <rect
        style="fill:#0000ff"
        id="rect3519"
-       width="957"
+       width="178"
        height="9"
        x="34"
        y="757.36218" />
@@ -110,5 +110,19 @@
        height="65"
        x="0"
        y="987.36218" />
+    <rect
+       y="757.36218"
+       x="321"
+       height="9"
+       width="374"
+       id="rect3183"
+       style="fill:#0000ff" />
+    <rect
+       y="757.36218"
+       x="803"
+       height="9"
+       width="188"
+       id="rect3185"
+       style="fill:#0000ff" />
   </g>
 </svg>
