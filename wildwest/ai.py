@@ -9,7 +9,7 @@ from game import FPS
 
 class AI(object):
     MIN_DISTANCE = 500
-    DESTINATION_REACHED = 60
+    DESTINATION_REACHED = 70
 
     def __init__(self, char):
         self.char = char
@@ -38,20 +38,14 @@ class AI(object):
         else:
             return False
 
-    def run_towards(self, dt, pos):
+    def run_towards(self, pos):
         if not self.is_close_by(pos):
             if self.direction_to(pos) == LEFT:
                 self.char.left()
             else:
                 self.char.right()
 
-    def move_towards(self, pos):
-        if self.is_close_by(pos):
-            pyglet.clock.unschedule(self.run_towards)
-        else:
-            pyglet.clock.schedule(self.run_towards, pos)
-
-    def move_away_from(self, pos):
+    def run_from(self, pos):
         if self.direction_to(pos) == LEFT:
             self.char.right()
         else:
@@ -68,11 +62,11 @@ class AI(object):
     def jump_over_object(self, obj):
         dir = self.direction_to(obj.body.pos)
         if dir == RIGHT:
-            destination = obj.body.pos + v(obj.body.rect.w + 60, 0)
+            destination = obj.body.pos + v(obj.body.rect.w + 100, 0)
         else:
             destination = obj.body.pos - v(60, 0)
         self.char.jump()
-        self.move_towards(destination)
+        self.run_towards(destination)
 
     def pick_strategy(self):
         """Choose a strategy based on changing circumstances"""
@@ -90,20 +84,26 @@ class AI(object):
             self.strategy_time = 1
             choice = random.random()
             if choice < 0.3:
-                self.strategy = self.strategy_reactive_defense
-            elif choice < 0.6:
                 self.strategy = self.strategy_shoot_first
+            elif choice < 0.5:
+                self.strategy = self.strategy_reactive_defense
             else:
                 self.strategy = self.strategy_hide
 
     def update(self, dt):
+        """Update method called at AI refresh rate"""
         self.target = self.world.hero
         self.target_pos = self.target.pos
         self.pos = self.char.pos
-
         self.pick_strategy()
-        if self.strategy:
-            self.strategy()
+
+    def update_frame(self, dt):
+        """Update method called every frame"""
+        if not self.strategy or self.strategy_time < 1:
+            return
+        self.target_pos = self.target.pos
+        self.pos = self.char.pos
+        self.strategy()
         self.strategy_time += 1
 
     def strategy_reactive_defense(self):
@@ -123,7 +123,6 @@ class AI(object):
         self.face_towards(self.target_pos)
         # Attack:
         # 1. If hero is in direct range shoot
-        # hitlist = lawman.hitlist
         if not self.target.crouching and not self.target.jumping:
             self.char.shoot()
 
@@ -135,19 +134,14 @@ class AI(object):
             self.pick_strategy()
             return
         obj, dist = hideable[0]
-        if self.strategy_time == 1:
-            self.move_towards(obj.body.pos)
         if self.is_close_by(obj.body.pos):
-            if self.direction_to(obj.body.pos) != self.direction_to(self.target.pos):
+            if self.direction_to(obj.body.pos) !=\
+                    self.direction_to(self.target.pos):
                 self.jump_over_object(obj)
             else:
                 self.char.crouch()
                 # objective reached, clear strategy
                 # self.strategy = None
-
-    def move(self, hero, lawman):
-        # Motion:
-        # 1. If an object is blocking, go past it
-        # 2. Shoot and hide if hero is right in front
-        return
+        else:
+            self.run_towards(obj.body.pos)
 
