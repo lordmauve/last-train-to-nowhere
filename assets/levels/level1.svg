@@ -26,8 +26,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="1352.2587"
-     inkscape:cy="327.79228"
+     inkscape:cx="1041.6457"
+     inkscape:cy="307.92053"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -67,6 +67,13 @@
        id="use4196"
        x="1024"
        y="132" />
+    <image
+       width="104"
+       height="78"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/seats.png"
+       id="image11718"
+       x="1379.3334"
+       y="298" />
     <image
        sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/crate.png"
        xlink:href="../sprites/crate.png"
@@ -115,6 +122,13 @@
        x="1487.7129"
        y="270" />
     <image
+       y="298"
+       x="1593.6667"
+       id="image11720"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/seats.png"
+       height="78"
+       width="104" />
+    <image
        sodipodi:absref="/home/mauve/dev/traintonowhere/assets/levels/../sprites/lawman-standing.png"
        xlink:href="../sprites/lawman-standing.png"
        width="90"
@@ -140,7 +154,7 @@
        y="302" />
     <image
        y="326.5"
-       x="1568"
+       x="1559"
        id="image3057"
        xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/table.png"
        height="55"
@@ -194,5 +208,19 @@
        id="image11341"
        x="1746"
        y="161" />
+    <image
+       y="298"
+       x="1165"
+       id="image11715"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/seats.png"
+       height="78"
+       width="104" />
+    <image
+       width="104"
+       height="78"
+       xlink:href="file:///home/mauve/dev/traintonowhere/assets/sprites/seats.png"
+       id="image11722"
+       x="1808.0001"
+       y="298" />
   </g>
 </svg>
