@@ -51,22 +51,19 @@ class LissajousCameraController(LaggyCameraController):
         super(LissajousCameraController, self).update(dt)
 
 
+WIDTH = 800
+HEIGHT = 600
+
+
 class Game(object):
     """Control the game.
 
-    Sets up the world, hands input to specific objects.
+    Sets up the world, delegates to different game states.
     """
     def __init__(self):
-        WIDTH = 800
-        HEIGHT = 600
         self.window = pyglet.window.Window(width=WIDTH, height=HEIGHT)
         self.load()
 
-        self.world = World()
-        self.world.spawn_player()
-
-        self.objects = []
-        self.camera = Camera(v(self.world.hero.pos) + v(0, 220) - v(WIDTH * 0.5, 0), WIDTH, HEIGHT)
         self.keys = key.KeyStateHandler()
         self.window.push_handlers(self.keys)
         self.window.push_handlers(
@@ -74,6 +71,12 @@ class Game(object):
         )
         pyglet.clock.schedule_interval(self.update, 1.0 / FPS)
 
+        self.restart()
+
+    def restart(self):
+        self.world = World()
+        self.world.spawn_player()
+        self.camera = Camera(v(self.world.hero.pos) + v(0, 220) - v(WIDTH * 0.5, 0), WIDTH, HEIGHT)
         self.camera_controller = LissajousCameraController(self.camera)
 
         self.set_gamestate(IntroGameState(self, self.world))
@@ -113,7 +116,7 @@ class GameState(object):
 class IntroGameState(GameState):
     def start(self):
         pos = v(self.world.hero.pos)
-        self.logo = StaticImage(pos + v(-670, 250), 'logo.png', 10)
+        self.logo = StaticImage(pos + v(-670, 270), 'logo.png', 10)
         self.pressenter = StaticImage(pos + v(-580, -70), 'press-enter.png', 10)
         self.world.scene.add(self.logo)
         self.world.scene.add(self.pressenter)
@@ -129,9 +132,17 @@ class IntroGameState(GameState):
 class PlayGameState(GameState):
     def start(self):
         pyglet.clock.schedule_interval(self.update_ai, 0.5)
+        self.world.hero.hero.set_handler('on_death', self.on_hero_death)
+
+    def on_hero_death(self, char):
+        print "We died!"
+        pyglet.clock.schedule_once(self.end_game, 4)
 
     def process_input(self):
         self.world.process_input(self.game.keys)
+
+    def end_game(self, dt):
+        self.game.restart()
 
     def update(self, dt):
         dt = min(dt, 0.08)

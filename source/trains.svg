@@ -23,18 +23,6 @@
      id="defs3304">
     <linearGradient
        inkscape:collect="always"
-       id="linearGradient9075">
-      <stop
-         style="stop-color:#000000;stop-opacity:1;"
-         offset="0"
-         id="stop9077" />
-      <stop
-         style="stop-color:#000000;stop-opacity:0;"
-         offset="1"
-         id="stop9079" />
-    </linearGradient>
-    <linearGradient
-       inkscape:collect="always"
        id="linearGradient10866">
       <stop
          style="stop-color:#241a0f;stop-opacity:1"
@@ -603,17 +591,6 @@
          offset="1"
          id="stop5317-1-2" />
     </linearGradient>
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient9075"
-       id="radialGradient9081"
-       cx="49"
-       cy="-538.13782"
-       fx="49"
-       fy="-538.13782"
-       r="325"
-       gradientTransform="matrix(1,0,0,0.34923076,0,-350.20353)"
-       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -988,11 +965,14 @@
        x="-174.85898"
        style="font-size:35.7575264px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:125%;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Nashville;-inkscape-font-specification:Nashville"
        xml:space="preserve"
-       transform="scale(1.0806686,0.92535305)"><tspan
+       transform="scale(1.0806686,0.92535305)"
+       inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/press-enter.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
          y="-432.01059"
          x="-174.85898"
          id="tspan9120"
-         sodipodi:role="line">Press EnTER TO PLAY</tspan></text>
+         sodipodi:role="line">PrESS EnTER TO PLAY</tspan></text>
   </g>
   <g
      inkscape:label="Carriages"
