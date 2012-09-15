@@ -1,3 +1,4 @@
+import math
 import pyglet
 from pyglet.window import key
 
@@ -7,6 +8,46 @@ FPS = 60
 from .vector import v
 from .wild import World
 from .scenegraph import Scenegraph, Camera, DebugGeometryNode
+
+
+class CameraController(object):
+    def __init__(self, camera):
+        self.camera = camera
+
+    def track(self, obj):
+        self.target = obj.pos + v(0, 120)
+
+    def update(self, dt):
+        self.camera.offset = self.target
+
+
+class LaggyCameraController(CameraController):
+    RATE = 0.5
+
+    def update(self, dt):
+        r = (1 - self.RATE ** dt)
+        self.camera.offset = (
+            (1 - r) * self.target +
+            r * v(self.camera.offset)
+        )
+
+
+class LissajousCameraController(LaggyCameraController):
+    t = 0
+    XSCALE = 5
+    YSCALE = 5
+    FREQ = 1.3
+
+    def track(self, obj):
+        self.target = obj.pos + v(0, 120) + v(
+            self.XSCALE * math.sin(3 * self.t * self.FREQ),
+            self.YSCALE * math.cos(2 * self.t * self.FREQ),
+        )
+
+    def update(self, dt):
+        self.t += dt
+        super(LissajousCameraController, self).update(dt)
+
 
 
 class Game(object):
@@ -31,6 +72,8 @@ class Game(object):
         pyglet.clock.schedule_interval(self.update_ai, 0.2)
         self.world.load_level('level1')
 
+        self.camera_controller = LissajousCameraController(self.camera)
+
     def draw(self):
         self.world.scene.draw(self.camera)
 
@@ -41,7 +84,8 @@ class Game(object):
         self.process_input()
         self.world.update(dt)
 
-        self.camera.offset = self.world.hero.pos + v(0, 120)
+        self.camera_controller.track(self.world.hero)
+        self.camera_controller.update(dt)
         self.world.scene.update(dt)
 
     def update_ai(self, dt):

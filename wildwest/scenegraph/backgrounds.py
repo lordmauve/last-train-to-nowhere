@@ -99,4 +99,4 @@ class FarBackgroundFactory(BackgroundFactory):
     INTERVAL = 2
 
     def random_dist(self, camera):
-        return random.uniform(camera.far * 0.8 - camera.focus, camera.far - camera.focus)
+        return random.uniform(camera.far * 0.9 - camera.focus, camera.far - camera.focus)
