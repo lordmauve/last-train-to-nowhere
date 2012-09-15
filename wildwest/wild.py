@@ -14,7 +14,7 @@ from pyglet.window import key
 from .scenegraph import Scenegraph, Animation, AnimatedEffect, FloatyImage
 from .scenegraph import SkyBox, GroundPlane, Bullet, Depth
 from .scenegraph.railroad import Locomotive, RailTrack, CarriageInterior, CarriageExterior
-from .scenegraph.backgrounds import BackgroundFactory
+from .scenegraph.backgrounds import BackgroundFactory, FarBackgroundFactory
 
 
 from .svg import load_geometry
@@ -470,6 +470,7 @@ class World(object):
         ))
 
         s.add(BackgroundFactory())
+        s.add(FarBackgroundFactory())
         return s
 
     def shoot(self, source, direction, mask=MASK_ALL):
