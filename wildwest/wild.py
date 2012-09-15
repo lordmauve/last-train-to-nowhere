@@ -38,10 +38,13 @@ LEFT = -1
 FLOOR_Y = 115
 
 # Collision groups
-GROUP_ALL = MASK_ALL = 0xffff
+GROUP_ALL = MASK_DEFAULT = 0x00ff
 GROUP_PLAYER = 0x0001
 GROUP_ENEMY = 0x0002
 GROUP_SCENERY = 0x0004
+
+GROUP_CORPSE = 0x0100
+
 
 PUNCH_DAMAGE = 10
 
@@ -59,7 +62,7 @@ class Player(object):
     MAX_HEALTH = 100
 
     groups = GROUP_ALL  # collision groups
-    attack = MASK_ALL  # objects we can attack
+    attack = MASK_DEFAULT  # objects we can attack
 
     gold = 0    # gold bars collected
 
@@ -90,10 +93,14 @@ class Player(object):
         world.physics.remove_body(self.body)
 
     def die(self):
+        if self.dead:
+            return
         self.dead = True
+        self.health = 0
         self.node.play('dead')
-        self.world.objects.remove(self)
-        self.world.physics.remove_body(self.body)
+        self.body.rect = Rect.from_blwh((0, 0), 117, 24)
+        self.body.groups = GROUP_CORPSE
+        self.body.mask = 0x8000
 
     @property
     def pos(self):
@@ -281,7 +288,7 @@ class Player(object):
 
 class Lawman(Player):
     groups = GROUP_ENEMY     # collision groups
-    attack = MASK_ALL & ~GROUP_ENEMY  # objects we can attack
+    attack = MASK_DEFAULT & ~GROUP_ENEMY  # objects we can attack
 
     MAX_HEALTH = 40
 
@@ -292,7 +299,7 @@ class Lawman(Player):
 
 class Outlaw(Player):
     groups = GROUP_PLAYER     # collision groups
-    attack = MASK_ALL & ~GROUP_PLAYER
+    attack = MASK_DEFAULT & ~GROUP_PLAYER
 
     Z = 1.01
 
@@ -581,7 +588,7 @@ class World(object):
         s.add(FarBackgroundFactory())
         return s
 
-    def shoot(self, source, direction, mask=MASK_ALL):
+    def shoot(self, source, direction, mask=MASK_DEFAULT):
         p1 = source
         p2 = p1 + v(1000, random.normalvariate(0, 25)) * direction
         seg = Segment(p1, p2)
@@ -647,10 +654,12 @@ class World(object):
         for o in self.objects:
             o.update(dt)
             if hasattr(o, 'ai'):
-                o.ai.update_frame(dt)
+                if not o.dead:
+                    o.ai.update_frame(dt)
 
     def update_ai(self, dt):
         if self.is_hero_alive():
             for o in self.objects:
                 if hasattr(o, 'ai'):
-                    o.ai.update(dt)
+                    if not o.dead:
+                        o.ai.update(dt)

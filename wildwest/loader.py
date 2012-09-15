@@ -56,6 +56,12 @@ def load_level(world, name):
 
     def floor_hit(o, dt):
         """Send things left, fast"""
+        try:
+            die = o.controller.die
+        except AttributeError:
+            pass
+        else:
+            die()
         o.apply_impulse(v(-10000, 0) * dt)
 
     floor.on_collide = floor_hit

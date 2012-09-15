@@ -16,7 +16,7 @@ def is_inf(v):
 class Body(object):
     on_collide = None
 
-    def __init__(self, rect, mass, pos=v(0, 0), controller=None, groups=0x0001, mask=0xffff):
+    def __init__(self, rect, mass, pos=v(0, 0), controller=None, groups=0x0001, mask=0x00ff):
         assert mass > 0
         self.pos = pos
         self.rect = rect
