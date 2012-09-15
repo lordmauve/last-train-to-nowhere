@@ -455,6 +455,37 @@ class Carriage(object):
             self.set_opacity(new)
 
 
+class Tanker(object):
+    WIDTH = 742
+
+    def __init__(self, pos):
+        pos = v(1, 0).project(pos)
+        self.interior = CarriageInterior(pos, 'tanker')
+        self.body = StaticBody(load_geometry('tanker'), v(0, 53) + pos)
+
+    def get_pos(self):
+        return self.interior.pos
+
+    def set_pos(self, pos):
+        self.interior.pos = pos
+        self.body.pos = v(0, 53) + pos
+
+    pos = property(get_pos, set_pos)
+
+    def spawn(self, world):
+        world.physics.add_static(self.body)
+        world.scene.add(self.interior)
+
+    def remove(self, scenegraph):
+        scenegraph.remove(self.interior)
+
+    def intersects(self, rect):
+        return False
+
+    def set_show_interior(self, show):
+        pass
+
+
 class LocomotiveObject(object):
     GOAL = Rect.from_blwh(v(308, 178), 155, 138)
 
