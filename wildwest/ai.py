@@ -53,6 +53,16 @@ class AI(object):
         else:
             self.char.left()
 
+    def is_outlaw_shootable(self):
+        hitlist = self.char.hitlist
+        if hitlist and isinstance(hitlist[0][1], Outlaw):
+            return True
+        return False
+
+    def shoot(self):
+        if self.is_outlaw_shootable():
+            self.char.shoot()
+
     def objects_in_direction(self, direction):
         p1 = self.char.body.pos + v(50 * direction, 50)
         p2 = p1 + v(1000, 0) * direction
@@ -110,11 +120,12 @@ class AI(object):
                 self.strategy = self.strategy_lie_in_wait
             elif choice < 0.6:
                 self.strategy = self.strategy_shoot_and_duct
-            elif choice < 0.8:
+            elif choice < 0.75:
                 self.strategy = self.strategy_reactive_defense
             else:
                 self.strategy = self.strategy_hide
-            # self.strategy = self.strategy_lie_in_wait
+            # print 'strategy picked:', self.strategy
+            # self.strategy = self.strategy_reactive_defense
 
     def update(self, dt):
         """Update method called at AI refresh rate"""
@@ -140,11 +151,14 @@ class AI(object):
 
         # Defence: if direct line of shooting
         # 1. Crouch if hero is standing or jumping and preparing to shoot
-        if self.target.jumping:
+        if not self.target.crouching:
             self.char.crouch()
         # 2. Jump if hero is crouching
         elif self.target.crouching:
             self.char.jump()
+        # 3. Shoot from time to time
+        if self.strategy_time % 20 == 0:
+            self.shoot()
 
     def strategy_shoot_first(self):
         """A simple attack strategy - keep shooting"""
@@ -153,7 +167,7 @@ class AI(object):
         # 1. If hero is in direct range shoot
         if not self.target.crouching and not self.target.jumping:
             if self.strategy_time % 4 == 0:
-                self.char.shoot()
+                self.shoot()
 
     def strategy_shoot_and_duct(self):
         self.face_towards(self.target_pos)
@@ -163,7 +177,7 @@ class AI(object):
                 self.shot = False
         if not self.target.crouching and not self.target.jumping:
             self.char.crouching = False
-            self.char.shoot()
+            self.shoot()
             self.shot = True
 
     def strategy_lie_in_wait(self):
@@ -173,7 +187,7 @@ class AI(object):
             return
         if isinstance(hitlist[0][1], Outlaw):
             if self.strategy_time % 4 == 0:
-                self.char.shoot()
+                self.shoot()
             else:
                 self.char.crouch()
         else:
@@ -221,4 +235,3 @@ class AI(object):
                 obj = self.jumping_over
             # print 'run towards obj:', obj
             self.run_towards(obj._pos)
-
