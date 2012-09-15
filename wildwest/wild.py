@@ -51,7 +51,7 @@ GROUP_CORPSE = 0x0100
 PUNCH_DAMAGE = 10
 
 
-class Player(object):
+class Player(pyglet.event.EventDispatcher):
     MAX_WALK = 200  # limit on walk speed
     ACCEL = 120000  # acceleration when walking
     FRICTION = 1  # deceleration
@@ -298,6 +298,9 @@ class Player(object):
         self.running = 0
 
 
+Player.register_event_type('on_death')
+
+
 class Lawman(Player):
     groups = GROUP_ENEMY     # collision groups
     attack = MASK_DEFAULT & ~GROUP_ENEMY  # objects we can attack
@@ -325,7 +328,7 @@ class OutlawOnHorse(object):
     dead = False
     body = None
 
-    FADE = 0.8
+    FADE = 0.9
 
     def __init__(self, pos):
         self.pos = pos
@@ -346,7 +349,7 @@ class OutlawOnHorse(object):
     def kill(self):
         self.node.scenegraph.remove(self.node)
         self.world.objects.remove(self)
-        self.gallop.stop()
+        self.gallop.pause()
 
     def noop(self):
         """Don't accept input."""
@@ -445,14 +448,26 @@ class Carriage(object):
 
 
 class LocomotiveObject(object):
+    GOAL = Rect.from_blwh(v(308, 178), 155, 138)
+
     def __init__(self, pos):
         pos = v(1, 0).project(pos)
         self.node = Locomotive(pos)
         self.body = StaticBody(load_geometry('locomotive'), pos)
+        self.goal = self.GOAL.translate(pos)
 
     def spawn(self, world):
+        self.world = world
         world.scene.add(self.node)
         world.physics.add_static(self.body)
+        world.objects.append(self)
+
+    def update(self, dt):
+        hero = self.world.get_hero()
+        if hero:
+            r = hero.body.get_rect()
+            if r.intersects(self.goal):
+                self.world.dispatch_event('on_goal', hero)
 
 
 class Pickup(object):
@@ -572,7 +587,7 @@ class Table(PhysicalScenery):
     MASS = 100
 
 
-class World(object):
+class World(pyglet.event.EventDispatcher):
     """Collection of all the objects and geometry in the world."""
     def __init__(self):
         self.objects = []
@@ -685,3 +700,6 @@ class World(object):
                 if hasattr(o, 'ai'):
                     if not o.dead:
                         o.ai.update(dt)
+
+
+World.register_event_type('on_goal')

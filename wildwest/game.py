@@ -88,6 +88,7 @@ class Game(object):
         self.world.process_input(self.keys)
 
     def update(self, dt):
+        dt = min(dt, 0.08)
         self.process_input()
         self.world.update(dt)
 
