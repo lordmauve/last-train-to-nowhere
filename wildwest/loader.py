@@ -18,6 +18,7 @@ CLASSES = {
     'table': wild.Table,
     'seats': wild.Seats,
     'mailsack': wild.MailSack,
+    'tanker': wild.Tanker,
 }
 
 CARRIAGES = ['car', 'freightcar', 'mailcar']
