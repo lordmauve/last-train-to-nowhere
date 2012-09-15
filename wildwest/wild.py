@@ -102,7 +102,8 @@ class Player(pyglet.event.EventDispatcher):
         self.dead = True
         self.health = 0
         self.node.play('dead')
-        self.body.rect = Rect.from_blwh((0, 10), 117, 24)
+        self.body.rect = Rect.from_blwh((-30, 0), 117, 24)
+        self.body.apply_impulse(v(0, 100))
         self.body.groups = GROUP_CORPSE
         self.body.mask = 0x8000
         self.dispatch_event('on_death', self)
@@ -139,11 +140,15 @@ class Player(pyglet.event.EventDispatcher):
         self.hit = False
 
     def jump(self):
+        if self.dead:
+            return
         if not self.jumping and self.body.v.y < 20:
             self.body.apply_impulse(v(0, 450))
             self.node.play('jumping')
 
     def left(self):
+        if self.dead:
+            return
         if self.crouching:
             self.face_left()
             return
@@ -153,6 +158,8 @@ class Player(pyglet.event.EventDispatcher):
             self.node.play('running')
 
     def right(self):
+        if self.dead:
+            return
         if self.crouching:
             self.face_right()
             return
@@ -165,8 +172,8 @@ class Player(pyglet.event.EventDispatcher):
         self.crouch()
 
     def crouch(self):
-        if self.hit:
-            pass
+        if self.dead or self.hit:
+            return
         self.running = 0
         if not self.crouching:
             self.body.rect = Rect.from_cwh(v(0, self.h_crouching / 2), self.w, self.h_crouching)
