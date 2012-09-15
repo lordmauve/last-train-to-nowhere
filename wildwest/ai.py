@@ -107,7 +107,7 @@ class AI(object):
             if choice < 0.1:
                 self.strategy = self.strategy_shoot_first
             elif choice < 0.3:
-                self.strategy = self.strategy_lie_and_wait
+                self.strategy = self.strategy_lie_in_wait
             elif choice < 0.6:
                 self.strategy = self.strategy_shoot_and_duct
             elif choice < 0.8:
