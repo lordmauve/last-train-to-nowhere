@@ -1,21 +1,23 @@
 import random
-import pyglet
 from operator import itemgetter
 from vector import v
+from geom import Segment, Rect
 from wild import RIGHT, LEFT
 from wild import Outlaw, Crate
-from game import FPS
+from physics import StaticBody
 
 
 class AI(object):
     MIN_DISTANCE = 500
-    DESTINATION_REACHED = 70
+    DESTINATION_REACHED = 100
 
     def __init__(self, char):
         self.char = char
         self.world = char.world
         self.strategy = None
         self.strategy_time = 0
+        self.jumping_over = None
+        self.shot = False
 
     def direction_to(self, pos):
         if (self.char.pos - pos).x > 0:
@@ -33,7 +35,7 @@ class AI(object):
             self.char.face_right()
 
     def is_close_by(self, pos):
-        if self.char.pos.distance_to(pos) < AI.DESTINATION_REACHED:
+        if abs(self.char.pos.distance_to(pos)) < AI.DESTINATION_REACHED:
             return True
         else:
             return False
@@ -51,20 +53,39 @@ class AI(object):
         else:
             self.char.left()
 
+    def objects_in_direction(self, direction):
+        p1 = self.char.body.pos + v(50 * direction, 50)
+        p2 = p1 + v(1000, 0) * direction
+        seg = Segment(p1, p2)
+        hit = self.world.physics.ray_query(seg)
+        return hit
+
+    def all_objects_in_range(self, range=1000):
+        objects_left = self.objects_in_direction(LEFT)
+        objects_right = self.objects_in_direction(RIGHT)
+        all_objects = objects_left + objects_right
+        filtered_objects = [(obj, dist) for dist, obj in all_objects if dist < range]
+        # print 'filtered_objects:', filtered_objects
+        return sorted(filtered_objects, key=itemgetter(1))
+
     def find_hideable_objects(self):
         hideable = []
-        for obj in self.world.objects:
-            if isinstance(obj, Crate):  # or isinstance(obj, Table):
-                d = self.pos.distance_to(obj.body.pos)
-                hideable.append((obj, d))
+        for obj, dist in self.all_objects_in_range():
+            if not isinstance(obj, Outlaw):  # or isinstance(obj, Table):
+                # print obj, dir(obj)
+                if isinstance(obj, Rect):
+                    obj._pos = obj.points[0]
+                if hasattr(obj, 'body'):
+                    obj._pos = obj.body.pos
+                hideable.append((obj, abs(dist)))
         return sorted(hideable, key=itemgetter(1))
 
-    def jump_over_object(self, obj):
-        dir = self.direction_to(obj.body.pos)
+    def jump_over_object(self, pos, w):
+        dir = self.direction_to(pos)
         if dir == RIGHT:
-            destination = obj.body.pos + v(obj.body.rect.w + 100, 0)
+            destination = pos + v(w + 100, 0)
         else:
-            destination = obj.body.pos - v(60, 0)
+            destination = pos - v(60, 0)
         self.char.jump()
         self.run_towards(destination)
 
@@ -83,12 +104,15 @@ class AI(object):
         if not self.strategy or self.strategy_time % 30 == 0:
             self.strategy_time = 1
             choice = random.random()
-            if choice < 0.3:
+            if choice < 0.1:
                 self.strategy = self.strategy_shoot_first
-            elif choice < 0.5:
+            elif choice < 0.6:
+                self.strategy = self.strategy_shoot_and_duct
+            elif choice < 0.8:
                 self.strategy = self.strategy_reactive_defense
             else:
                 self.strategy = self.strategy_hide
+            # self.strategy = self.strategy_shoot_and_duct
 
     def update(self, dt):
         """Update method called at AI refresh rate"""
@@ -126,22 +150,58 @@ class AI(object):
         if not self.target.crouching and not self.target.jumping:
             self.char.shoot()
 
+    def strategy_shoot_and_duct(self):
+        self.face_towards(self.target_pos)
+        if self.shot:
+            self.char.crouch()
+            if self.strategy_time > 10:
+                self.shot = False
+        if not self.target.crouching and not self.target.jumping:
+            self.char.crouching = False
+            self.char.shoot()
+            self.shot = True
+
+    def object_width(self, obj):
+        w = None
+        if hasattr(obj, 'body'):
+            w = obj.body.rect.w
+        if isinstance(obj, Rect):
+            w = obj.w
+        return w
+
+    def object_left(self, obj):
+        """Get a point to the left of the object"""
+
     def strategy_hide(self):
         """Defensive strategy to hide behind something blocking"""
         # Find the nearest hide-able object and hide
         hideable = self.find_hideable_objects()
+        # print 'hideable objects:', hideable
         if not hideable:
             self.pick_strategy()
             return
         obj, dist = hideable[0]
-        if self.is_close_by(obj.body.pos):
-            if self.direction_to(obj.body.pos) !=\
+        if self.is_close_by(obj._pos):
+            # print 'object is close by', obj
+            w = self.object_width(obj)
+            if not w:
+                w = 100
+
+            if self.direction_to(obj._pos) !=\
                     self.direction_to(self.target.pos):
-                self.jump_over_object(obj)
+                # print 'obj close_by but need to jump. w=', w
+                self.jump_over_object(obj._pos, w)
+                self.jumping_over = obj
             else:
+                # print 'obj close by: crouching'
                 self.char.crouch()
+                self.face_towards(self.target_pos)
+                self.jumping_over = None
                 # objective reached, clear strategy
                 # self.strategy = None
         else:
-            self.run_towards(obj.body.pos)
+            if self.jumping_over:
+                obj = self.jumping_over
+            # print 'run towards obj:', obj
+            self.run_towards(obj._pos)
 
