@@ -600,10 +600,10 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="154.49179"
-     inkscape:cy="1351.505"
+     inkscape:cx="114.49179"
+     inkscape:cy="1951.505"
      inkscape:document-units="px"
-     inkscape:current-layer="layer6"
+     inkscape:current-layer="g9254"
      showgrid="false"
      inkscape:window-width="1680"
      inkscape:window-height="1026"
@@ -931,7 +931,7 @@
        sodipodi:nodetypes="ccccccccccc" />
     <g
        id="g8559"
-       transform="translate(20.355026,-17)"
+       transform="translate(20.355026,-159)"
        inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/well-done.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90">
@@ -973,6 +973,104 @@
          x="-174.85898"
          id="tspan9120"
          sodipodi:role="line">PrESS EnTER TO PLAY</tspan></text>
+    <g
+       id="g9151"
+       inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/welcome.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <text
+         xml:space="preserve"
+         style="font-size:119.93697357px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;opacity:0.5;fill:#000000;fill-opacity:1;stroke:none;font-family:Nashville;-inkscape-font-specification:Nashville"
+         x="453.31189"
+         y="-585.10974"
+         id="text9142"
+         sodipodi:linespacing="100%"><tspan
+           style="font-size:56px;line-height:100%;fill:#000000"
+           sodipodi:role="line"
+           id="tspan9144"
+           x="453.31189"
+           y="-585.10974">WELCOME To</tspan><tspan
+           id="tspan9146"
+           sodipodi:role="line"
+           x="453.31189"
+           y="-477.59979"
+           style="font-size:150px">NOWHERE</tspan><tspan
+           sodipodi:role="line"
+           x="453.31189"
+           y="-357.66281"
+           id="tspan9164"
+           style="font-size:64px">POPULATION: YOU</tspan></text>
+      <g
+         id="g9128"
+         transform="translate(20.355026,28)"
+         inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/well-done.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <text
+         xml:space="preserve"
+         style="font-size:119.93697357px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#e0e0e0;fill-opacity:1;stroke:none;display:inline;font-family:Nashville;-inkscape-font-specification:Nashville"
+         x="452.31189"
+         y="-586.10974"
+         id="text9134"
+         sodipodi:linespacing="100%"><tspan
+           style="font-size:56px;line-height:100%"
+           sodipodi:role="line"
+           id="tspan9136"
+           x="452.31189"
+           y="-586.10974">WELCOME To</tspan><tspan
+           id="tspan9138"
+           sodipodi:role="line"
+           x="452.31189"
+           y="-454.37988"
+           style="font-size:150px">NOWHERE</tspan><tspan
+           sodipodi:role="line"
+           x="452.31189"
+           y="-373.66464"
+           id="tspan9160"
+           style="font-size:64px;fill:#801515;fill-opacity:1">POPULATION: YOU</tspan></text>
+    </g>
+    <g
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/well-done.png"
+       transform="translate(-168.64497,-370)"
+       id="g9254">
+      <text
+         xml:space="preserve"
+         style="font-size:119.93697357px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:center;text-decoration:none;line-height:125%;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:middle;baseline-shift:baseline;opacity:0.5;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Nashville;-inkscape-font-specification:Nashville"
+         x="30.522343"
+         y="-700.10974"
+         id="text9268"
+         sodipodi:linespacing="125%"><tspan
+           style="font-size:64px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:center;text-decoration:none;line-height:125%;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:middle;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Nashville;-inkscape-font-specification:Nashville"
+           sodipodi:role="line"
+           id="tspan9270"
+           x="30.522343"
+           y="-700.10974">CONGRATULATIONS</tspan><tspan
+           id="tspan9272"
+           sodipodi:role="line"
+           x="30.522337"
+           y="-563.77863">THE END</tspan></text>
+      <text
+         sodipodi:linespacing="125%"
+         id="text9260"
+         y="-701.10974"
+         x="29.522343"
+         style="font-size:119.93697357px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#e0e0e0;fill-opacity:1;stroke:none;font-family:Nashville;-inkscape-font-specification:Nashville"
+         xml:space="preserve"
+         inkscape:export-filename="/home/mauve/dev/traintonowhere/assets/sprites/the-end.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90"><tspan
+           y="-701.10974"
+           x="29.522343"
+           id="tspan9262"
+           sodipodi:role="line"
+           style="font-size:64px;text-align:center;text-anchor:middle">CONGRATULATIONS</tspan><tspan
+           y="-564.77863"
+           x="29.522337"
+           sodipodi:role="line"
+           id="tspan9266">THE END</tspan></text>
+    </g>
   </g>
   <g
      inkscape:label="Carriages"

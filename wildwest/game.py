@@ -134,19 +134,29 @@ class PlayGameState(GameState):
     level = 1
 
     def start(self):
+        try:
+            self.world.load_level('level%d' % self.level)
+        except IOError:
+            self.show_message(StaticImage((0, 0), 'the-end.png', 10), off=v(100, 220))
+            PlayGameState.level = 1
+            pyglet.clock.schedule_once(self.end_game, 10)
+            
+
         self.welldone = StaticImage((0, 0), 'well-done.png', 10)
         self.welcome = StaticImage((0, 0), 'welcome.png', 10)
 
-        self.world.load_level('level%d' % self.level)
         pyglet.clock.schedule_interval(self.update_ai, 0.5)
         self.world.hero.hero.set_handler('on_death', self.on_hero_death)
         self.world.set_handler('on_goal', self.on_goal)
 
         self.won = False
 
-    def show_message(self, node):
+    def __del__(self):
+        pyglet.clock.unschedule(self.update_ai)
+
+    def show_message(self, node, off=v(0, 100)):
         w = node.sprite.image.width
-        node.pos = v(self.world.hero.pos) + v(-w * 0.5, 100)
+        node.pos = v(self.world.hero.pos) + v(-w * 0.5, 0) + off
         self.world.scene.add(node)
 
     def on_hero_death(self, char):
