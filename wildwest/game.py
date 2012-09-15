@@ -7,7 +7,7 @@ FPS = 60
 
 from .vector import v
 from .wild import World
-from .scenegraph import Scenegraph, Camera, DebugGeometryNode, StaticImage
+from .scenegraph import Scenegraph, Camera, DebugGeometryNode, StaticImage, FadeyImage
 
 from .hud import HUD
 
@@ -118,12 +118,13 @@ class GameState(object):
 class IntroGameState(GameState):
     def start(self):
         pos = v(self.world.hero.pos)
-        self.logo = StaticImage(pos + v(-670, 270), 'logo.png', 10)
+        self.logo = FadeyImage(pos + v(-670, 270), 'logo.png', 10)
         self.pressenter = StaticImage(pos + v(-580, -60), 'press-enter.png', 10)
         self.world.scene.add(self.logo)
         self.world.scene.add(self.pressenter)
 
     def update(self, dt):
+        self.logo.show()
         if self.game.keys[key.ENTER]:
             self.world.scene.remove(self.pressenter)
             self.game.set_gamestate(PlayGameState(self.game, self.world))
