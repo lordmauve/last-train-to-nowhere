@@ -104,15 +104,17 @@ class AI(object):
         if not self.strategy or self.strategy_time % 30 == 0:
             self.strategy_time = 1
             choice = random.random()
-            # if choice < 0.1:
-            #     self.strategy = self.strategy_shoot_first
-            # elif choice < 0.6:
-            #     self.strategy = self.strategy_shoot_and_duct
-            # elif choice < 0.8:
-            #     self.strategy = self.strategy_reactive_defense
-            # else:
-            #     self.strategy = self.strategy_hide
-            self.strategy = self.strategy_hide
+            if choice < 0.1:
+                self.strategy = self.strategy_shoot_first
+            elif choice < 0.3:
+                self.strategy = self.strategy_lie_and_wait
+            elif choice < 0.6:
+                self.strategy = self.strategy_shoot_and_duct
+            elif choice < 0.8:
+                self.strategy = self.strategy_reactive_defense
+            else:
+                self.strategy = self.strategy_hide
+            # self.strategy = self.strategy_lie_in_wait
 
     def update(self, dt):
         """Update method called at AI refresh rate"""
@@ -160,6 +162,20 @@ class AI(object):
             self.char.crouching = False
             self.char.shoot()
             self.shot = True
+
+    def strategy_lie_in_wait(self):
+        self.face_towards(self.target_pos)
+        hitlist = self.char.hitlist
+        if not hitlist:
+            return
+        print 'hitlist:', hitlist
+        if isinstance(hitlist[0][1], Outlaw):
+            if self.strategy_time % 4 == 0:
+                self.char.shoot()
+            else:
+                self.char.crouch()
+        else:
+            self.char.crouch()
 
     def object_width(self, obj):
         w = None
