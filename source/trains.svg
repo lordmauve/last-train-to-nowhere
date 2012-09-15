@@ -678,10 +678,10 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="-3527.6443"
-     inkscape:cy="726.55154"
+     inkscape:cx="-7.6442793"
+     inkscape:cy="966.55154"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer6"
      showgrid="false"
      inkscape:window-width="1680"
      inkscape:window-height="1026"
@@ -733,8 +733,7 @@
      inkscape:groupmode="layer"
      id="layer6"
      inkscape:label="Background"
-     style="display:inline"
-     sodipodi:insensitive="true">
+     style="display:inline">
     <rect
        style="color:#000000;fill:url(#linearGradient6251);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.838;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        id="rect6235"
