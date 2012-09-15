@@ -12,7 +12,7 @@ from pyglet.window import key
 from pyglet import media
 
 
-from .scenegraph import Scenegraph, Animation, AnimatedEffect, FloatyImage, StaticImage
+from .scenegraph import Scenegraph, Animation, AnimatedEffect, FloatyImage, StaticImage, FadeyImage
 from .scenegraph import SkyBox, GroundPlane, Bullet, Depth
 from .scenegraph.railroad import Locomotive, RailTrack, CarriageInterior, CarriageExterior
 from .scenegraph.backgrounds import BackgroundFactory, FarBackgroundFactory
@@ -674,6 +674,10 @@ class World(pyglet.event.EventDispatcher):
     def in_goal(self, char):
         if char.gold >= self.GOLD_NEEDED:
             self.dispatch_event('on_goal', char)
+        else:
+            self.scene.add(self.moregold)
+            self.moregold.pos = char.pos + v(-206, 200)
+            self.moregold.show()
 
     def get_objects_by_class(self, cls):
         objs = []
@@ -702,6 +706,8 @@ class World(pyglet.event.EventDispatcher):
 
         s.add(BackgroundFactory())
         s.add(FarBackgroundFactory())
+
+        self.moregold = FadeyImage(v(0, 0), 'moregold.png', 10)
         return s
 
     def shoot(self, source, direction, mask=MASK_DEFAULT):

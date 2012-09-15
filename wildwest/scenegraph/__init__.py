@@ -173,6 +173,28 @@ class FloatyImage(StaticImage):
         gl.glTranslatef(0, 6 * math.sin(5 * self.scenegraph.t), 0)
         super(FloatyImage, self).draw(camera)
         gl.glPopMatrix()
+
+
+class FadeyImage(StaticImage):
+    """An image that fades out over time."""
+    opacity = 0
+    t = None
+
+    def show(self):
+        self.opacity = 1
+        self.t = None
+
+    def draw(self, camera):
+        if self.t is None:
+            self.t = self.scenegraph.t
+        else:
+            self.opacity = max(0, self.opacity - (self.scenegraph.t - self.t) * 0.5)
+            if self.opacity == 0:
+                self.scenegraph.remove(self)
+                return
+            self.t = self.scenegraph.t
+        self.sprite.opacity = int(self.opacity * 255)
+        super(FadeyImage, self).draw(camera)
     
 
 
