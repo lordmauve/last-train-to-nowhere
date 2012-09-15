@@ -73,7 +73,7 @@ class Game(object):
             on_draw=self.draw
         )
         pyglet.clock.schedule_interval(self.update, 1.0 / FPS)
-        pyglet.clock.schedule_interval(self.update_ai, 0.2)
+        pyglet.clock.schedule_interval(self.update_ai, 0.5)
         self.world.load_level('level1')
 
         self.camera_controller = LissajousCameraController(self.camera)
