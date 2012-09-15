@@ -64,7 +64,7 @@ class AI(object):
         objects_left = self.objects_in_direction(LEFT)
         objects_right = self.objects_in_direction(RIGHT)
         all_objects = objects_left + objects_right
-        filtered_objects = [(obj, dist) for dist, obj in all_objects if dist < range]
+        filtered_objects = [(obj, dist) for dist, obj in all_objects if abs(dist) < range]
         # print 'filtered_objects:', filtered_objects
         return sorted(filtered_objects, key=itemgetter(1))
 
@@ -104,15 +104,15 @@ class AI(object):
         if not self.strategy or self.strategy_time % 30 == 0:
             self.strategy_time = 1
             choice = random.random()
-            if choice < 0.1:
-                self.strategy = self.strategy_shoot_first
-            elif choice < 0.6:
-                self.strategy = self.strategy_shoot_and_duct
-            elif choice < 0.8:
-                self.strategy = self.strategy_reactive_defense
-            else:
-                self.strategy = self.strategy_hide
-            # self.strategy = self.strategy_shoot_and_duct
+            # if choice < 0.1:
+            #     self.strategy = self.strategy_shoot_first
+            # elif choice < 0.6:
+            #     self.strategy = self.strategy_shoot_and_duct
+            # elif choice < 0.8:
+            #     self.strategy = self.strategy_reactive_defense
+            # else:
+            #     self.strategy = self.strategy_hide
+            self.strategy = self.strategy_hide
 
     def update(self, dt):
         """Update method called at AI refresh rate"""
