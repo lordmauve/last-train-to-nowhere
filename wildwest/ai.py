@@ -61,14 +61,16 @@ class AI(object):
         return False
 
     def shoot_bullet(self, dt):
-        self.char.shoot()
+        if not self.char.dead:
+            self.char.shoot()
 
     def shoot(self):
         if self.is_outlaw_shootable():  # and self.strategy_time % 5 == 0:
-            pyglet.clock.schedule_once(self.shoot_bullet, 0.3)
+            pyglet.clock.schedule_once(self.shoot_bullet, 0.1)
 
     def crouch_later(self, dt):
-        self.char.crouch()
+        if not self.char.dead:
+            self.char.crouch()
 
     def crouch(self):
         pyglet.clock.schedule_once(self.crouch_later, 0.1)
