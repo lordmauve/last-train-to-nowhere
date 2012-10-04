@@ -69,9 +69,16 @@ class Game(object):
         self.window.push_handlers(
             on_draw=self.draw
         )
-        pyglet.clock.schedule_interval(self.update, 1.0 / FPS)
+        pyglet.clock.schedule(self.update)
 
         self.restart()
+
+    def debug_allocation(self, dt):
+        import gc
+        print "World objects:", len(self.world.objects)
+        print "Physical objects:", len(self.world.physics.dynamic)
+        print "Scenegraph nodes:", len(self.world.scene.objects)
+        print "Garbage:", len(gc.garbage)
 
     def restart(self, gamestate=None):
         self.world = World()
@@ -98,6 +105,7 @@ class Game(object):
 
     def set_debug(self):
         self.world.scene.add(DebugGeometryNode(self.world.physics))
+        pyglet.clock.schedule_interval(self.debug_allocation, 1)
 
 
 class GameState(object):
@@ -141,7 +149,7 @@ class PlayGameState(GameState):
             self.show_message(StaticImage((0, 0), 'the-end.png', 10), off=v(100, 220))
             PlayGameState.level = 1
             pyglet.clock.schedule_once(self.end_game, 10)
-            
+
 
         self.welldone = StaticImage((0, 0), 'well-done.png', 10)
         self.welcome = StaticImage((0, 0), 'welcome.png', 10)

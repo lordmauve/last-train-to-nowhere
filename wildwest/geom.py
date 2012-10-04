@@ -14,36 +14,36 @@ class BasePolygon(object):
     def project_to_axis(self, axis):
         projected_points = [p.dot(axis) for p in self.points]
         return Projection(min(projected_points), max(projected_points))
-  
+
     def intersects(self, other):
         edges = self.edges
         edges.extend(other.edges)
-        
+
         projections = []
         for edge in edges:
             axis = edge.normalised().perpendicular()
-            
+
             self_projection = self.project_to_axis(axis)
             other_projection = other.project_to_axis(axis)
             intersection1 = self_projection.intersection(other_projection)
             intersection2 = -other_projection.intersection(self_projection)
             if not intersection1:
                 return False
-                
+
             proj_vector1 = Vector((axis.x * intersection1, axis.y * intersection1))
             proj_vector2 = Vector((axis.x * intersection2, axis.y * intersection2))
             projections.append(proj_vector1)
             projections.append(proj_vector2)
-        
+
         mtd = -self.find_mtd(projections)
-        
+
         return mtd
-    
+
     def collide(self, other):
         mtd = self.intersects(other)
         if mtd:
             self.pos += mtd
-    
+
     def find_mtd(self, push_vectors):
         mtd = push_vectors[0]
         mind2 = push_vectors[0].dot(push_vectors[0])
@@ -56,7 +56,7 @@ class BasePolygon(object):
 
 
 class Rect(BasePolygon, namedtuple('BaseRect', 'l r b t')):
-    """2D rectangle class."""    
+    """2D rectangle class."""
 
     @classmethod
     def from_blwh(cls, bl, w, h):
@@ -142,16 +142,16 @@ class Rect(BasePolygon, namedtuple('BaseRect', 'l r b t')):
         )
 
 
- 
+
 class Projection(object):
     def __init__(self, min, max):
         self.min, self.max = min, max
-   
+
     def intersection(self, other):
         if self.max > other.min and other.max > self.min:
             return self.max-other.min
         return 0
- 
+
 
 class ConvexPolygon(BasePolygon):
     def __init__(self, pos, points):
@@ -161,7 +161,7 @@ class ConvexPolygon(BasePolygon):
         self.points = []
         for p in points:
             self.points.append(Vector(p))
-        
+
         self.edges = []
         for i in range(len(self.points)):
             point = self.points[i]
@@ -184,12 +184,12 @@ class Segment(object):
 
     def truncate(self, dist):
         p1 = self.points[0]
-        return Segment(p1, p1 + self.edge * dist) 
+        return Segment(p1, p1 + self.edge * dist)
 
     def project_to_axis(self, axis):
         projected_points = [p.dot(axis) for p in self.points]
         return Projection(min(projected_points), max(projected_points))
-  
+
     def intersects(self, other):
         proj = other.project_to_axis(self.axis)
         if proj.max > self.axis_dist >= proj.min:
