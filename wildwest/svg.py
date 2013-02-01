@@ -1,12 +1,13 @@
 import re
 from xml.etree import ElementTree
 from geom import Rect
+from pkg_resources import resource_stream
 
 
 def parse(filename):
-    with open(filename, 'r') as f:
-        tree = ElementTree.parse(f)
-        return tree
+    f = resource_stream('wildwest', filename)
+    tree = ElementTree.parse(f)
+    return tree
 
 
 def images(tree):
