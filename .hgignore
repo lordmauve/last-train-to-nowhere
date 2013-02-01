@@ -1,7 +1,12 @@
 syntax: glob
 env
 *.pyc
+*.pyo
 *.swp
 *~
 *.orig
 *.rej
+grabs/
+mockups/
+dist/
+build/

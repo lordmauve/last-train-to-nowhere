@@ -10,6 +10,8 @@ from itertools import chain
 
 from ..geom import Rect, v
 
+from pkg_resources import resource_filename, resource_stream
+
 
 def _texture_atlas_add(self, img):
     """Monkey patch pyglet to pad the texture atlas to remove adjacency artifacts.
@@ -26,10 +28,8 @@ pyglet.image.atlas.TextureAtlas.add = _texture_atlas_add
 
 
 pyglet.resource.path += [
-    './assets/sprites',
-    './assets/textures',
-    '../assets/sprites',
-    '../assets/textures',
+    resource_filename('wildwest', 'assets/sprites/'),
+    resource_filename('wildwest', 'assets/textures/'),
 ]
 pyglet.resource.reindex()
 
@@ -229,14 +229,13 @@ class Animation(SpriteNode):
 
     def load(self, fname):
         try:
-            default, animations = self.loaded[fname]
+            return self.loaded[fname]
         except KeyError:
             pass
 
         from pyglet.image import Animation, AnimationFrame
 
-        with open(fname) as f:
-            self.doc = json.load(f)
+        self.doc = json.load(resource_stream('wildwest', fname))
 
         animations = {}
         default = None
