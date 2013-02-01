@@ -23,14 +23,14 @@ class BackgroundObject(SpriteNode):
             self.t = self.scenegraph.t
 
         xoff = (self.scenegraph.t - self.t) * self.SPEED
-        vp = camera.get_plane_rect(-self.z + camera.focus)
-        r = self.rect.translate(v(-xoff, 0))
-        if r.r < vp.l:
+        vl = camera.get_left_plane(-self.z + camera.focus)
+        r = self.rect.r - xoff
+        if r < vl:
             self.scenegraph.remove(self)
 
         gl.glPushMatrix()
         gl.glTranslatef(-xoff, 0, self.z)
-        super(BackgroundObject, self).draw(camera)
+        self.sprite.draw()
         gl.glPopMatrix()
 
 
@@ -66,7 +66,7 @@ class BackgroundFactory(Node):
         s = random.choice(self.sprites)
         z = self.random_dist(camera)
         bounds = camera.get_plane_rect(z + camera.focus)
-        if anywhere: 
+        if anywhere:
             pos = v(random.uniform(bounds.l, bounds.r), 0)
         else:
             pos = v(bounds.r, 0)
@@ -83,7 +83,7 @@ class BackgroundFactory(Node):
             self.last_t = self.scenegraph.t
             self.populate(camera)
             return
-        
+
         if self.scenegraph.t - self.last_t > self.INTERVAL and len(self.objects) < self.MAX_OBJECTS:
             self.spawn(camera)
             self.last_t = self.scenegraph.t

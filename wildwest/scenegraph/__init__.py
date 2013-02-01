@@ -62,6 +62,15 @@ class Camera(object):
             y + scale * 0.5 * sh
         )
 
+    def get_left_plane(self, depth):
+        scale = depth / self.focus
+        x = self.offset.x
+
+        # The extra 1/1.01 is to cover the distance from the centre of the
+        # outside pixels to the edge of the frustum
+        sw = self.screen_w + 1.001
+        return x + scale * -0.5 * sw
+
     def far_plane(self):
         """Get the rectangle of the back plane"""
         return self.get_plane_rect(self.far)
@@ -69,7 +78,7 @@ class Camera(object):
     def near_plane(self):
         """Get the rectangle of the near plane"""
         return self.get_plane_rect(self.near)
-    
+
     def viewport(self):
         """Get the rectangle of the near plane"""
         x, y = self.offset
@@ -195,12 +204,12 @@ class FadeyImage(StaticImage):
             self.t = self.scenegraph.t
         self.sprite.opacity = int(self.opacity * 255)
         super(FadeyImage, self).draw(camera)
-    
+
 
 
 class Animation(SpriteNode):
     """Node that loads multiple animations from a JSON file.
-    
+
     The current animation can be changed using .play()
     """
     loaded = {}
@@ -248,7 +257,7 @@ class Animation(SpriteNode):
                     default = 'default'
             frames = []
             for f in a['frames']:
-                im = pyglet.resource.image(f['file']) 
+                im = pyglet.resource.image(f['file'])
                 im.anchor_x, im.anchor_y = a.get('anchor', (0, 0))
                 frames.append(
                     [im, a.get('frametime', 0.1)]
@@ -388,7 +397,7 @@ class Bullet(Node):
         self.seg = segment
         self.t = None
         self.build()
-    
+
     def build(self, age=0):
         p1, p2 = self.seg.points
         across = self.seg.axis * 0.5 * self.trail_width
