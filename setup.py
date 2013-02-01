@@ -21,4 +21,12 @@ setup(
             'last-train-to-knowhere = wildwest.__main__:main',
         ]   
     },
+    classifiers=[
+        'Topic :: Games/Entertainment :: Side-Scrolling/Arcade Games',
+        'Development Status :: 5 - Production/Stable',
+        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+        'Programming Language :: Python :: 2 :: Only',
+        'Operating System :: OS Independent',
+        'Natural Language :: English'
+    ]
 )
