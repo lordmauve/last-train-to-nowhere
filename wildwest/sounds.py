@@ -14,14 +14,18 @@ THUD = load_sound('thud.wav')
 GALLOP = load_sound('gallop.wav')
 
 
-if not media.have_avbin:
-    print "You're missing out on the music! You need to install AVBin."
-else:
+def start_music():
     music = media.Player()
     fname = resource_filename(__name__, 'assets/music/oh_hi_oleandro.mp3')
     music.queue(media.load(fname))
-    music.eos_action = media.Player.EOS_LOOP
+    music.on_eos = start_music
     music.play()
+
+
+if not media.have_avbin:
+    print("You're missing out on the music! You need to install AVBin.")
+else:
+    start_music()
 
 
 class Channel(object):
@@ -29,6 +33,6 @@ class Channel(object):
         pass
 
     def play(self, sound):
-        player = media.ManagedSoundPlayer()
+        player = media.Player()
         player.queue(sound)
         player.play()

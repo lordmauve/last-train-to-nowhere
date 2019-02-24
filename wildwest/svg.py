@@ -1,6 +1,6 @@
 import re
 from xml.etree import ElementTree
-from geom import Rect
+from .geom import Rect
 from pkg_resources import resource_stream
 
 
@@ -65,4 +65,4 @@ def load_level_data(name):
 
 
 if __name__ == '__main__':
-    print load_geometry('mailcar')
+    print(load_geometry('mailcar'))

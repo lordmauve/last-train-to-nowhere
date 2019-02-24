@@ -248,9 +248,9 @@ class Animation(SpriteNode):
 
         animations = {}
         default = None
-        for name, a in self.doc.items():
+        for name, a in list(self.doc.items()):
             if name == 'default':
-                if isinstance(a, unicode):
+                if isinstance(a, str):
                     default = a
                     continue
                 else:

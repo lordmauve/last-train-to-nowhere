@@ -278,7 +278,7 @@ class Player(pyglet.event.EventDispatcher):
         based on what has happened in the physics, plus any input.
 
         """
-        
+
         self.node.pos = self.body.pos
         if self.dead:
             return
@@ -365,15 +365,14 @@ class OutlawOnHorse(object):
         self.node.pos = pos
 
         self.hero = Outlaw(v(15, 115))
-        
-        self.gallop = media.Player()
-        self.gallop.queue(GALLOP)
+
+        self.gallop = GALLOP.play()
+        self.gallop.on_eos = lambda: self.gallop.queue(GALLOP)
 
     def spawn(self, world):
         self.world = world
         world.scene.add(self.node)
         world.objects.append(self)
-        self.gallop.eos_action = media.Player.EOS_LOOP
         self.gallop.play()
 
     def kill(self):
@@ -398,11 +397,11 @@ class OutlawOnHorse(object):
     def start_player(self):
         self.hero.spawn(self.world)
         self.world.hero = self.hero
-        
+
         hud = HUD(self.hero)
         self.world.scene.add(hud)
         self.world.hud = hud
-        
+
         self.anim.play('horse')
         self.VELOCITY = -self.VELOCITY
 
@@ -720,7 +719,7 @@ class World(pyglet.event.EventDispatcher):
             (194, 183, 164, 255),
         )
         s.add(ground)
-    
+
 
         s.add(SkyBox(
             (129, 218, 255, 255),

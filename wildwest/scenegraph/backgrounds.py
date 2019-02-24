@@ -75,7 +75,7 @@ class BackgroundFactory(Node):
         self.objects.add(o)
 
     def populate(self, camera):
-        for i in xrange(30):
+        for i in range(30):
             self.spawn(camera, True)
 
     def draw(self, camera):

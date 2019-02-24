@@ -210,7 +210,7 @@ class Physics(object):
                     self.collide_velocities(c)
                     collisions.append(c)
 
-        for i in xrange(5):
+        for i in range(5):
             if not collisions:
                 break
             colliding = set()
