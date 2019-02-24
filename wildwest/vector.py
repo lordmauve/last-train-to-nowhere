@@ -29,7 +29,7 @@
 
 """
 
-from __future__ import division
+
 
 import math
 import weakref
@@ -43,7 +43,7 @@ def cached(func):
             The getter function to decorate.
 
     """
-    cached_name = "_cached_%s" % func.func_name
+    cached_name = "_cached_%s" % func.__name__
 
     # The keywords 'getattr' and 'cached_name' are used to optimise the common
     # case (return cached value) by bringing the used names to local scope.
@@ -59,10 +59,10 @@ def cached(func):
         assert not hasattr(self, cached_name)
         setattr(self, cached_name, value)
 
-    fget.func_name = "get_" + func.func_name
-    fset.func_name = "set_" + func.func_name
+    fget.__name__ = "get_" + func.__name__
+    fset.__name__ = "set_" + func.__name__
 
-    return property(fget, fset, doc=func.func_doc)
+    return property(fget, fset, doc=func.__doc__)
 
 
 class Vector(tuple):
@@ -798,7 +798,7 @@ class Rectangle(object):
                 The points to bound.
 
         """
-        xs, ys = zip(*points)
+        xs, ys = list(zip(*points))
         lo = (min(xs), min(ys))
         hi = (max(xs), max(ys))
         return cls(lo, hi)

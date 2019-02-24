@@ -1,11 +1,11 @@
 import random
 from operator import itemgetter
-from vector import v
+from .vector import v
 import pyglet
-from geom import Segment, Rect
-from wild import RIGHT, LEFT
-from wild import Outlaw, Crate
-from physics import StaticBody
+from .geom import Segment, Rect
+from .wild import RIGHT, LEFT
+from .wild import Outlaw, Crate
+from .physics import StaticBody
 
 
 class AI(object):

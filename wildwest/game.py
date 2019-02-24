@@ -75,10 +75,10 @@ class Game(object):
 
     def debug_allocation(self, dt):
         import gc
-        print "World objects:", len(self.world.objects)
-        print "Physical objects:", len(self.world.physics.dynamic)
-        print "Scenegraph nodes:", len(self.world.scene.objects)
-        print "Garbage:", len(gc.garbage)
+        print("World objects:", len(self.world.objects))
+        print("Physical objects:", len(self.world.physics.dynamic))
+        print("Scenegraph nodes:", len(self.world.scene.objects))
+        print("Garbage:", len(gc.garbage))
 
     def restart(self, gamestate=None):
         self.world = World()

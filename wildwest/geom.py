@@ -4,7 +4,7 @@ with some functionality lifted from retrogamelib.
 
 import math
 from collections import namedtuple
-from vector import Vector, v
+from .vector import Vector, v
 
 
 class BasePolygon(object):
